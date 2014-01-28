@@ -1,2 +1,4 @@
 -- Comfy Corp --
-
+ - Must Have
+ - Could Have
+ - Future
