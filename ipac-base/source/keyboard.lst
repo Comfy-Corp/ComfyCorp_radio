@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page 1
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 1
 
 
    1               		.file	"keyboard.c"
@@ -58,7 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page
   55 003e 991F      		rol r25
   56 0040 3A95      		dec r19
   57 0042 01F4      		brne 1b
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page 2
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 2
 
 
   58 0044 482B      		or r20,r24
@@ -118,7 +118,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page
  112 0090 0895      		ret
  113               	/* epilogue: frame size=0 */
  114               	/* epilogue: noreturn */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page 3
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 3
 
 
  115               	/* epilogue end (size=0) */
@@ -178,7 +178,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page
  169 00d0 5B9A      		sbi 43-0x20,3
  170 00d2 5A9A      		sbi 43-0x20,2
  171 00d4 1092 0000 		sts KbState,__zero_reg__
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page 4
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 4
 
 
  172 00d8 8FEF      		ldi r24,lo8(-1)
@@ -238,7 +238,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page
  226 013a 80E0      		ldi r24,lo8(hKBEvent)
  227 013c 90E0      		ldi r25,hi8(hKBEvent)
  228 013e 0E94 0000 		call NutEventWait
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page 5
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 5
 
 
  229 0142 20E0      		ldi r18,lo8(0)
@@ -262,29 +262,29 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page
  247               		.lcomm KbState,1
  248               		.lcomm KeyRepeatArray,16
  249               	/* File "source/keyboard.c": code  188 = 0x00bc ( 183), prologues   0, epilogues   5 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s 			page 6
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 keyboard.c
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:13     .text:00000000 KbScan
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:243    .bss:00000002 KeyFound
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:75     .text:0000005e isKeyPressed
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:97     .text:0000007a KbSetKeyRepeating
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:247    .bss:00000008 KeyRepeatArray
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:120    .text:00000092 KbGetKey
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:244    .bss:00000004 KeyBuffer
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:132    .text:0000009a KbInjectKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:3      *ABS*:0000003f __SREG__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:4      *ABS*:0000003e __SP_H__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:5      *ABS*:0000003d __SP_L__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:13     .text:00000000 KbScan
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:243    .bss:00000002 KeyFound
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:75     .text:0000005e isKeyPressed
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:97     .text:0000007a KbSetKeyRepeating
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:247    .bss:00000008 KeyRepeatArray
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:120    .text:00000092 KbGetKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:244    .bss:00000004 KeyBuffer
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:132    .text:0000009a KbInjectKey
                              .bss:00000000 hKBEvent
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:164    .text:000000cc KbInit
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:246    .bss:00000007 KbState
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:245    .bss:00000005 HoldCounter
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccy8g6SL.s:221    .text:00000136 KbWaitForKeyEvent
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:164    .text:000000cc KbInit
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:246    .bss:00000007 KbState
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:245    .bss:00000005 HoldCounter
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:221    .text:00000136 KbWaitForKeyEvent
 
 UNDEFINED SYMBOLS
 __do_copy_data
