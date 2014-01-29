@@ -227,6 +227,12 @@ void LcdWriteString(char charArray[], int size)
     } 
 }
 
+void LcdClear()
+{
+        LcdWriteByte(WRITE_COMMAND, 0x01);         // display clear
+        LcdWriteByte(WRITE_COMMAND,0x80);
+        NutDelay(5);
+}
 /* ---------- end of module ------------------------------------------------ */
 
 /*@}*/

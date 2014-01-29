@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 1
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 1
 
 
    1               		.file	"main.c"
@@ -58,7 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page
   54               		.type	NutAppMain, @function
   55               	NutAppMain:
   56               	/* prologue: frame size=24 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 2
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 2
 
 
   57 003a EF92      		push r14
@@ -118,7 +118,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page
  111 00be 80E0      		ldi r24,lo8(__c.2555)
  112 00c0 90E0      		ldi r25,hi8(__c.2555)
  113 00c2 9F93      		push r25
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 3
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 3
 
 
  114 00c4 8F93      		push r24
@@ -178,7 +178,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page
  168 013a 01F0      		breq .L11
  169 013c 81E0      		ldi r24,lo8(1)
  170 013e 0E94 0000 		call LcdBackLight
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 4
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 4
 
 
  171               	.L11:
@@ -203,128 +203,135 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page
  190 0166 0196      		adiw r24,1
  191 0168 0E94 0000 		call LcdWriteString
  192               	.L13:
- 193 016c 64E6      		ldi r22,lo8(100)
- 194 016e 70E0      		ldi r23,hi8(100)
- 195 0170 80E0      		ldi r24,hlo8(100)
- 196 0172 90E0      		ldi r25,hhi8(100)
- 197 0174 0E94 0000 		call NutSleep
- 198 0178 C801      		movw r24,r16
- 199 017a 69E1      		ldi r22,lo8(25)
- 200 017c 70E0      		ldi r23,hi8(25)
- 201 017e 0E94 0000 		call __divmodhi4
- 202 0182 0F5F      		subi r16,lo8(-(1))
- 203 0184 1F4F      		sbci r17,hi8(-(1))
- 204 0186 892B      		or r24,r25
- 205 0188 01F4      		brne .L16
- 206 018a EF28      		or r14,r15
- 207 018c 01F0      		breq .L18
- 208 018e 1F93      		push r17
- 209 0190 0F93      		push r16
- 210 0192 80E0      		ldi r24,lo8(__c.2559)
- 211 0194 90E0      		ldi r25,hi8(__c.2559)
- 212 0196 9F93      		push r25
- 213 0198 8F93      		push r24
- 214 019a 86EC      		ldi r24,lo8(-58)
- 215 019c 8F93      		push r24
- 216 019e 0E94 0000 		call LogMsg_P
- 217 01a2 EE24      		clr r14
- 218 01a4 FF24      		clr r15
- 219 01a6 00C0      		rjmp .L23
- 220               	.L18:
- 221 01a8 1F93      		push r17
- 222 01aa 0F93      		push r16
- 223 01ac 80E0      		ldi r24,lo8(__c.2561)
- 224 01ae 90E0      		ldi r25,hi8(__c.2561)
- 225 01b0 9F93      		push r25
- 226 01b2 8F93      		push r24
- 227 01b4 86EC      		ldi r24,lo8(-58)
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 5
+ 193 016c 80E4      		ldi r24,lo8(64)
+ 194 016e 90E0      		ldi r25,hi8(64)
+ 195 0170 0E94 0000 		call isKeyPressed
+ 196 0174 8823      		tst r24
+ 197 0176 01F0      		breq .L16
+ 198 0178 0E94 0000 		call LcdClear
+ 199               	.L16:
+ 200 017c 64E6      		ldi r22,lo8(100)
+ 201 017e 70E0      		ldi r23,hi8(100)
+ 202 0180 80E0      		ldi r24,hlo8(100)
+ 203 0182 90E0      		ldi r25,hhi8(100)
+ 204 0184 0E94 0000 		call NutSleep
+ 205 0188 C801      		movw r24,r16
+ 206 018a 69E1      		ldi r22,lo8(25)
+ 207 018c 70E0      		ldi r23,hi8(25)
+ 208 018e 0E94 0000 		call __divmodhi4
+ 209 0192 0F5F      		subi r16,lo8(-(1))
+ 210 0194 1F4F      		sbci r17,hi8(-(1))
+ 211 0196 892B      		or r24,r25
+ 212 0198 01F4      		brne .L18
+ 213 019a EF28      		or r14,r15
+ 214 019c 01F0      		breq .L20
+ 215 019e 1F93      		push r17
+ 216 01a0 0F93      		push r16
+ 217 01a2 80E0      		ldi r24,lo8(__c.2560)
+ 218 01a4 90E0      		ldi r25,hi8(__c.2560)
+ 219 01a6 9F93      		push r25
+ 220 01a8 8F93      		push r24
+ 221 01aa 86EC      		ldi r24,lo8(-58)
+ 222 01ac 8F93      		push r24
+ 223 01ae 0E94 0000 		call LogMsg_P
+ 224 01b2 EE24      		clr r14
+ 225 01b4 FF24      		clr r15
+ 226 01b6 00C0      		rjmp .L25
+ 227               	.L20:
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 5
 
 
- 228 01b6 8F93      		push r24
- 229 01b8 0E94 0000 		call LogMsg_P
- 230 01bc 81E0      		ldi r24,lo8(1)
- 231 01be E82E      		mov r14,r24
- 232 01c0 F12C      		mov r15,__zero_reg__
- 233               	.L23:
- 234 01c2 0F90      		pop __tmp_reg__
- 235 01c4 0F90      		pop __tmp_reg__
- 236 01c6 0F90      		pop __tmp_reg__
- 237 01c8 0F90      		pop __tmp_reg__
- 238 01ca 0F90      		pop __tmp_reg__
- 239               	.L16:
- 240 01cc 0E94 0000 		call WatchDogRestart
- 241 01d0 00C0      		rjmp .L8
- 242               	/* epilogue: frame size=24 */
- 243               	/* epilogue: noreturn */
- 244               	/* epilogue end (size=0) */
- 245               	/* function NutAppMain size 206 (192) */
- 246               		.size	NutAppMain, .-NutAppMain
- 247               		.type	SysMainBeatInterrupt, @function
- 248               	SysMainBeatInterrupt:
- 249               	/* prologue: frame size=0 */
- 250               	/* prologue end (size=0) */
- 251 01d2 0E94 0000 		call KbScan
- 252 01d6 0E94 0000 		call CardCheckCard
- 253               	/* epilogue: frame size=0 */
- 254 01da 0895      		ret
- 255               	/* epilogue end (size=1) */
- 256               	/* function SysMainBeatInterrupt size 5 (4) */
- 257               		.size	SysMainBeatInterrupt, .-SysMainBeatInterrupt
- 258               		.section	.progmem.data,"a",@progbits
- 259               		.type	__c.2561, @object
- 260               		.size	__c.2561, 40
- 261               	__c.2561:
- 262 0000 576F 6F68 		.string	"Woohoo!, I'm still alive Joris ... [%d]"
- 262      6F6F 212C 
- 262      2049 276D 
- 262      2073 7469 
- 262      6C6C 2061 
- 263               		.type	__c.2559, @object
- 264               		.size	__c.2559, 23
- 265               	__c.2559:
- 266 0028 4865 6C6C 		.string	"Hellew! Raoul ... [%d]"
- 266      6577 2120 
- 266      5261 6F75 
- 266      6C20 2E2E 
- 266      2E20 5B25 
- 267               		.type	__c.2555, @object
- 268               		.size	__c.2555, 26
- 269               	__c.2555:
- 270 003f 5254 4320 		.string	"RTC time [%02d:%02d:%02d]"
- 270      7469 6D65 
- 270      205B 2530 
- 270      3264 3A25 
- 270      3032 643A 
- 271               		.type	__c.2553, @object
- 272               		.size	__c.2553, 20
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 6
+ 228 01b8 1F93      		push r17
+ 229 01ba 0F93      		push r16
+ 230 01bc 80E0      		ldi r24,lo8(__c.2562)
+ 231 01be 90E0      		ldi r25,hi8(__c.2562)
+ 232 01c0 9F93      		push r25
+ 233 01c2 8F93      		push r24
+ 234 01c4 86EC      		ldi r24,lo8(-58)
+ 235 01c6 8F93      		push r24
+ 236 01c8 0E94 0000 		call LogMsg_P
+ 237 01cc 81E0      		ldi r24,lo8(1)
+ 238 01ce E82E      		mov r14,r24
+ 239 01d0 F12C      		mov r15,__zero_reg__
+ 240               	.L25:
+ 241 01d2 0F90      		pop __tmp_reg__
+ 242 01d4 0F90      		pop __tmp_reg__
+ 243 01d6 0F90      		pop __tmp_reg__
+ 244 01d8 0F90      		pop __tmp_reg__
+ 245 01da 0F90      		pop __tmp_reg__
+ 246               	.L18:
+ 247 01dc 0E94 0000 		call WatchDogRestart
+ 248 01e0 00C0      		rjmp .L8
+ 249               	/* epilogue: frame size=24 */
+ 250               	/* epilogue: noreturn */
+ 251               	/* epilogue end (size=0) */
+ 252               	/* function NutAppMain size 214 (200) */
+ 253               		.size	NutAppMain, .-NutAppMain
+ 254               		.type	SysMainBeatInterrupt, @function
+ 255               	SysMainBeatInterrupt:
+ 256               	/* prologue: frame size=0 */
+ 257               	/* prologue end (size=0) */
+ 258 01e2 0E94 0000 		call KbScan
+ 259 01e6 0E94 0000 		call CardCheckCard
+ 260               	/* epilogue: frame size=0 */
+ 261 01ea 0895      		ret
+ 262               	/* epilogue end (size=1) */
+ 263               	/* function SysMainBeatInterrupt size 5 (4) */
+ 264               		.size	SysMainBeatInterrupt, .-SysMainBeatInterrupt
+ 265               		.section	.progmem.data,"a",@progbits
+ 266               		.type	__c.2562, @object
+ 267               		.size	__c.2562, 40
+ 268               	__c.2562:
+ 269 0000 576F 6F68 		.string	"Woohoo!, I'm still alive Joris ... [%d]"
+ 269      6F6F 212C 
+ 269      2049 276D 
+ 269      2073 7469 
+ 269      6C6C 2061 
+ 270               		.type	__c.2560, @object
+ 271               		.size	__c.2560, 23
+ 272               	__c.2560:
+ 273 0028 4865 6C6C 		.string	"Hellew! Raoul ... [%d]"
+ 273      6577 2120 
+ 273      5261 6F75 
+ 273      6C20 2E2E 
+ 273      2E20 5B25 
+ 274               		.type	__c.2555, @object
+ 275               		.size	__c.2555, 26
+ 276               	__c.2555:
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 6
 
 
- 273               	__c.2553:
- 274 0059 4865 6C6C 		.string	"Hello World and Jim"
- 274      6F20 576F 
- 274      726C 6420 
- 274      616E 6420 
- 274      4A69 6D00 
- 275               	/* File "source/main.c": code  240 = 0x00f0 ( 224), prologues  14, epilogues   2 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s 			page 7
+ 277 003f 5254 4320 		.string	"RTC time [%02d:%02d:%02d]"
+ 277      7469 6D65 
+ 277      205B 2530 
+ 277      3264 3A25 
+ 277      3032 643A 
+ 278               		.type	__c.2553, @object
+ 279               		.size	__c.2553, 20
+ 280               	__c.2553:
+ 281 0059 4865 6C6C 		.string	"Hello World and Jim"
+ 281      6F20 576F 
+ 281      726C 6420 
+ 281      616E 6420 
+ 281      4A69 6D00 
+ 282               	/* File "source/main.c": code  248 = 0x00f8 ( 232), prologues  14, epilogues   2 */
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s 			page 7
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:13     .text:00000000 SysInitIO
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:55     .text:0000003a NutAppMain
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:273    .progmem.data:00000059 __c.2553
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:269    .progmem.data:0000003f __c.2555
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:248    .text:000001d2 SysMainBeatInterrupt
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:265    .progmem.data:00000028 __c.2559
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccKQp0RX.s:261    .progmem.data:00000000 __c.2561
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:3      *ABS*:0000003f __SREG__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:4      *ABS*:0000003e __SP_H__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:5      *ABS*:0000003d __SP_L__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:13     .text:00000000 SysInitIO
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:55     .text:0000003a NutAppMain
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:280    .progmem.data:00000059 __c.2553
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:276    .progmem.data:0000003f __c.2555
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:255    .text:000001e2 SysMainBeatInterrupt
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:272    .progmem.data:00000028 __c.2560
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc9ErZka.s:268    .progmem.data:00000000 __c.2562
 
 UNDEFINED SYMBOLS
 __do_copy_data
@@ -350,6 +357,7 @@ NutThreadSetPriority
 isKeyPressed
 LcdBackLight
 LcdWriteString
+LcdClear
 NutSleep
 __divmodhi4
 WatchDogRestart
