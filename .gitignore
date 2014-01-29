@@ -23,8 +23,11 @@
 *.hex
 
 # LaTeX
-
 *.pdf
 *.aux
 *.log
 *.gz
+
+# OS X 
+
+.DS_Store
