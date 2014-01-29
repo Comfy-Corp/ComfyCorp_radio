@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page 1
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s 			page 1
 
 
    1               		.file	"keyboard.c"
@@ -58,7 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page
   55 003e 991F      		rol r25
   56 0040 3A95      		dec r19
   57 0042 01F4      		brne 1b
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page 2
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s 			page 2
 
 
   58 0044 482B      		or r20,r24
@@ -118,7 +118,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page
  112               	/* prologue: frame size=0 */
  113               	/* prologue end (size=0) */
  114 0082 8091 0000 		lds r24,KeyBuffer
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page 3
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s 			page 3
 
 
  115 0086 9927      		clr r25
@@ -178,7 +178,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page
  169 00d6 F894      		cli
  170 00d8 0F92      		push __tmp_reg__
  171               		
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page 4
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s 			page 4
 
 
  172               	/* #NOAPP */
@@ -238,7 +238,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page
  226 013e 30E0      		ldi r19,hi8(1)
  227               	.L25:
  228 0140 C901      		movw r24,r18
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page 5
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s 			page 5
 
 
  229               	/* epilogue: frame size=0 */
@@ -253,29 +253,29 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page
  238               		.lcomm KbState,1
  239               		.lcomm KeyRepeatArray,16
  240               	/* File "source/keyboard.c": code  181 = 0x00b5 ( 176), prologues   0, epilogues   5 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s 			page 6
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 keyboard.c
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:13     .text:00000000 KbScan
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:234    .bss:00000002 KeyFound
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:75     .text:0000005e GetKeys
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:88     .text:0000006a KbSetKeyRepeating
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:238    .bss:00000008 KeyRepeatArray
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:111    .text:00000082 KbGetKey
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:235    .bss:00000004 KeyBuffer
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:123    .text:0000008a KbInjectKey
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:3      *ABS*:0000003f __SREG__
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:4      *ABS*:0000003e __SP_H__
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:5      *ABS*:0000003d __SP_L__
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:6      *ABS*:00000000 __tmp_reg__
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:7      *ABS*:00000001 __zero_reg__
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:13     .text:00000000 KbScan
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:234    .bss:00000002 KeyFound
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:75     .text:0000005e GetKeys
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:88     .text:0000006a KbSetKeyRepeating
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:238    .bss:00000008 KeyRepeatArray
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:111    .text:00000082 KbGetKey
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:235    .bss:00000004 KeyBuffer
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:123    .text:0000008a KbInjectKey
                              .bss:00000000 hKBEvent
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:155    .text:000000bc KbInit
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:237    .bss:00000007 KbState
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:236    .bss:00000005 HoldCounter
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cckaLJvU.s:212    .text:00000126 KbWaitForKeyEvent
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:155    .text:000000bc KbInit
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:237    .bss:00000007 KbState
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:236    .bss:00000005 HoldCounter
+C:/Users/no_no/AppData/Local/Temp/cc5YAnMB.s:212    .text:00000126 KbWaitForKeyEvent
 
 UNDEFINED SYMBOLS
 __do_copy_data

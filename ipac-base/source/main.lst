@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 1
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 1
 
 
    1               		.file	"main.c"
@@ -58,7 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page
   55 003e 0F93      		push r16
   56 0040 1F93      		push r17
   57 0042 CF93      		push r28
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 2
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 2
 
 
   58 0044 DF93      		push r29
@@ -118,7 +118,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page
  112 00c8 0E94 0000 		call LogMsg_P
  113 00cc 8DB7      		in r24,__SP_L__
  114 00ce 9EB7      		in r25,__SP_H__
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 3
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 3
 
 
  115 00d0 0996      		adiw r24,9
@@ -153,176 +153,180 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page
  144               	/* #APP */
  145 0114 7894      		sei
  146               	/* #NOAPP */
- 147 0116 88E4      		ldi r24,lo8(72)
+ 147 0116 84E2      		ldi r24,lo8(36)
  148 0118 0E94 0000 		call LcdChar
- 149 011c 85E6      		ldi r24,lo8(101)
+ 149 011c 88E4      		ldi r24,lo8(72)
  150 011e 0E94 0000 		call LcdChar
- 151 0122 8CE6      		ldi r24,lo8(108)
+ 151 0122 85E6      		ldi r24,lo8(101)
  152 0124 0E94 0000 		call LcdChar
  153 0128 8CE6      		ldi r24,lo8(108)
  154 012a 0E94 0000 		call LcdChar
- 155 012e 8FE6      		ldi r24,lo8(111)
+ 155 012e 8CE6      		ldi r24,lo8(108)
  156 0130 0E94 0000 		call LcdChar
- 157 0134 8FE5      		ldi r24,lo8(95)
+ 157 0134 8FE6      		ldi r24,lo8(111)
  158 0136 0E94 0000 		call LcdChar
- 159 013a 8AE4      		ldi r24,lo8(74)
+ 159 013a 80E2      		ldi r24,lo8(32)
  160 013c 0E94 0000 		call LcdChar
- 161 0140 85E7      		ldi r24,lo8(117)
+ 161 0140 8AE4      		ldi r24,lo8(74)
  162 0142 0E94 0000 		call LcdChar
- 163 0146 8CE6      		ldi r24,lo8(108)
+ 163 0146 85E7      		ldi r24,lo8(117)
  164 0148 0E94 0000 		call LcdChar
- 165 014c 89E6      		ldi r24,lo8(105)
+ 165 014c 8CE6      		ldi r24,lo8(108)
  166 014e 0E94 0000 		call LcdChar
- 167 0152 81E6      		ldi r24,lo8(97)
+ 167 0152 89E6      		ldi r24,lo8(105)
  168 0154 0E94 0000 		call LcdChar
- 169 0158 8EE6      		ldi r24,lo8(110)
+ 169 0158 81E6      		ldi r24,lo8(97)
  170 015a 0E94 0000 		call LcdChar
- 171 015e 00E0      		ldi r16,lo8(0)
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 4
+ 171 015e 8EE6      		ldi r24,lo8(110)
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 4
 
 
- 172 0160 10E0      		ldi r17,hi8(0)
- 173 0162 EE24      		clr r14
- 174 0164 FF24      		clr r15
- 175               	.L8:
- 176 0166 0E94 0000 		call GetKeys
- 177 016a 8F3D      		cpi r24,223
- 178 016c 9105      		cpc r25,__zero_reg__
- 179 016e 01F4      		brne .L9
- 180 0170 81E0      		ldi r24,lo8(1)
- 181 0172 00C0      		rjmp .L18
- 182               	.L9:
- 183 0174 8F3E      		cpi r24,239
- 184 0176 9105      		cpc r25,__zero_reg__
- 185 0178 01F4      		brne .L11
- 186 017a 80E0      		ldi r24,lo8(0)
- 187               	.L18:
- 188 017c 0E94 0000 		call LcdBackLight
- 189               	.L11:
- 190 0180 64E6      		ldi r22,lo8(100)
- 191 0182 70E0      		ldi r23,hi8(100)
- 192 0184 80E0      		ldi r24,hlo8(100)
- 193 0186 90E0      		ldi r25,hhi8(100)
- 194 0188 0E94 0000 		call NutSleep
- 195 018c 84E0      		ldi r24,lo8(4)
- 196 018e 0E94 0000 		call LedControl
- 197 0192 C801      		movw r24,r16
- 198 0194 69E1      		ldi r22,lo8(25)
- 199 0196 70E0      		ldi r23,hi8(25)
- 200 0198 0E94 0000 		call __divmodhi4
- 201 019c 0F5F      		subi r16,lo8(-(1))
- 202 019e 1F4F      		sbci r17,hi8(-(1))
- 203 01a0 892B      		or r24,r25
- 204 01a2 01F4      		brne .L13
- 205 01a4 EF28      		or r14,r15
- 206 01a6 01F0      		breq .L15
- 207 01a8 1F93      		push r17
- 208 01aa 0F93      		push r16
- 209 01ac 80E0      		ldi r24,lo8(__c.2557)
- 210 01ae 90E0      		ldi r25,hi8(__c.2557)
- 211 01b0 9F93      		push r25
- 212 01b2 8F93      		push r24
- 213 01b4 86EC      		ldi r24,lo8(-58)
- 214 01b6 8F93      		push r24
- 215 01b8 0E94 0000 		call LogMsg_P
- 216 01bc EE24      		clr r14
- 217 01be FF24      		clr r15
- 218 01c0 00C0      		rjmp .L19
- 219               	.L15:
- 220 01c2 1F93      		push r17
- 221 01c4 0F93      		push r16
- 222 01c6 80E0      		ldi r24,lo8(__c.2559)
- 223 01c8 90E0      		ldi r25,hi8(__c.2559)
- 224 01ca 9F93      		push r25
- 225 01cc 8F93      		push r24
- 226 01ce 86EC      		ldi r24,lo8(-58)
- 227 01d0 8F93      		push r24
- 228 01d2 0E94 0000 		call LogMsg_P
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 5
+ 172 0160 0E94 0000 		call LcdChar
+ 173 0164 84E2      		ldi r24,lo8(36)
+ 174 0166 0E94 0000 		call LcdChar
+ 175 016a 00E0      		ldi r16,lo8(0)
+ 176 016c 10E0      		ldi r17,hi8(0)
+ 177 016e EE24      		clr r14
+ 178 0170 FF24      		clr r15
+ 179               	.L8:
+ 180 0172 0E94 0000 		call GetKeys
+ 181 0176 8F3D      		cpi r24,223
+ 182 0178 9105      		cpc r25,__zero_reg__
+ 183 017a 01F4      		brne .L9
+ 184 017c 81E0      		ldi r24,lo8(1)
+ 185 017e 00C0      		rjmp .L18
+ 186               	.L9:
+ 187 0180 8F3E      		cpi r24,239
+ 188 0182 9105      		cpc r25,__zero_reg__
+ 189 0184 01F4      		brne .L11
+ 190 0186 80E0      		ldi r24,lo8(0)
+ 191               	.L18:
+ 192 0188 0E94 0000 		call LcdBackLight
+ 193               	.L11:
+ 194 018c 64E6      		ldi r22,lo8(100)
+ 195 018e 70E0      		ldi r23,hi8(100)
+ 196 0190 80E0      		ldi r24,hlo8(100)
+ 197 0192 90E0      		ldi r25,hhi8(100)
+ 198 0194 0E94 0000 		call NutSleep
+ 199 0198 84E0      		ldi r24,lo8(4)
+ 200 019a 0E94 0000 		call LedControl
+ 201 019e C801      		movw r24,r16
+ 202 01a0 69E1      		ldi r22,lo8(25)
+ 203 01a2 70E0      		ldi r23,hi8(25)
+ 204 01a4 0E94 0000 		call __divmodhi4
+ 205 01a8 0F5F      		subi r16,lo8(-(1))
+ 206 01aa 1F4F      		sbci r17,hi8(-(1))
+ 207 01ac 892B      		or r24,r25
+ 208 01ae 01F4      		brne .L13
+ 209 01b0 EF28      		or r14,r15
+ 210 01b2 01F0      		breq .L15
+ 211 01b4 1F93      		push r17
+ 212 01b6 0F93      		push r16
+ 213 01b8 80E0      		ldi r24,lo8(__c.2557)
+ 214 01ba 90E0      		ldi r25,hi8(__c.2557)
+ 215 01bc 9F93      		push r25
+ 216 01be 8F93      		push r24
+ 217 01c0 86EC      		ldi r24,lo8(-58)
+ 218 01c2 8F93      		push r24
+ 219 01c4 0E94 0000 		call LogMsg_P
+ 220 01c8 EE24      		clr r14
+ 221 01ca FF24      		clr r15
+ 222 01cc 00C0      		rjmp .L19
+ 223               	.L15:
+ 224 01ce 1F93      		push r17
+ 225 01d0 0F93      		push r16
+ 226 01d2 80E0      		ldi r24,lo8(__c.2559)
+ 227 01d4 90E0      		ldi r25,hi8(__c.2559)
+ 228 01d6 9F93      		push r25
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 5
 
 
- 229 01d6 81E0      		ldi r24,lo8(1)
- 230 01d8 E82E      		mov r14,r24
- 231 01da F12C      		mov r15,__zero_reg__
- 232               	.L19:
- 233 01dc 0F90      		pop __tmp_reg__
- 234 01de 0F90      		pop __tmp_reg__
- 235 01e0 0F90      		pop __tmp_reg__
- 236 01e2 0F90      		pop __tmp_reg__
- 237 01e4 0F90      		pop __tmp_reg__
- 238               	.L13:
- 239 01e6 0E94 0000 		call WatchDogRestart
- 240 01ea 00C0      		rjmp .L8
- 241               	/* epilogue: frame size=18 */
- 242               	/* epilogue: noreturn */
- 243               	/* epilogue end (size=0) */
- 244               	/* function NutAppMain size 218 (204) */
- 245               		.size	NutAppMain, .-NutAppMain
- 246               		.type	SysMainBeatInterrupt, @function
- 247               	SysMainBeatInterrupt:
- 248               	/* prologue: frame size=0 */
- 249               	/* prologue end (size=0) */
- 250 01ec 0E94 0000 		call KbScan
- 251 01f0 0E94 0000 		call CardCheckCard
- 252               	/* epilogue: frame size=0 */
- 253 01f4 0895      		ret
- 254               	/* epilogue end (size=1) */
- 255               	/* function SysMainBeatInterrupt size 5 (4) */
- 256               		.size	SysMainBeatInterrupt, .-SysMainBeatInterrupt
- 257               		.section	.progmem.data,"a",@progbits
- 258               		.type	__c.2559, @object
- 259               		.size	__c.2559, 40
- 260               	__c.2559:
- 261 0000 576F 6F68 		.string	"Woohoo!, I'm still alive Joris ... [%d]"
- 261      6F6F 212C 
- 261      2049 276D 
- 261      2073 7469 
- 261      6C6C 2061 
- 262               		.type	__c.2557, @object
- 263               		.size	__c.2557, 26
- 264               	__c.2557:
- 265 0028 4865 6C6C 		.string	"Hellew! Raoul :) ... [%d]"
- 265      6577 2120 
- 265      5261 6F75 
- 265      6C20 3A29 
- 265      202E 2E2E 
- 266               		.type	__c.2553, @object
- 267               		.size	__c.2553, 26
- 268               	__c.2553:
- 269 0042 5254 4320 		.string	"RTC time [%02d:%02d:%02d]"
- 269      7469 6D65 
- 269      205B 2530 
- 269      3264 3A25 
- 269      3032 643A 
- 270               		.type	__c.2551, @object
- 271               		.size	__c.2551, 20
- 272               	__c.2551:
- 273 005c 4865 6C6C 		.string	"Hello World and Jim"
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 6
+ 229 01d8 8F93      		push r24
+ 230 01da 86EC      		ldi r24,lo8(-58)
+ 231 01dc 8F93      		push r24
+ 232 01de 0E94 0000 		call LogMsg_P
+ 233 01e2 81E0      		ldi r24,lo8(1)
+ 234 01e4 E82E      		mov r14,r24
+ 235 01e6 F12C      		mov r15,__zero_reg__
+ 236               	.L19:
+ 237 01e8 0F90      		pop __tmp_reg__
+ 238 01ea 0F90      		pop __tmp_reg__
+ 239 01ec 0F90      		pop __tmp_reg__
+ 240 01ee 0F90      		pop __tmp_reg__
+ 241 01f0 0F90      		pop __tmp_reg__
+ 242               	.L13:
+ 243 01f2 0E94 0000 		call WatchDogRestart
+ 244 01f6 00C0      		rjmp .L8
+ 245               	/* epilogue: frame size=18 */
+ 246               	/* epilogue: noreturn */
+ 247               	/* epilogue end (size=0) */
+ 248               	/* function NutAppMain size 224 (210) */
+ 249               		.size	NutAppMain, .-NutAppMain
+ 250               		.type	SysMainBeatInterrupt, @function
+ 251               	SysMainBeatInterrupt:
+ 252               	/* prologue: frame size=0 */
+ 253               	/* prologue end (size=0) */
+ 254 01f8 0E94 0000 		call KbScan
+ 255 01fc 0E94 0000 		call CardCheckCard
+ 256               	/* epilogue: frame size=0 */
+ 257 0200 0895      		ret
+ 258               	/* epilogue end (size=1) */
+ 259               	/* function SysMainBeatInterrupt size 5 (4) */
+ 260               		.size	SysMainBeatInterrupt, .-SysMainBeatInterrupt
+ 261               		.section	.progmem.data,"a",@progbits
+ 262               		.type	__c.2559, @object
+ 263               		.size	__c.2559, 40
+ 264               	__c.2559:
+ 265 0000 576F 6F68 		.string	"Woohoo!, I'm still alive Joris ... [%d]"
+ 265      6F6F 212C 
+ 265      2049 276D 
+ 265      2073 7469 
+ 265      6C6C 2061 
+ 266               		.type	__c.2557, @object
+ 267               		.size	__c.2557, 26
+ 268               	__c.2557:
+ 269 0028 4865 6C6C 		.string	"Hellew! Raoul :) ... [%d]"
+ 269      6577 2120 
+ 269      5261 6F75 
+ 269      6C20 3A29 
+ 269      202E 2E2E 
+ 270               		.type	__c.2553, @object
+ 271               		.size	__c.2553, 26
+ 272               	__c.2553:
+ 273 0042 5254 4320 		.string	"RTC time [%02d:%02d:%02d]"
+ 273      7469 6D65 
+ 273      205B 2530 
+ 273      3264 3A25 
+ 273      3032 643A 
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 6
 
 
- 273      6F20 576F 
- 273      726C 6420 
- 273      616E 6420 
- 273      4A69 6D00 
- 274               	/* File "source/main.c": code  252 = 0x00fc ( 236), prologues  14, epilogues   2 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s 			page 7
+ 274               		.type	__c.2551, @object
+ 275               		.size	__c.2551, 20
+ 276               	__c.2551:
+ 277 005c 4865 6C6C 		.string	"Hello World and Jim"
+ 277      6F20 576F 
+ 277      726C 6420 
+ 277      616E 6420 
+ 277      4A69 6D00 
+ 278               	/* File "source/main.c": code  258 = 0x0102 ( 242), prologues  14, epilogues   2 */
+GAS LISTING C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s 			page 7
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:13     .text:00000000 SysInitIO
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:51     .text:0000003a NutAppMain
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:272    .progmem.data:0000005c __c.2551
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:268    .progmem.data:00000042 __c.2553
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:247    .text:000001ec SysMainBeatInterrupt
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:264    .progmem.data:00000028 __c.2557
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccUfWOzy.s:260    .progmem.data:00000000 __c.2559
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:3      *ABS*:0000003f __SREG__
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:4      *ABS*:0000003e __SP_H__
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:5      *ABS*:0000003d __SP_L__
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:6      *ABS*:00000000 __tmp_reg__
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:7      *ABS*:00000001 __zero_reg__
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:13     .text:00000000 SysInitIO
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:51     .text:0000003a NutAppMain
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:276    .progmem.data:0000005c __c.2551
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:272    .progmem.data:00000042 __c.2553
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:251    .text:000001f8 SysMainBeatInterrupt
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:268    .progmem.data:00000028 __c.2557
+C:/Users/no_no/AppData/Local/Temp/cc8JAbsc.s:264    .progmem.data:00000000 __c.2559
 
 UNDEFINED SYMBOLS
 __do_copy_data
