@@ -28,3 +28,6 @@
 *.aux
 *.log
 *.gz
+
+#swap files
+*.swp
