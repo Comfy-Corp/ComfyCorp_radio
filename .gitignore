@@ -13,6 +13,8 @@
 *.so
 *.so.*
 *.dylib
+*.map
+*.lst
 
 # Executables
 *.exe
@@ -28,3 +30,6 @@
 *.aux
 *.log
 *.gz
+
+#swap files
+*.swp
