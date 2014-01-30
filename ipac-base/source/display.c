@@ -84,6 +84,10 @@ void LcdChar(char MyChar)
     LcdWriteByte(WRITE_DATA, MyChar);
 }
 
+void LcdWriteUchar(u_char write, u_char byte)
+{
+    LcdWriteByte(write, byte);
+}
 
 /* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
 /*!
@@ -114,7 +118,7 @@ void LcdChar(char MyChar)
     LcdWriteByte(WRITE_COMMAND, 0x28);          // function set: 4-bit mode, 5x7 dot mode, 2-lines
     NutDelay(5);
 
-    LcdWriteByte(WRITE_COMMAND, 0x0C);          // display ON/OFF: display ON, cursor OFF, blink OFF
+    LcdWriteByte(WRITE_COMMAND, 0x0B);          // display ON/OFF: display ON, cursor OFF, blink OFF
     NutDelay(5);
 
     LcdWriteByte(WRITE_COMMAND, 0x01);          // display clear
@@ -143,7 +147,7 @@ void LcdChar(char MyChar)
 static void LcdWriteByte(u_char CtrlState, u_char LcdByte)
 {
     LcdWaitBusy();                      // see if the controller is ready to receive next byte
-    LcdWriteNibble(CtrlState, LcdByte & 0xF0);
+    LcdWriteNibble(CtrlState, LcdByte & 0xF0); //f
     LcdWriteNibble(CtrlState, LcdByte << 4);
 
 }
