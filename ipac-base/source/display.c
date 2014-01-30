@@ -222,6 +222,21 @@ static void LcdWaitBusy()
     cbi (LCD_RW_PORT, LCD_RW);              // we are going to write
 }
 
+void LcdWriteString(char charArray[], int size)
+{
+    //int size = sizeof(charArray)/sizeof(charArray[0]);
+  int i;
+  for(i=0;i<size-1;i++){
+    LcdChar((char)charArray[i]);
+    } 
+}
+
+void LcdClear()
+{
+        LcdWriteByte(WRITE_COMMAND, 0x01);         // display clear
+        LcdWriteByte(WRITE_COMMAND,0x80);
+        NutDelay(5);
+}
 /* ---------- end of module ------------------------------------------------ */
 
 /*@}*/
