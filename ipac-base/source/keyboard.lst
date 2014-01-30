@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 1
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 1
 
 
    1               		.file	"keyboard.c"
@@ -58,7 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page
   55 003e 991F      		rol r25
   56 0040 3A95      		dec r19
   57 0042 01F4      		brne 1b
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 2
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 2
 
 
   58 0044 482B      		or r20,r24
@@ -71,220 +71,221 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page
   65 0052 532B      		or r21,r19
   66 0054 5093 0000 		sts (KeyFound)+1,r21
   67 0058 4093 0000 		sts KeyFound,r20
-  68               	/* epilogue: frame size=0 */
-  69 005c 0895      		ret
-  70               	/* epilogue end (size=1) */
-  71               	/* function KbScan size 55 (54) */
-  72               		.size	KbScan, .-KbScan
-  73               	.global	isKeyPressed
-  74               		.type	isKeyPressed, @function
-  75               	isKeyPressed:
-  76               	/* prologue: frame size=0 */
-  77               	/* prologue end (size=0) */
-  78 005e 40E0      		ldi r20,lo8(0)
-  79 0060 50E0      		ldi r21,hi8(0)
-  80 0062 2091 0000 		lds r18,KeyFound
-  81 0066 3091 0000 		lds r19,(KeyFound)+1
-  82 006a 2823      		and r18,r24
-  83 006c 3923      		and r19,r25
-  84 006e 232B      		or r18,r19
-  85 0070 01F4      		brne .L4
-  86 0072 41E0      		ldi r20,lo8(1)
-  87 0074 50E0      		ldi r21,hi8(1)
-  88               	.L4:
-  89 0076 CA01      		movw r24,r20
-  90               	/* epilogue: frame size=0 */
-  91 0078 0895      		ret
-  92               	/* epilogue end (size=1) */
-  93               	/* function isKeyPressed size 14 (13) */
-  94               		.size	isKeyPressed, .-isKeyPressed
-  95               	.global	KbSetKeyRepeating
-  96               		.type	KbSetKeyRepeating, @function
-  97               	KbSetKeyRepeating:
-  98               	/* prologue: frame size=0 */
-  99               	/* prologue end (size=0) */
- 100 007a E82F      		mov r30,r24
- 101 007c 862F      		mov r24,r22
- 102 007e 8150      		subi r24,lo8(-(-1))
- 103 0080 8230      		cpi r24,lo8(2)
- 104 0082 00F4      		brsh .L10
- 105 0084 E031      		cpi r30,lo8(16)
- 106 0086 00F4      		brsh .L10
- 107 0088 FF27      		clr r31
- 108 008a E050      		subi r30,lo8(-(KeyRepeatArray))
- 109 008c F040      		sbci r31,hi8(-(KeyRepeatArray))
- 110 008e 6083      		st Z,r22
- 111               	.L10:
- 112 0090 0895      		ret
- 113               	/* epilogue: frame size=0 */
- 114               	/* epilogue: noreturn */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 3
+  68 005c 4093 0000 		sts KeyBuffer,r20
+  69               	/* epilogue: frame size=0 */
+  70 0060 0895      		ret
+  71               	/* epilogue end (size=1) */
+  72               	/* function KbScan size 57 (56) */
+  73               		.size	KbScan, .-KbScan
+  74               	.global	isKeyPressed
+  75               		.type	isKeyPressed, @function
+  76               	isKeyPressed:
+  77               	/* prologue: frame size=0 */
+  78               	/* prologue end (size=0) */
+  79 0062 40E0      		ldi r20,lo8(0)
+  80 0064 50E0      		ldi r21,hi8(0)
+  81 0066 2091 0000 		lds r18,KeyFound
+  82 006a 3091 0000 		lds r19,(KeyFound)+1
+  83 006e 2823      		and r18,r24
+  84 0070 3923      		and r19,r25
+  85 0072 232B      		or r18,r19
+  86 0074 01F4      		brne .L4
+  87 0076 41E0      		ldi r20,lo8(1)
+  88 0078 50E0      		ldi r21,hi8(1)
+  89               	.L4:
+  90 007a CA01      		movw r24,r20
+  91               	/* epilogue: frame size=0 */
+  92 007c 0895      		ret
+  93               	/* epilogue end (size=1) */
+  94               	/* function isKeyPressed size 14 (13) */
+  95               		.size	isKeyPressed, .-isKeyPressed
+  96               	.global	KbSetKeyRepeating
+  97               		.type	KbSetKeyRepeating, @function
+  98               	KbSetKeyRepeating:
+  99               	/* prologue: frame size=0 */
+ 100               	/* prologue end (size=0) */
+ 101 007e E82F      		mov r30,r24
+ 102 0080 862F      		mov r24,r22
+ 103 0082 8150      		subi r24,lo8(-(-1))
+ 104 0084 8230      		cpi r24,lo8(2)
+ 105 0086 00F4      		brsh .L10
+ 106 0088 E031      		cpi r30,lo8(16)
+ 107 008a 00F4      		brsh .L10
+ 108 008c FF27      		clr r31
+ 109 008e E050      		subi r30,lo8(-(KeyRepeatArray))
+ 110 0090 F040      		sbci r31,hi8(-(KeyRepeatArray))
+ 111 0092 6083      		st Z,r22
+ 112               	.L10:
+ 113 0094 0895      		ret
+ 114               	/* epilogue: frame size=0 */
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 3
 
 
- 115               	/* epilogue end (size=0) */
- 116               	/* function KbSetKeyRepeating size 12 (12) */
- 117               		.size	KbSetKeyRepeating, .-KbSetKeyRepeating
- 118               	.global	KbGetKey
- 119               		.type	KbGetKey, @function
- 120               	KbGetKey:
- 121               	/* prologue: frame size=0 */
- 122               	/* prologue end (size=0) */
- 123 0092 8091 0000 		lds r24,KeyBuffer
- 124 0096 9927      		clr r25
- 125               	/* epilogue: frame size=0 */
- 126 0098 0895      		ret
- 127               	/* epilogue end (size=1) */
- 128               	/* function KbGetKey size 4 (3) */
- 129               		.size	KbGetKey, .-KbGetKey
- 130               	.global	KbInjectKey
- 131               		.type	KbInjectKey, @function
- 132               	KbInjectKey:
- 133               	/* prologue: frame size=0 */
- 134               	/* prologue end (size=0) */
- 135 009a 8093 0000 		sts KeyBuffer,r24
- 136 009e E091 0000 		lds r30,hKBEvent
- 137 00a2 F091 0000 		lds r31,(hKBEvent)+1
- 138 00a6 3097      		sbiw r30,0
- 139 00a8 01F4      		brne .L14
- 140 00aa 8FEF      		ldi r24,lo8(-1)
- 141 00ac 9FEF      		ldi r25,hi8(-1)
- 142 00ae 9093 0000 		sts (hKBEvent)+1,r25
- 143 00b2 8093 0000 		sts hKBEvent,r24
- 144 00b6 0895      		ret
- 145               	.L14:
- 146 00b8 8FEF      		ldi r24,hi8(-1)
- 147 00ba EF3F      		cpi r30,lo8(-1)
- 148 00bc F807      		cpc r31,r24
- 149 00be 01F0      		breq .L18
- 150 00c0 8481      		ldd r24,Z+4
- 151 00c2 9581      		ldd r25,Z+5
- 152 00c4 0196      		adiw r24,1
- 153 00c6 9583      		std Z+5,r25
- 154 00c8 8483      		std Z+4,r24
- 155               	.L18:
- 156 00ca 0895      		ret
- 157               	/* epilogue: frame size=0 */
- 158               	/* epilogue: noreturn */
- 159               	/* epilogue end (size=0) */
- 160               	/* function KbInjectKey size 25 (25) */
- 161               		.size	KbInjectKey, .-KbInjectKey
- 162               	.global	KbInit
- 163               		.type	KbInit, @function
- 164               	KbInit:
- 165               	/* prologue: frame size=0 */
- 166               	/* prologue end (size=0) */
- 167 00cc A39A      		sbi 52-0x20,3
- 168 00ce A49A      		sbi 52-0x20,4
- 169 00d0 5B9A      		sbi 43-0x20,3
- 170 00d2 5A9A      		sbi 43-0x20,2
- 171 00d4 1092 0000 		sts KbState,__zero_reg__
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 4
+ 115               	/* epilogue: noreturn */
+ 116               	/* epilogue end (size=0) */
+ 117               	/* function KbSetKeyRepeating size 12 (12) */
+ 118               		.size	KbSetKeyRepeating, .-KbSetKeyRepeating
+ 119               	.global	KbGetKey
+ 120               		.type	KbGetKey, @function
+ 121               	KbGetKey:
+ 122               	/* prologue: frame size=0 */
+ 123               	/* prologue end (size=0) */
+ 124 0096 8091 0000 		lds r24,KeyBuffer
+ 125 009a 9927      		clr r25
+ 126               	/* epilogue: frame size=0 */
+ 127 009c 0895      		ret
+ 128               	/* epilogue end (size=1) */
+ 129               	/* function KbGetKey size 4 (3) */
+ 130               		.size	KbGetKey, .-KbGetKey
+ 131               	.global	KbInjectKey
+ 132               		.type	KbInjectKey, @function
+ 133               	KbInjectKey:
+ 134               	/* prologue: frame size=0 */
+ 135               	/* prologue end (size=0) */
+ 136 009e 8093 0000 		sts KeyBuffer,r24
+ 137 00a2 E091 0000 		lds r30,hKBEvent
+ 138 00a6 F091 0000 		lds r31,(hKBEvent)+1
+ 139 00aa 3097      		sbiw r30,0
+ 140 00ac 01F4      		brne .L14
+ 141 00ae 8FEF      		ldi r24,lo8(-1)
+ 142 00b0 9FEF      		ldi r25,hi8(-1)
+ 143 00b2 9093 0000 		sts (hKBEvent)+1,r25
+ 144 00b6 8093 0000 		sts hKBEvent,r24
+ 145 00ba 0895      		ret
+ 146               	.L14:
+ 147 00bc 8FEF      		ldi r24,hi8(-1)
+ 148 00be EF3F      		cpi r30,lo8(-1)
+ 149 00c0 F807      		cpc r31,r24
+ 150 00c2 01F0      		breq .L18
+ 151 00c4 8481      		ldd r24,Z+4
+ 152 00c6 9581      		ldd r25,Z+5
+ 153 00c8 0196      		adiw r24,1
+ 154 00ca 9583      		std Z+5,r25
+ 155 00cc 8483      		std Z+4,r24
+ 156               	.L18:
+ 157 00ce 0895      		ret
+ 158               	/* epilogue: frame size=0 */
+ 159               	/* epilogue: noreturn */
+ 160               	/* epilogue end (size=0) */
+ 161               	/* function KbInjectKey size 25 (25) */
+ 162               		.size	KbInjectKey, .-KbInjectKey
+ 163               	.global	KbInit
+ 164               		.type	KbInit, @function
+ 165               	KbInit:
+ 166               	/* prologue: frame size=0 */
+ 167               	/* prologue end (size=0) */
+ 168 00d0 A39A      		sbi 52-0x20,3
+ 169 00d2 A49A      		sbi 52-0x20,4
+ 170 00d4 5B9A      		sbi 43-0x20,3
+ 171 00d6 5A9A      		sbi 43-0x20,2
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 4
 
 
- 172 00d8 8FEF      		ldi r24,lo8(-1)
- 173 00da 9FEF      		ldi r25,hi8(-1)
- 174 00dc 9093 0000 		sts (KeyFound)+1,r25
- 175 00e0 8093 0000 		sts KeyFound,r24
- 176               	/* #APP */
- 177 00e4 0FB6      		in  __tmp_reg__, __SREG__
- 178 00e6 F894      		cli
- 179 00e8 0F92      		push __tmp_reg__
- 180               		
- 181               	/* #NOAPP */
- 182 00ea 1092 0000 		sts (hKBEvent)+1,__zero_reg__
- 183 00ee 1092 0000 		sts hKBEvent,__zero_reg__
- 184               	/* #APP */
- 185 00f2 0F90      		pop __tmp_reg__
- 186 00f4 0FBE      		out __SREG__, __tmp_reg__
- 187               		
- 188               	/* #NOAPP */
- 189 00f6 8FEF      		ldi r24,lo8(-1)
- 190 00f8 8093 0000 		sts KeyBuffer,r24
- 191 00fc E0E0      		ldi r30,lo8(KeyRepeatArray)
- 192 00fe F0E0      		ldi r31,hi8(KeyRepeatArray)
- 193 0100 82E0      		ldi r24,lo8(2)
- 194               	.L20:
- 195 0102 8193      		st Z+,r24
- 196 0104 90E0      		ldi r25,hi8(KeyRepeatArray+16)
- 197 0106 E030      		cpi r30,lo8(KeyRepeatArray+16)
- 198 0108 F907      		cpc r31,r25
- 199 010a 01F4      		brne .L20
- 200 010c 1092 0000 		sts (HoldCounter)+1,__zero_reg__
- 201 0110 1092 0000 		sts HoldCounter,__zero_reg__
- 202 0114 61E0      		ldi r22,lo8(1)
- 203 0116 88E0      		ldi r24,lo8(8)
- 204 0118 0E94 0000 		call KbSetKeyRepeating
- 205 011c 61E0      		ldi r22,lo8(1)
- 206 011e 8BE0      		ldi r24,lo8(11)
- 207 0120 0E94 0000 		call KbSetKeyRepeating
- 208 0124 61E0      		ldi r22,lo8(1)
- 209 0126 8AE0      		ldi r24,lo8(10)
- 210 0128 0E94 0000 		call KbSetKeyRepeating
- 211 012c 61E0      		ldi r22,lo8(1)
- 212 012e 8CE0      		ldi r24,lo8(12)
- 213 0130 0E94 0000 		call KbSetKeyRepeating
- 214               	/* epilogue: frame size=0 */
- 215 0134 0895      		ret
- 216               	/* epilogue end (size=1) */
- 217               	/* function KbInit size 62 (61) */
- 218               		.size	KbInit, .-KbInit
- 219               	.global	KbWaitForKeyEvent
- 220               		.type	KbWaitForKeyEvent, @function
- 221               	KbWaitForKeyEvent:
- 222               	/* prologue: frame size=0 */
- 223               	/* prologue end (size=0) */
- 224 0136 AB01      		movw r20,r22
- 225 0138 BC01      		movw r22,r24
- 226 013a 80E0      		ldi r24,lo8(hKBEvent)
- 227 013c 90E0      		ldi r25,hi8(hKBEvent)
- 228 013e 0E94 0000 		call NutEventWait
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 5
+ 172 00d8 1092 0000 		sts KbState,__zero_reg__
+ 173 00dc 8FEF      		ldi r24,lo8(-1)
+ 174 00de 9FEF      		ldi r25,hi8(-1)
+ 175 00e0 9093 0000 		sts (KeyFound)+1,r25
+ 176 00e4 8093 0000 		sts KeyFound,r24
+ 177               	/* #APP */
+ 178 00e8 0FB6      		in  __tmp_reg__, __SREG__
+ 179 00ea F894      		cli
+ 180 00ec 0F92      		push __tmp_reg__
+ 181               		
+ 182               	/* #NOAPP */
+ 183 00ee 1092 0000 		sts (hKBEvent)+1,__zero_reg__
+ 184 00f2 1092 0000 		sts hKBEvent,__zero_reg__
+ 185               	/* #APP */
+ 186 00f6 0F90      		pop __tmp_reg__
+ 187 00f8 0FBE      		out __SREG__, __tmp_reg__
+ 188               		
+ 189               	/* #NOAPP */
+ 190 00fa 8FEF      		ldi r24,lo8(-1)
+ 191 00fc 8093 0000 		sts KeyBuffer,r24
+ 192 0100 E0E0      		ldi r30,lo8(KeyRepeatArray)
+ 193 0102 F0E0      		ldi r31,hi8(KeyRepeatArray)
+ 194 0104 82E0      		ldi r24,lo8(2)
+ 195               	.L20:
+ 196 0106 8193      		st Z+,r24
+ 197 0108 90E0      		ldi r25,hi8(KeyRepeatArray+16)
+ 198 010a E030      		cpi r30,lo8(KeyRepeatArray+16)
+ 199 010c F907      		cpc r31,r25
+ 200 010e 01F4      		brne .L20
+ 201 0110 1092 0000 		sts (HoldCounter)+1,__zero_reg__
+ 202 0114 1092 0000 		sts HoldCounter,__zero_reg__
+ 203 0118 61E0      		ldi r22,lo8(1)
+ 204 011a 88E0      		ldi r24,lo8(8)
+ 205 011c 0E94 0000 		call KbSetKeyRepeating
+ 206 0120 61E0      		ldi r22,lo8(1)
+ 207 0122 8BE0      		ldi r24,lo8(11)
+ 208 0124 0E94 0000 		call KbSetKeyRepeating
+ 209 0128 61E0      		ldi r22,lo8(1)
+ 210 012a 8AE0      		ldi r24,lo8(10)
+ 211 012c 0E94 0000 		call KbSetKeyRepeating
+ 212 0130 61E0      		ldi r22,lo8(1)
+ 213 0132 8CE0      		ldi r24,lo8(12)
+ 214 0134 0E94 0000 		call KbSetKeyRepeating
+ 215               	/* epilogue: frame size=0 */
+ 216 0138 0895      		ret
+ 217               	/* epilogue end (size=1) */
+ 218               	/* function KbInit size 62 (61) */
+ 219               		.size	KbInit, .-KbInit
+ 220               	.global	KbWaitForKeyEvent
+ 221               		.type	KbWaitForKeyEvent, @function
+ 222               	KbWaitForKeyEvent:
+ 223               	/* prologue: frame size=0 */
+ 224               	/* prologue end (size=0) */
+ 225 013a AB01      		movw r20,r22
+ 226 013c BC01      		movw r22,r24
+ 227 013e 80E0      		ldi r24,lo8(hKBEvent)
+ 228 0140 90E0      		ldi r25,hi8(hKBEvent)
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 5
 
 
- 229 0142 20E0      		ldi r18,lo8(0)
- 230 0144 30E0      		ldi r19,hi8(0)
- 231 0146 8F5F      		subi r24,lo8(-1)
- 232 0148 9F4F      		sbci r25,hi8(-1)
- 233 014a 01F4      		brne .L26
- 234 014c 21E0      		ldi r18,lo8(1)
- 235 014e 30E0      		ldi r19,hi8(1)
- 236               	.L26:
- 237 0150 C901      		movw r24,r18
- 238               	/* epilogue: frame size=0 */
- 239 0152 0895      		ret
- 240               	/* epilogue end (size=1) */
- 241               	/* function KbWaitForKeyEvent size 16 (15) */
- 242               		.size	KbWaitForKeyEvent, .-KbWaitForKeyEvent
- 243               		.lcomm hKBEvent,2
- 244               		.lcomm KeyFound,2
- 245               		.lcomm KeyBuffer,1
- 246               		.lcomm HoldCounter,2
- 247               		.lcomm KbState,1
- 248               		.lcomm KeyRepeatArray,16
- 249               	/* File "source/keyboard.c": code  188 = 0x00bc ( 183), prologues   0, epilogues   5 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s 			page 6
+ 229 0142 0E94 0000 		call NutEventWait
+ 230 0146 20E0      		ldi r18,lo8(0)
+ 231 0148 30E0      		ldi r19,hi8(0)
+ 232 014a 8F5F      		subi r24,lo8(-1)
+ 233 014c 9F4F      		sbci r25,hi8(-1)
+ 234 014e 01F4      		brne .L26
+ 235 0150 21E0      		ldi r18,lo8(1)
+ 236 0152 30E0      		ldi r19,hi8(1)
+ 237               	.L26:
+ 238 0154 C901      		movw r24,r18
+ 239               	/* epilogue: frame size=0 */
+ 240 0156 0895      		ret
+ 241               	/* epilogue end (size=1) */
+ 242               	/* function KbWaitForKeyEvent size 16 (15) */
+ 243               		.size	KbWaitForKeyEvent, .-KbWaitForKeyEvent
+ 244               		.lcomm hKBEvent,2
+ 245               		.lcomm KeyFound,2
+ 246               		.lcomm KeyBuffer,1
+ 247               		.lcomm HoldCounter,2
+ 248               		.lcomm KbState,1
+ 249               		.lcomm KeyRepeatArray,16
+ 250               	/* File "source/keyboard.c": code  190 = 0x00be ( 185), prologues   0, epilogues   5 */
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 keyboard.c
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:13     .text:00000000 KbScan
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:243    .bss:00000002 KeyFound
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:75     .text:0000005e isKeyPressed
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:97     .text:0000007a KbSetKeyRepeating
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:247    .bss:00000008 KeyRepeatArray
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:120    .text:00000092 KbGetKey
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:244    .bss:00000004 KeyBuffer
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:132    .text:0000009a KbInjectKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:3      *ABS*:0000003f __SREG__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:4      *ABS*:0000003e __SP_H__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:5      *ABS*:0000003d __SP_L__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:13     .text:00000000 KbScan
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:244    .bss:00000002 KeyFound
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:245    .bss:00000004 KeyBuffer
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:76     .text:00000062 isKeyPressed
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:98     .text:0000007e KbSetKeyRepeating
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:248    .bss:00000008 KeyRepeatArray
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:121    .text:00000096 KbGetKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:133    .text:0000009e KbInjectKey
                              .bss:00000000 hKBEvent
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:164    .text:000000cc KbInit
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:246    .bss:00000007 KbState
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:245    .bss:00000005 HoldCounter
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccOdLObx.s:221    .text:00000136 KbWaitForKeyEvent
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:165    .text:000000d0 KbInit
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:247    .bss:00000007 KbState
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:246    .bss:00000005 HoldCounter
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:222    .text:0000013a KbWaitForKeyEvent
 
 UNDEFINED SYMBOLS
 __do_copy_data
