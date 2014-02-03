@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 1
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 1
 
 
    1               		.file	"keyboard.c"
@@ -58,11 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page
   55 003e 991F      		rol r25
   56 0040 3A95      		dec r19
   57 0042 01F4      		brne 1b
-<<<<<<< HEAD
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 2
-=======
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 2
->>>>>>> 8734af555ce9d5804ce164a0e21360dad93051bc
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 2
 
 
   58 0044 682B      		or r22,r24
@@ -71,205 +67,6 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page
   61 004a 3327      		clr r19
   62 004c 322F      		mov r19,r18
   63 004e 2227      		clr r18
-<<<<<<< HEAD
-  64 0050 422B      		or r20,r18
-  65 0052 532B      		or r21,r19
-  66 0054 5093 0000 		sts (KeyFound)+1,r21
-  67 0058 4093 0000 		sts KeyFound,r20
-  68 005c 4093 0000 		sts KeyBuffer,r20
-  69               	/* epilogue: frame size=0 */
-  70 0060 0895      		ret
-  71               	/* epilogue end (size=1) */
-  72               	/* function KbScan size 57 (56) */
-  73               		.size	KbScan, .-KbScan
-  74               	.global	isKeyPressed
-  75               		.type	isKeyPressed, @function
-  76               	isKeyPressed:
-  77               	/* prologue: frame size=0 */
-  78               	/* prologue end (size=0) */
-  79 0062 40E0      		ldi r20,lo8(0)
-  80 0064 50E0      		ldi r21,hi8(0)
-  81 0066 2091 0000 		lds r18,KeyFound
-  82 006a 3091 0000 		lds r19,(KeyFound)+1
-  83 006e 2823      		and r18,r24
-  84 0070 3923      		and r19,r25
-  85 0072 232B      		or r18,r19
-  86 0074 01F4      		brne .L4
-  87 0076 41E0      		ldi r20,lo8(1)
-  88 0078 50E0      		ldi r21,hi8(1)
-  89               	.L4:
-  90 007a CA01      		movw r24,r20
-  91               	/* epilogue: frame size=0 */
-  92 007c 0895      		ret
-  93               	/* epilogue end (size=1) */
-  94               	/* function isKeyPressed size 14 (13) */
-  95               		.size	isKeyPressed, .-isKeyPressed
-  96               	.global	KbSetKeyRepeating
-  97               		.type	KbSetKeyRepeating, @function
-  98               	KbSetKeyRepeating:
-  99               	/* prologue: frame size=0 */
- 100               	/* prologue end (size=0) */
- 101 007e E82F      		mov r30,r24
- 102 0080 862F      		mov r24,r22
- 103 0082 8150      		subi r24,lo8(-(-1))
- 104 0084 8230      		cpi r24,lo8(2)
- 105 0086 00F4      		brsh .L10
- 106 0088 E031      		cpi r30,lo8(16)
- 107 008a 00F4      		brsh .L10
- 108 008c FF27      		clr r31
- 109 008e E050      		subi r30,lo8(-(KeyRepeatArray))
- 110 0090 F040      		sbci r31,hi8(-(KeyRepeatArray))
- 111 0092 6083      		st Z,r22
- 112               	.L10:
- 113 0094 0895      		ret
- 114               	/* epilogue: frame size=0 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 3
-
-
- 115               	/* epilogue: noreturn */
- 116               	/* epilogue end (size=0) */
- 117               	/* function KbSetKeyRepeating size 12 (12) */
- 118               		.size	KbSetKeyRepeating, .-KbSetKeyRepeating
- 119               	.global	KbGetKey
- 120               		.type	KbGetKey, @function
- 121               	KbGetKey:
- 122               	/* prologue: frame size=0 */
- 123               	/* prologue end (size=0) */
- 124 0096 8091 0000 		lds r24,KeyBuffer
- 125 009a 9927      		clr r25
- 126               	/* epilogue: frame size=0 */
- 127 009c 0895      		ret
- 128               	/* epilogue end (size=1) */
- 129               	/* function KbGetKey size 4 (3) */
- 130               		.size	KbGetKey, .-KbGetKey
- 131               	.global	KbInjectKey
- 132               		.type	KbInjectKey, @function
- 133               	KbInjectKey:
- 134               	/* prologue: frame size=0 */
- 135               	/* prologue end (size=0) */
- 136 009e 8093 0000 		sts KeyBuffer,r24
- 137 00a2 E091 0000 		lds r30,hKBEvent
- 138 00a6 F091 0000 		lds r31,(hKBEvent)+1
- 139 00aa 3097      		sbiw r30,0
- 140 00ac 01F4      		brne .L14
- 141 00ae 8FEF      		ldi r24,lo8(-1)
- 142 00b0 9FEF      		ldi r25,hi8(-1)
- 143 00b2 9093 0000 		sts (hKBEvent)+1,r25
- 144 00b6 8093 0000 		sts hKBEvent,r24
- 145 00ba 0895      		ret
- 146               	.L14:
- 147 00bc 8FEF      		ldi r24,hi8(-1)
- 148 00be EF3F      		cpi r30,lo8(-1)
- 149 00c0 F807      		cpc r31,r24
- 150 00c2 01F0      		breq .L18
- 151 00c4 8481      		ldd r24,Z+4
- 152 00c6 9581      		ldd r25,Z+5
- 153 00c8 0196      		adiw r24,1
- 154 00ca 9583      		std Z+5,r25
- 155 00cc 8483      		std Z+4,r24
- 156               	.L18:
- 157 00ce 0895      		ret
- 158               	/* epilogue: frame size=0 */
- 159               	/* epilogue: noreturn */
- 160               	/* epilogue end (size=0) */
- 161               	/* function KbInjectKey size 25 (25) */
- 162               		.size	KbInjectKey, .-KbInjectKey
- 163               	.global	KbInit
- 164               		.type	KbInit, @function
- 165               	KbInit:
- 166               	/* prologue: frame size=0 */
- 167               	/* prologue end (size=0) */
- 168 00d0 A39A      		sbi 52-0x20,3
- 169 00d2 A49A      		sbi 52-0x20,4
- 170 00d4 5B9A      		sbi 43-0x20,3
- 171 00d6 5A9A      		sbi 43-0x20,2
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 4
-
-
- 172 00d8 1092 0000 		sts KbState,__zero_reg__
- 173 00dc 8FEF      		ldi r24,lo8(-1)
- 174 00de 9FEF      		ldi r25,hi8(-1)
- 175 00e0 9093 0000 		sts (KeyFound)+1,r25
- 176 00e4 8093 0000 		sts KeyFound,r24
- 177               	/* #APP */
- 178 00e8 0FB6      		in  __tmp_reg__, __SREG__
- 179 00ea F894      		cli
- 180 00ec 0F92      		push __tmp_reg__
- 181               		
- 182               	/* #NOAPP */
- 183 00ee 1092 0000 		sts (hKBEvent)+1,__zero_reg__
- 184 00f2 1092 0000 		sts hKBEvent,__zero_reg__
- 185               	/* #APP */
- 186 00f6 0F90      		pop __tmp_reg__
- 187 00f8 0FBE      		out __SREG__, __tmp_reg__
- 188               		
- 189               	/* #NOAPP */
- 190 00fa 8FEF      		ldi r24,lo8(-1)
- 191 00fc 8093 0000 		sts KeyBuffer,r24
- 192 0100 E0E0      		ldi r30,lo8(KeyRepeatArray)
- 193 0102 F0E0      		ldi r31,hi8(KeyRepeatArray)
- 194 0104 82E0      		ldi r24,lo8(2)
- 195               	.L20:
- 196 0106 8193      		st Z+,r24
- 197 0108 90E0      		ldi r25,hi8(KeyRepeatArray+16)
- 198 010a E030      		cpi r30,lo8(KeyRepeatArray+16)
- 199 010c F907      		cpc r31,r25
- 200 010e 01F4      		brne .L20
- 201 0110 1092 0000 		sts (HoldCounter)+1,__zero_reg__
- 202 0114 1092 0000 		sts HoldCounter,__zero_reg__
- 203 0118 61E0      		ldi r22,lo8(1)
- 204 011a 88E0      		ldi r24,lo8(8)
- 205 011c 0E94 0000 		call KbSetKeyRepeating
- 206 0120 61E0      		ldi r22,lo8(1)
- 207 0122 8BE0      		ldi r24,lo8(11)
- 208 0124 0E94 0000 		call KbSetKeyRepeating
- 209 0128 61E0      		ldi r22,lo8(1)
- 210 012a 8AE0      		ldi r24,lo8(10)
- 211 012c 0E94 0000 		call KbSetKeyRepeating
- 212 0130 61E0      		ldi r22,lo8(1)
- 213 0132 8CE0      		ldi r24,lo8(12)
- 214 0134 0E94 0000 		call KbSetKeyRepeating
- 215               	/* epilogue: frame size=0 */
- 216 0138 0895      		ret
- 217               	/* epilogue end (size=1) */
- 218               	/* function KbInit size 62 (61) */
- 219               		.size	KbInit, .-KbInit
- 220               	.global	KbWaitForKeyEvent
- 221               		.type	KbWaitForKeyEvent, @function
- 222               	KbWaitForKeyEvent:
- 223               	/* prologue: frame size=0 */
- 224               	/* prologue end (size=0) */
- 225 013a AB01      		movw r20,r22
- 226 013c BC01      		movw r22,r24
- 227 013e 80E0      		ldi r24,lo8(hKBEvent)
- 228 0140 90E0      		ldi r25,hi8(hKBEvent)
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 5
-
-
- 229 0142 0E94 0000 		call NutEventWait
- 230 0146 20E0      		ldi r18,lo8(0)
- 231 0148 30E0      		ldi r19,hi8(0)
- 232 014a 8F5F      		subi r24,lo8(-1)
- 233 014c 9F4F      		sbci r25,hi8(-1)
- 234 014e 01F4      		brne .L26
- 235 0150 21E0      		ldi r18,lo8(1)
- 236 0152 30E0      		ldi r19,hi8(1)
- 237               	.L26:
- 238 0154 C901      		movw r24,r18
- 239               	/* epilogue: frame size=0 */
- 240 0156 0895      		ret
- 241               	/* epilogue end (size=1) */
- 242               	/* function KbWaitForKeyEvent size 16 (15) */
- 243               		.size	KbWaitForKeyEvent, .-KbWaitForKeyEvent
- 244               		.lcomm hKBEvent,2
- 245               		.lcomm KeyFound,2
- 246               		.lcomm KeyBuffer,1
- 247               		.lcomm HoldCounter,2
- 248               		.lcomm KbState,1
- 249               		.lcomm KeyRepeatArray,16
- 250               	/* File "source/keyboard.c": code  190 = 0x00be ( 185), prologues   0, epilogues   5 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page 6
-=======
   64 0050 622B      		or r22,r18
   65 0052 732B      		or r23,r19
   66 0054 7093 0000 		sts (KeyFound)+1,r23
@@ -299,371 +96,326 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s 			page
   90 0088 00C0      		rjmp .L3
   91 008a 6F5F      		subi r22,lo8(-2049)
   92 008c 774F      		sbci r23,hi8(-2049)
-  93 008e 01F0      		breq .+2
-  94 0090 00C0      		rjmp .L2
-  95 0092 00C0      		rjmp .L4
-  96               	.L18:
-  97 0094 8EEF      		ldi r24,hi8(-257)
-  98 0096 6F3F      		cpi r22,lo8(-257)
-  99 0098 7807      		cpc r23,r24
- 100 009a 01F4      		brne .+2
- 101 009c 00C0      		rjmp .L7
- 102 009e 8FEF      		ldi r24,hi8(-129)
- 103 00a0 6F37      		cpi r22,lo8(-129)
- 104 00a2 7807      		cpc r23,r24
- 105 00a4 01F0      		breq .L8
- 106 00a6 6F5F      		subi r22,lo8(-513)
- 107 00a8 7D4F      		sbci r23,hi8(-513)
- 108 00aa 01F0      		breq .+2
- 109 00ac 00C0      		rjmp .L2
- 110 00ae 00C0      		rjmp .L6
- 111               	.L17:
- 112 00b0 8FEF      		ldi r24,hi8(-9)
- 113 00b2 673F      		cpi r22,lo8(-9)
- 114 00b4 7807      		cpc r23,r24
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 3
+  93 008e 01F4      		brne .L2
+  94 0090 00C0      		rjmp .L4
+  95               	.L18:
+  96 0092 8EEF      		ldi r24,hi8(-257)
+  97 0094 6F3F      		cpi r22,lo8(-257)
+  98 0096 7807      		cpc r23,r24
+  99 0098 01F4      		brne .+2
+ 100 009a 00C0      		rjmp .L7
+ 101 009c 8FEF      		ldi r24,hi8(-129)
+ 102 009e 6F37      		cpi r22,lo8(-129)
+ 103 00a0 7807      		cpc r23,r24
+ 104 00a2 01F0      		breq .L8
+ 105 00a4 6F5F      		subi r22,lo8(-513)
+ 106 00a6 7D4F      		sbci r23,hi8(-513)
+ 107 00a8 01F4      		brne .L2
+ 108 00aa 00C0      		rjmp .L6
+ 109               	.L17:
+ 110 00ac 8FEF      		ldi r24,hi8(-9)
+ 111 00ae 673F      		cpi r22,lo8(-9)
+ 112 00b0 7807      		cpc r23,r24
+ 113 00b2 01F0      		breq .L13
+ 114 00b4 8FEF      		ldi r24,hi8(-8)
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 3
 
 
- 115 00b6 01F0      		breq .L13
- 116 00b8 8FEF      		ldi r24,hi8(-8)
- 117 00ba 683F      		cpi r22,lo8(-8)
- 118 00bc 7807      		cpc r23,r24
- 119 00be 00F4      		brsh .L19
- 120 00c0 8FEF      		ldi r24,hi8(-33)
- 121 00c2 6F3D      		cpi r22,lo8(-33)
- 122 00c4 7807      		cpc r23,r24
- 123 00c6 01F0      		breq .L11
- 124 00c8 8FEF      		ldi r24,hi8(-17)
- 125 00ca 6F3E      		cpi r22,lo8(-17)
- 126 00cc 7807      		cpc r23,r24
- 127 00ce 01F0      		breq .L12
- 128 00d0 6F5C      		subi r22,lo8(-49)
- 129 00d2 7F4F      		sbci r23,hi8(-49)
- 130 00d4 01F4      		brne .L2
- 131 00d6 00C0      		rjmp .L10
- 132               	.L19:
- 133 00d8 8FEF      		ldi r24,hi8(-3)
- 134 00da 6D3F      		cpi r22,lo8(-3)
- 135 00dc 7807      		cpc r23,r24
- 136 00de 01F0      		breq .L15
- 137 00e0 8FEF      		ldi r24,hi8(-2)
- 138 00e2 6E3F      		cpi r22,lo8(-2)
- 139 00e4 7807      		cpc r23,r24
- 140 00e6 01F0      		breq .L16
- 141 00e8 6B5F      		subi r22,lo8(-5)
- 142 00ea 7F4F      		sbci r23,hi8(-5)
- 143 00ec 01F4      		brne .L2
- 144 00ee 81E0      		ldi r24,lo8(1)
- 145 00f0 90E0      		ldi r25,hi8(1)
- 146 00f2 00C0      		rjmp .L20
- 147               	.L15:
- 148 00f4 82E0      		ldi r24,lo8(2)
- 149 00f6 90E0      		ldi r25,hi8(2)
- 150 00f8 00C0      		rjmp .L20
- 151               	.L8:
- 152 00fa 83E0      		ldi r24,lo8(3)
- 153 00fc 90E0      		ldi r25,hi8(3)
- 154 00fe 00C0      		rjmp .L20
- 155               	.L13:
- 156 0100 84E0      		ldi r24,lo8(4)
- 157 0102 90E0      		ldi r25,hi8(4)
- 158 0104 00C0      		rjmp .L20
- 159               	.L16:
- 160 0106 85E0      		ldi r24,lo8(5)
- 161 0108 90E0      		ldi r25,hi8(5)
- 162 010a 00C0      		rjmp .L20
- 163               	.L9:
- 164 010c 86E0      		ldi r24,lo8(6)
- 165 010e 90E0      		ldi r25,hi8(6)
- 166 0110 00C0      		rjmp .L20
- 167               	.L12:
- 168 0112 87E0      		ldi r24,lo8(7)
- 169 0114 90E0      		ldi r25,hi8(7)
- 170 0116 00C0      		rjmp .L20
- 171               	.L4:
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 4
+ 115 00b6 683F      		cpi r22,lo8(-8)
+ 116 00b8 7807      		cpc r23,r24
+ 117 00ba 00F4      		brsh .L19
+ 118 00bc 8FEF      		ldi r24,hi8(-33)
+ 119 00be 6F3D      		cpi r22,lo8(-33)
+ 120 00c0 7807      		cpc r23,r24
+ 121 00c2 01F0      		breq .L11
+ 122 00c4 8FEF      		ldi r24,hi8(-17)
+ 123 00c6 6F3E      		cpi r22,lo8(-17)
+ 124 00c8 7807      		cpc r23,r24
+ 125 00ca 01F0      		breq .L12
+ 126 00cc 6F5C      		subi r22,lo8(-49)
+ 127 00ce 7F4F      		sbci r23,hi8(-49)
+ 128 00d0 01F4      		brne .L2
+ 129 00d2 00C0      		rjmp .L10
+ 130               	.L19:
+ 131 00d4 8FEF      		ldi r24,hi8(-3)
+ 132 00d6 6D3F      		cpi r22,lo8(-3)
+ 133 00d8 7807      		cpc r23,r24
+ 134 00da 01F0      		breq .L15
+ 135 00dc 8FEF      		ldi r24,hi8(-2)
+ 136 00de 6E3F      		cpi r22,lo8(-2)
+ 137 00e0 7807      		cpc r23,r24
+ 138 00e2 01F0      		breq .L16
+ 139 00e4 6B5F      		subi r22,lo8(-5)
+ 140 00e6 7F4F      		sbci r23,hi8(-5)
+ 141 00e8 01F4      		brne .L2
+ 142 00ea 00C0      		rjmp .L14
+ 143               	.L10:
+ 144 00ec 8EE0      		ldi r24,lo8(14)
+ 145 00ee 90E0      		ldi r25,hi8(14)
+ 146 00f0 00C0      		rjmp .L20
+ 147               	.L2:
+ 148 00f2 88E8      		ldi r24,lo8(136)
+ 149 00f4 90E0      		ldi r25,hi8(136)
+ 150 00f6 00C0      		rjmp .L20
+ 151               	.L14:
+ 152 00f8 81E0      		ldi r24,lo8(1)
+ 153 00fa 90E0      		ldi r25,hi8(1)
+ 154 00fc 00C0      		rjmp .L20
+ 155               	.L15:
+ 156 00fe 82E0      		ldi r24,lo8(2)
+ 157 0100 90E0      		ldi r25,hi8(2)
+ 158 0102 00C0      		rjmp .L20
+ 159               	.L8:
+ 160 0104 83E0      		ldi r24,lo8(3)
+ 161 0106 90E0      		ldi r25,hi8(3)
+ 162 0108 00C0      		rjmp .L20
+ 163               	.L13:
+ 164 010a 84E0      		ldi r24,lo8(4)
+ 165 010c 90E0      		ldi r25,hi8(4)
+ 166 010e 00C0      		rjmp .L20
+ 167               	.L16:
+ 168 0110 85E0      		ldi r24,lo8(5)
+ 169 0112 90E0      		ldi r25,hi8(5)
+ 170 0114 00C0      		rjmp .L20
+ 171               	.L9:
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 4
 
 
- 172 0118 88E0      		ldi r24,lo8(8)
- 173 011a 90E0      		ldi r25,hi8(8)
- 174 011c 00C0      		rjmp .L20
- 175               	.L11:
- 176 011e 89E0      		ldi r24,lo8(9)
- 177 0120 90E0      		ldi r25,hi8(9)
- 178 0122 00C0      		rjmp .L20
- 179               	.L7:
- 180 0124 8AE0      		ldi r24,lo8(10)
- 181 0126 90E0      		ldi r25,hi8(10)
- 182 0128 00C0      		rjmp .L20
- 183               	.L5:
- 184 012a 8BE0      		ldi r24,lo8(11)
- 185 012c 90E0      		ldi r25,hi8(11)
- 186 012e 00C0      		rjmp .L20
- 187               	.L6:
- 188 0130 8CE0      		ldi r24,lo8(12)
- 189 0132 90E0      		ldi r25,hi8(12)
- 190 0134 00C0      		rjmp .L20
- 191               	.L2:
- 192 0136 88E8      		ldi r24,lo8(-120)
- 193 0138 8093 0000 		sts KeyBuffer,r24
- 194 013c 0895      		ret
- 195               	.L22:
- 196 013e 8FEF      		ldi r24,lo8(-1)
- 197 0140 9FEF      		ldi r25,hi8(-1)
- 198 0142 9093 0000 		sts (hKBEvent)+1,r25
- 199 0146 8093 0000 		sts hKBEvent,r24
- 200 014a 0895      		ret
- 201               	.L26:
- 202 014c 8FEF      		ldi r24,hi8(-1)
- 203 014e EF3F      		cpi r30,lo8(-1)
- 204 0150 F807      		cpc r31,r24
- 205 0152 01F0      		breq .L25
- 206 0154 8481      		ldd r24,Z+4
- 207 0156 9581      		ldd r25,Z+5
- 208 0158 0196      		adiw r24,1
- 209 015a 9583      		std Z+5,r25
- 210 015c 8483      		std Z+4,r24
- 211 015e 0895      		ret
- 212               	.L3:
- 213 0160 8DE0      		ldi r24,lo8(13)
- 214 0162 90E0      		ldi r25,hi8(13)
- 215               	.L20:
- 216 0164 8093 0000 		sts KeyBuffer,r24
- 217 0168 E091 0000 		lds r30,hKBEvent
- 218 016c F091 0000 		lds r31,(hKBEvent)+1
- 219 0170 3097      		sbiw r30,0
- 220 0172 01F4      		brne .L26
- 221 0174 00C0      		rjmp .L22
- 222               	.L10:
- 223 0176 8EE0      		ldi r24,lo8(14)
- 224 0178 8093 0000 		sts KeyBuffer,r24
- 225               	.L25:
- 226 017c 0895      		ret
+ 172 0116 86E0      		ldi r24,lo8(6)
+ 173 0118 90E0      		ldi r25,hi8(6)
+ 174 011a 00C0      		rjmp .L20
+ 175               	.L12:
+ 176 011c 87E0      		ldi r24,lo8(7)
+ 177 011e 90E0      		ldi r25,hi8(7)
+ 178 0120 00C0      		rjmp .L20
+ 179               	.L4:
+ 180 0122 88E0      		ldi r24,lo8(8)
+ 181 0124 90E0      		ldi r25,hi8(8)
+ 182 0126 00C0      		rjmp .L20
+ 183               	.L11:
+ 184 0128 89E0      		ldi r24,lo8(9)
+ 185 012a 90E0      		ldi r25,hi8(9)
+ 186 012c 00C0      		rjmp .L20
+ 187               	.L7:
+ 188 012e 8AE0      		ldi r24,lo8(10)
+ 189 0130 90E0      		ldi r25,hi8(10)
+ 190 0132 00C0      		rjmp .L20
+ 191               	.L5:
+ 192 0134 8BE0      		ldi r24,lo8(11)
+ 193 0136 90E0      		ldi r25,hi8(11)
+ 194 0138 00C0      		rjmp .L20
+ 195               	.L6:
+ 196 013a 8CE0      		ldi r24,lo8(12)
+ 197 013c 90E0      		ldi r25,hi8(12)
+ 198 013e 00C0      		rjmp .L20
+ 199               	.L3:
+ 200 0140 8DE0      		ldi r24,lo8(13)
+ 201 0142 90E0      		ldi r25,hi8(13)
+ 202               	.L20:
+ 203 0144 8093 0000 		sts KeyBuffer,r24
+ 204               	/* epilogue: frame size=0 */
+ 205 0148 0895      		ret
+ 206               	/* epilogue end (size=1) */
+ 207               	/* function KbScan size 177 (176) */
+ 208               		.size	KbScan, .-KbScan
+ 209               	.global	KbSetKeyRepeating
+ 210               		.type	KbSetKeyRepeating, @function
+ 211               	KbSetKeyRepeating:
+ 212               	/* prologue: frame size=0 */
+ 213               	/* prologue end (size=0) */
+ 214 014a E82F      		mov r30,r24
+ 215 014c 862F      		mov r24,r22
+ 216 014e 8150      		subi r24,lo8(-(-1))
+ 217 0150 8230      		cpi r24,lo8(2)
+ 218 0152 00F4      		brsh .L26
+ 219 0154 E031      		cpi r30,lo8(16)
+ 220 0156 00F4      		brsh .L26
+ 221 0158 FF27      		clr r31
+ 222 015a E050      		subi r30,lo8(-(KeyRepeatArray))
+ 223 015c F040      		sbci r31,hi8(-(KeyRepeatArray))
+ 224 015e 6083      		st Z,r22
+ 225               	.L26:
+ 226 0160 0895      		ret
  227               	/* epilogue: frame size=0 */
  228               	/* epilogue: noreturn */
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 5
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 5
 
 
  229               	/* epilogue end (size=0) */
- 230               	/* function KbScan size 203 (203) */
- 231               		.size	KbScan, .-KbScan
- 232               	.global	KbSetKeyRepeating
- 233               		.type	KbSetKeyRepeating, @function
- 234               	KbSetKeyRepeating:
+ 230               	/* function KbSetKeyRepeating size 12 (12) */
+ 231               		.size	KbSetKeyRepeating, .-KbSetKeyRepeating
+ 232               	.global	KbGetKey
+ 233               		.type	KbGetKey, @function
+ 234               	KbGetKey:
  235               	/* prologue: frame size=0 */
  236               	/* prologue end (size=0) */
- 237 017e E82F      		mov r30,r24
- 238 0180 862F      		mov r24,r22
- 239 0182 8150      		subi r24,lo8(-(-1))
- 240 0184 8230      		cpi r24,lo8(2)
- 241 0186 00F4      		brsh .L31
- 242 0188 E031      		cpi r30,lo8(16)
- 243 018a 00F4      		brsh .L31
- 244 018c FF27      		clr r31
- 245 018e E050      		subi r30,lo8(-(KeyRepeatArray))
- 246 0190 F040      		sbci r31,hi8(-(KeyRepeatArray))
- 247 0192 6083      		st Z,r22
- 248               	.L31:
- 249 0194 0895      		ret
+ 237 0162 8091 0000 		lds r24,KeyBuffer
+ 238 0166 9927      		clr r25
+ 239               	/* epilogue: frame size=0 */
+ 240 0168 0895      		ret
+ 241               	/* epilogue end (size=1) */
+ 242               	/* function KbGetKey size 4 (3) */
+ 243               		.size	KbGetKey, .-KbGetKey
+ 244               	.global	KbSetKey
+ 245               		.type	KbSetKey, @function
+ 246               	KbSetKey:
+ 247               	/* prologue: frame size=0 */
+ 248               	/* prologue end (size=0) */
+ 249 016a 8093 0000 		sts KeyBuffer,r24
  250               	/* epilogue: frame size=0 */
- 251               	/* epilogue: noreturn */
- 252               	/* epilogue end (size=0) */
- 253               	/* function KbSetKeyRepeating size 12 (12) */
- 254               		.size	KbSetKeyRepeating, .-KbSetKeyRepeating
- 255               	.global	KbGetKey
- 256               		.type	KbGetKey, @function
- 257               	KbGetKey:
+ 251 016e 0895      		ret
+ 252               	/* epilogue end (size=1) */
+ 253               	/* function KbSetKey size 3 (2) */
+ 254               		.size	KbSetKey, .-KbSetKey
+ 255               	.global	KbInjectKey
+ 256               		.type	KbInjectKey, @function
+ 257               	KbInjectKey:
  258               	/* prologue: frame size=0 */
  259               	/* prologue end (size=0) */
- 260 0196 8091 0000 		lds r24,KeyBuffer
- 261 019a 9927      		clr r25
- 262               	/* epilogue: frame size=0 */
- 263 019c 0895      		ret
- 264               	/* epilogue end (size=1) */
- 265               	/* function KbGetKey size 4 (3) */
- 266               		.size	KbGetKey, .-KbGetKey
- 267               	.global	KbSetKey
- 268               		.type	KbSetKey, @function
- 269               	KbSetKey:
- 270               	/* prologue: frame size=0 */
- 271               	/* prologue end (size=0) */
- 272 019e 8093 0000 		sts KeyBuffer,r24
- 273               	/* epilogue: frame size=0 */
- 274 01a2 0895      		ret
- 275               	/* epilogue end (size=1) */
- 276               	/* function KbSetKey size 3 (2) */
- 277               		.size	KbSetKey, .-KbSetKey
- 278               	.global	KbInjectKey
- 279               		.type	KbInjectKey, @function
- 280               	KbInjectKey:
- 281               	/* prologue: frame size=0 */
- 282               	/* prologue end (size=0) */
- 283 01a4 8093 0000 		sts KeyBuffer,r24
- 284 01a8 E091 0000 		lds r30,hKBEvent
- 285 01ac F091 0000 		lds r31,(hKBEvent)+1
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 6
+ 260 0170 8093 0000 		sts KeyBuffer,r24
+ 261 0174 E091 0000 		lds r30,hKBEvent
+ 262 0178 F091 0000 		lds r31,(hKBEvent)+1
+ 263 017c 3097      		sbiw r30,0
+ 264 017e 01F4      		brne .L32
+ 265 0180 8FEF      		ldi r24,lo8(-1)
+ 266 0182 9FEF      		ldi r25,hi8(-1)
+ 267 0184 9093 0000 		sts (hKBEvent)+1,r25
+ 268 0188 8093 0000 		sts hKBEvent,r24
+ 269 018c 0895      		ret
+ 270               	.L32:
+ 271 018e 8FEF      		ldi r24,hi8(-1)
+ 272 0190 EF3F      		cpi r30,lo8(-1)
+ 273 0192 F807      		cpc r31,r24
+ 274 0194 01F0      		breq .L36
+ 275 0196 8481      		ldd r24,Z+4
+ 276 0198 9581      		ldd r25,Z+5
+ 277 019a 0196      		adiw r24,1
+ 278 019c 9583      		std Z+5,r25
+ 279 019e 8483      		std Z+4,r24
+ 280               	.L36:
+ 281 01a0 0895      		ret
+ 282               	/* epilogue: frame size=0 */
+ 283               	/* epilogue: noreturn */
+ 284               	/* epilogue end (size=0) */
+ 285               	/* function KbInjectKey size 25 (25) */
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 6
 
 
- 286 01b0 3097      		sbiw r30,0
- 287 01b2 01F4      		brne .L37
- 288 01b4 8FEF      		ldi r24,lo8(-1)
- 289 01b6 9FEF      		ldi r25,hi8(-1)
- 290 01b8 9093 0000 		sts (hKBEvent)+1,r25
- 291 01bc 8093 0000 		sts hKBEvent,r24
- 292 01c0 0895      		ret
- 293               	.L37:
- 294 01c2 8FEF      		ldi r24,hi8(-1)
- 295 01c4 EF3F      		cpi r30,lo8(-1)
- 296 01c6 F807      		cpc r31,r24
- 297 01c8 01F0      		breq .L41
- 298 01ca 8481      		ldd r24,Z+4
- 299 01cc 9581      		ldd r25,Z+5
- 300 01ce 0196      		adiw r24,1
- 301 01d0 9583      		std Z+5,r25
- 302 01d2 8483      		std Z+4,r24
- 303               	.L41:
- 304 01d4 0895      		ret
- 305               	/* epilogue: frame size=0 */
- 306               	/* epilogue: noreturn */
- 307               	/* epilogue end (size=0) */
- 308               	/* function KbInjectKey size 25 (25) */
- 309               		.size	KbInjectKey, .-KbInjectKey
- 310               	.global	KbInit
- 311               		.type	KbInit, @function
- 312               	KbInit:
- 313               	/* prologue: frame size=0 */
- 314               	/* prologue end (size=0) */
- 315 01d6 A39A      		sbi 52-0x20,3
- 316 01d8 A49A      		sbi 52-0x20,4
- 317 01da 5B9A      		sbi 43-0x20,3
- 318 01dc 5A9A      		sbi 43-0x20,2
- 319 01de 1092 0000 		sts KbState,__zero_reg__
- 320 01e2 8FEF      		ldi r24,lo8(-1)
- 321 01e4 9FEF      		ldi r25,hi8(-1)
- 322 01e6 9093 0000 		sts (KeyFound)+1,r25
- 323 01ea 8093 0000 		sts KeyFound,r24
- 324               	/* #APP */
- 325 01ee 0FB6      		in  __tmp_reg__, __SREG__
- 326 01f0 F894      		cli
- 327 01f2 0F92      		push __tmp_reg__
- 328               		
- 329               	/* #NOAPP */
- 330 01f4 1092 0000 		sts (hKBEvent)+1,__zero_reg__
- 331 01f8 1092 0000 		sts hKBEvent,__zero_reg__
- 332               	/* #APP */
- 333 01fc 0F90      		pop __tmp_reg__
- 334 01fe 0FBE      		out __SREG__, __tmp_reg__
- 335               		
- 336               	/* #NOAPP */
- 337 0200 8FEF      		ldi r24,lo8(-1)
- 338 0202 8093 0000 		sts KeyBuffer,r24
- 339 0206 E0E0      		ldi r30,lo8(KeyRepeatArray)
- 340 0208 F0E0      		ldi r31,hi8(KeyRepeatArray)
- 341 020a 82E0      		ldi r24,lo8(2)
- 342               	.L43:
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 7
+ 286               		.size	KbInjectKey, .-KbInjectKey
+ 287               	.global	KbInit
+ 288               		.type	KbInit, @function
+ 289               	KbInit:
+ 290               	/* prologue: frame size=0 */
+ 291               	/* prologue end (size=0) */
+ 292 01a2 A39A      		sbi 52-0x20,3
+ 293 01a4 A49A      		sbi 52-0x20,4
+ 294 01a6 5B9A      		sbi 43-0x20,3
+ 295 01a8 5A9A      		sbi 43-0x20,2
+ 296 01aa 1092 0000 		sts KbState,__zero_reg__
+ 297 01ae 8FEF      		ldi r24,lo8(-1)
+ 298 01b0 9FEF      		ldi r25,hi8(-1)
+ 299 01b2 9093 0000 		sts (KeyFound)+1,r25
+ 300 01b6 8093 0000 		sts KeyFound,r24
+ 301               	/* #APP */
+ 302 01ba 0FB6      		in  __tmp_reg__, __SREG__
+ 303 01bc F894      		cli
+ 304 01be 0F92      		push __tmp_reg__
+ 305               		
+ 306               	/* #NOAPP */
+ 307 01c0 1092 0000 		sts (hKBEvent)+1,__zero_reg__
+ 308 01c4 1092 0000 		sts hKBEvent,__zero_reg__
+ 309               	/* #APP */
+ 310 01c8 0F90      		pop __tmp_reg__
+ 311 01ca 0FBE      		out __SREG__, __tmp_reg__
+ 312               		
+ 313               	/* #NOAPP */
+ 314 01cc 8FEF      		ldi r24,lo8(-1)
+ 315 01ce 8093 0000 		sts KeyBuffer,r24
+ 316 01d2 E0E0      		ldi r30,lo8(KeyRepeatArray)
+ 317 01d4 F0E0      		ldi r31,hi8(KeyRepeatArray)
+ 318 01d6 82E0      		ldi r24,lo8(2)
+ 319               	.L38:
+ 320 01d8 8193      		st Z+,r24
+ 321 01da 90E0      		ldi r25,hi8(KeyRepeatArray+16)
+ 322 01dc E030      		cpi r30,lo8(KeyRepeatArray+16)
+ 323 01de F907      		cpc r31,r25
+ 324 01e0 01F4      		brne .L38
+ 325 01e2 1092 0000 		sts (HoldCounter)+1,__zero_reg__
+ 326 01e6 1092 0000 		sts HoldCounter,__zero_reg__
+ 327 01ea 61E0      		ldi r22,lo8(1)
+ 328 01ec 88E0      		ldi r24,lo8(8)
+ 329 01ee 0E94 0000 		call KbSetKeyRepeating
+ 330 01f2 61E0      		ldi r22,lo8(1)
+ 331 01f4 8BE0      		ldi r24,lo8(11)
+ 332 01f6 0E94 0000 		call KbSetKeyRepeating
+ 333 01fa 61E0      		ldi r22,lo8(1)
+ 334 01fc 8AE0      		ldi r24,lo8(10)
+ 335 01fe 0E94 0000 		call KbSetKeyRepeating
+ 336 0202 61E0      		ldi r22,lo8(1)
+ 337 0204 8CE0      		ldi r24,lo8(12)
+ 338 0206 0E94 0000 		call KbSetKeyRepeating
+ 339               	/* epilogue: frame size=0 */
+ 340 020a 0895      		ret
+ 341               	/* epilogue end (size=1) */
+ 342               	/* function KbInit size 62 (61) */
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 7
 
 
- 343 020c 8193      		st Z+,r24
- 344 020e 90E0      		ldi r25,hi8(KeyRepeatArray+16)
- 345 0210 E030      		cpi r30,lo8(KeyRepeatArray+16)
- 346 0212 F907      		cpc r31,r25
- 347 0214 01F4      		brne .L43
- 348 0216 1092 0000 		sts (HoldCounter)+1,__zero_reg__
- 349 021a 1092 0000 		sts HoldCounter,__zero_reg__
- 350 021e 61E0      		ldi r22,lo8(1)
- 351 0220 88E0      		ldi r24,lo8(8)
- 352 0222 0E94 0000 		call KbSetKeyRepeating
- 353 0226 61E0      		ldi r22,lo8(1)
- 354 0228 8BE0      		ldi r24,lo8(11)
- 355 022a 0E94 0000 		call KbSetKeyRepeating
- 356 022e 61E0      		ldi r22,lo8(1)
- 357 0230 8AE0      		ldi r24,lo8(10)
- 358 0232 0E94 0000 		call KbSetKeyRepeating
- 359 0236 61E0      		ldi r22,lo8(1)
- 360 0238 8CE0      		ldi r24,lo8(12)
- 361 023a 0E94 0000 		call KbSetKeyRepeating
- 362               	/* epilogue: frame size=0 */
- 363 023e 0895      		ret
- 364               	/* epilogue end (size=1) */
- 365               	/* function KbInit size 62 (61) */
- 366               		.size	KbInit, .-KbInit
- 367               	.global	KbWaitForKeyEvent
- 368               		.type	KbWaitForKeyEvent, @function
- 369               	KbWaitForKeyEvent:
- 370               	/* prologue: frame size=0 */
- 371               	/* prologue end (size=0) */
- 372 0240 AB01      		movw r20,r22
- 373 0242 BC01      		movw r22,r24
- 374 0244 80E0      		ldi r24,lo8(hKBEvent)
- 375 0246 90E0      		ldi r25,hi8(hKBEvent)
- 376 0248 0E94 0000 		call NutEventWait
- 377 024c 20E0      		ldi r18,lo8(0)
- 378 024e 30E0      		ldi r19,hi8(0)
- 379 0250 8F5F      		subi r24,lo8(-1)
- 380 0252 9F4F      		sbci r25,hi8(-1)
- 381 0254 01F4      		brne .L49
- 382 0256 21E0      		ldi r18,lo8(1)
- 383 0258 30E0      		ldi r19,hi8(1)
- 384               	.L49:
- 385 025a C901      		movw r24,r18
- 386               	/* epilogue: frame size=0 */
- 387 025c 0895      		ret
- 388               	/* epilogue end (size=1) */
- 389               	/* function KbWaitForKeyEvent size 16 (15) */
- 390               		.size	KbWaitForKeyEvent, .-KbWaitForKeyEvent
- 391               		.lcomm hKBEvent,2
- 392               		.lcomm KeyFound,2
- 393               		.lcomm KeyBuffer,1
- 394               		.lcomm HoldCounter,2
- 395               		.lcomm KbState,1
- 396               		.lcomm KeyRepeatArray,16
- 397               	/* File "source/keyboard.c": code  325 = 0x0145 ( 321), prologues   0, epilogues   4 */
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s 			page 8
->>>>>>> 8734af555ce9d5804ce164a0e21360dad93051bc
+ 343               		.size	KbInit, .-KbInit
+ 344               	.global	KbWaitForKeyEvent
+ 345               		.type	KbWaitForKeyEvent, @function
+ 346               	KbWaitForKeyEvent:
+ 347               	/* prologue: frame size=0 */
+ 348               	/* prologue end (size=0) */
+ 349 020c AB01      		movw r20,r22
+ 350 020e BC01      		movw r22,r24
+ 351 0210 80E0      		ldi r24,lo8(hKBEvent)
+ 352 0212 90E0      		ldi r25,hi8(hKBEvent)
+ 353 0214 0E94 0000 		call NutEventWait
+ 354 0218 20E0      		ldi r18,lo8(0)
+ 355 021a 30E0      		ldi r19,hi8(0)
+ 356 021c 8F5F      		subi r24,lo8(-1)
+ 357 021e 9F4F      		sbci r25,hi8(-1)
+ 358 0220 01F4      		brne .L44
+ 359 0222 21E0      		ldi r18,lo8(1)
+ 360 0224 30E0      		ldi r19,hi8(1)
+ 361               	.L44:
+ 362 0226 C901      		movw r24,r18
+ 363               	/* epilogue: frame size=0 */
+ 364 0228 0895      		ret
+ 365               	/* epilogue end (size=1) */
+ 366               	/* function KbWaitForKeyEvent size 16 (15) */
+ 367               		.size	KbWaitForKeyEvent, .-KbWaitForKeyEvent
+ 368               		.lcomm hKBEvent,2
+ 369               		.lcomm KeyFound,2
+ 370               		.lcomm KeyBuffer,1
+ 371               		.lcomm HoldCounter,2
+ 372               		.lcomm KbState,1
+ 373               		.lcomm KeyRepeatArray,16
+ 374               	/* File "source/keyboard.c": code  299 = 0x012b ( 294), prologues   0, epilogues   5 */
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s 			page 8
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 keyboard.c
-<<<<<<< HEAD
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:13     .text:00000000 KbScan
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:244    .bss:00000002 KeyFound
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:245    .bss:00000004 KeyBuffer
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:76     .text:00000062 isKeyPressed
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:98     .text:0000007e KbSetKeyRepeating
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:248    .bss:00000008 KeyRepeatArray
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:121    .text:00000096 KbGetKey
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:133    .text:0000009e KbInjectKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:3      *ABS*:0000003f __SREG__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:4      *ABS*:0000003e __SP_H__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:5      *ABS*:0000003d __SP_L__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:13     .text:00000000 KbScan
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:368    .bss:00000002 KeyFound
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:369    .bss:00000004 KeyBuffer
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:211    .text:0000014a KbSetKeyRepeating
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:372    .bss:00000008 KeyRepeatArray
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:234    .text:00000162 KbGetKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:246    .text:0000016a KbSetKey
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:257    .text:00000170 KbInjectKey
                              .bss:00000000 hKBEvent
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:165    .text:000000d0 KbInit
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:247    .bss:00000007 KbState
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:246    .bss:00000005 HoldCounter
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccYlo2Ug.s:222    .text:0000013a KbWaitForKeyEvent
-=======
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:3      *ABS*:0000003f __SREG__
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:4      *ABS*:0000003e __SP_H__
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:5      *ABS*:0000003d __SP_L__
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:6      *ABS*:00000000 __tmp_reg__
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:7      *ABS*:00000001 __zero_reg__
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:13     .text:00000000 KbScan
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:391    .bss:00000002 KeyFound
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:392    .bss:00000004 KeyBuffer
-                             .bss:00000000 hKBEvent
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:234    .text:0000017e KbSetKeyRepeating
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:395    .bss:00000008 KeyRepeatArray
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:257    .text:00000196 KbGetKey
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:269    .text:0000019e KbSetKey
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:280    .text:000001a4 KbInjectKey
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:312    .text:000001d6 KbInit
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:394    .bss:00000007 KbState
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:393    .bss:00000005 HoldCounter
-C:/Users/no_no/AppData/Local/Temp/ccYVt0si.s:369    .text:00000240 KbWaitForKeyEvent
->>>>>>> 8734af555ce9d5804ce164a0e21360dad93051bc
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:289    .text:000001a2 KbInit
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:371    .bss:00000007 KbState
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:370    .bss:00000005 HoldCounter
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cci7CO9K.s:346    .text:0000020c KbWaitForKeyEvent
 
 UNDEFINED SYMBOLS
 __do_copy_data

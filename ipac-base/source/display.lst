@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page 1
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 1
 
 
    1               		.file	"display.c"
@@ -58,11 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page
   55               	/* #NOAPP */
   56 0032 7298      		cbi 46-0x20,2
   57 0034 8A98      		cbi 49-0x20,2
-<<<<<<< HEAD
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page 2
-=======
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s 			page 2
->>>>>>> 8734af555ce9d5804ce164a0e21360dad93051bc
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 2
 
 
   58 0036 8AB1      		in r24,42-0x20
@@ -119,135 +115,10 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page
  109               	LcdWriteUchar:
  110               	/* prologue: frame size=0 */
  111               	/* prologue end (size=0) */
-<<<<<<< HEAD
- 112 007e 682F      		mov r22,r24
- 113 0080 83E0      		ldi r24,lo8(3)
- 114 0082 0E94 0000 		call LcdWriteByte
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page 3
-
-
- 115               	/* epilogue: frame size=0 */
- 116 0086 0895      		ret
- 117               	/* epilogue end (size=1) */
- 118               	/* function LcdChar size 5 (4) */
- 119               		.size	LcdChar, .-LcdChar
- 120               	.global	LcdWriteString
- 121               		.type	LcdWriteString, @function
- 122               	LcdWriteString:
- 123               	/* prologue: frame size=0 */
- 124 0088 EF92      		push r14
- 125 008a FF92      		push r15
- 126 008c 0F93      		push r16
- 127 008e 1F93      		push r17
- 128 0090 CF93      		push r28
- 129 0092 DF93      		push r29
- 130               	/* prologue end (size=6) */
- 131 0094 7B01      		movw r14,r22
- 132 0096 C0E0      		ldi r28,lo8(0)
- 133 0098 D0E0      		ldi r29,hi8(0)
- 134 009a 8C01      		movw r16,r24
- 135 009c 00C0      		rjmp .L21
- 136               	.L22:
- 137 009e F801      		movw r30,r16
- 138 00a0 8191      		ld r24,Z+
- 139 00a2 8F01      		movw r16,r30
- 140 00a4 0E94 0000 		call LcdChar
- 141 00a8 2196      		adiw r28,1
- 142               	.L21:
- 143 00aa C701      		movw r24,r14
- 144 00ac 0197      		sbiw r24,1
- 145 00ae C817      		cp r28,r24
- 146 00b0 D907      		cpc r29,r25
- 147 00b2 04F0      		brlt .L22
- 148               	/* epilogue: frame size=0 */
- 149 00b4 DF91      		pop r29
- 150 00b6 CF91      		pop r28
- 151 00b8 1F91      		pop r17
- 152 00ba 0F91      		pop r16
- 153 00bc FF90      		pop r15
- 154 00be EF90      		pop r14
- 155 00c0 0895      		ret
- 156               	/* epilogue end (size=7) */
- 157               	/* function LcdWriteString size 29 (16) */
- 158               		.size	LcdWriteString, .-LcdWriteString
- 159               	.global	LcdClear
- 160               		.type	LcdClear, @function
- 161               	LcdClear:
- 162               	/* prologue: frame size=0 */
- 163               	/* prologue end (size=0) */
- 164 00c2 61E0      		ldi r22,lo8(1)
- 165 00c4 82E0      		ldi r24,lo8(2)
- 166 00c6 0E94 0000 		call LcdWriteByte
- 167 00ca 60E8      		ldi r22,lo8(-128)
- 168 00cc 82E0      		ldi r24,lo8(2)
- 169 00ce 0E94 0000 		call LcdWriteByte
- 170 00d2 85E0      		ldi r24,lo8(5)
- 171 00d4 0E94 0000 		call NutDelay
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page 4
-
-
- 172               	/* epilogue: frame size=0 */
- 173 00d8 0895      		ret
- 174               	/* epilogue end (size=1) */
- 175               	/* function LcdClear size 12 (11) */
- 176               		.size	LcdClear, .-LcdClear
- 177               	.global	LcdLowLevelInit
- 178               		.type	LcdLowLevelInit, @function
- 179               	LcdLowLevelInit:
- 180               	/* prologue: frame size=0 */
- 181 00da 1F93      		push r17
- 182               	/* prologue end (size=1) */
- 183 00dc 8CE8      		ldi r24,lo8(-116)
- 184 00de 0E94 0000 		call NutDelay
- 185 00e2 10E0      		ldi r17,lo8(0)
- 186               	.L28:
- 187 00e4 63E3      		ldi r22,lo8(51)
- 188 00e6 82E0      		ldi r24,lo8(2)
- 189 00e8 0E94 0000 		call LcdWriteNibble
- 190 00ec 84E0      		ldi r24,lo8(4)
- 191 00ee 0E94 0000 		call NutDelay
- 192 00f2 1F5F      		subi r17,lo8(-(1))
- 193 00f4 1330      		cpi r17,lo8(3)
- 194 00f6 01F4      		brne .L28
- 195 00f8 62E2      		ldi r22,lo8(34)
- 196 00fa 82E0      		ldi r24,lo8(2)
- 197 00fc 0E94 0000 		call LcdWriteNibble
- 198 0100 81E0      		ldi r24,lo8(1)
- 199 0102 0E94 0000 		call NutDelay
- 200 0106 68E2      		ldi r22,lo8(40)
- 201 0108 82E0      		ldi r24,lo8(2)
- 202 010a 0E94 0000 		call LcdWriteByte
- 203 010e 85E0      		ldi r24,lo8(5)
- 204 0110 0E94 0000 		call NutDelay
- 205 0114 6CE0      		ldi r22,lo8(12)
- 206 0116 82E0      		ldi r24,lo8(2)
- 207 0118 0E94 0000 		call LcdWriteByte
- 208 011c 85E0      		ldi r24,lo8(5)
- 209 011e 0E94 0000 		call NutDelay
- 210 0122 61E0      		ldi r22,lo8(1)
- 211 0124 82E0      		ldi r24,lo8(2)
- 212 0126 0E94 0000 		call LcdWriteByte
- 213 012a 85E0      		ldi r24,lo8(5)
- 214 012c 0E94 0000 		call NutDelay
- 215 0130 66E0      		ldi r22,lo8(6)
- 216 0132 82E0      		ldi r24,lo8(2)
- 217 0134 0E94 0000 		call LcdWriteByte
- 218 0138 60E8      		ldi r22,lo8(-128)
- 219 013a 82E0      		ldi r24,lo8(2)
- 220 013c 0E94 0000 		call LcdWriteByte
- 221               	/* epilogue: frame size=0 */
- 222 0140 1F91      		pop r17
- 223 0142 0895      		ret
- 224               	/* epilogue end (size=2) */
- 225               	/* function LcdLowLevelInit size 53 (50) */
- 226               		.size	LcdLowLevelInit, .-LcdLowLevelInit
- 227               	/* File "source/display.c": code  166 = 0x00a6 ( 142), prologues   9, epilogues  15 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page 5
-=======
  112 007e 0E94 0000 		call LcdWriteByte
  113               	/* epilogue: frame size=0 */
  114 0082 0895      		ret
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s 			page 3
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 3
 
 
  115               	/* epilogue end (size=1) */
@@ -307,7 +178,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page
  169               		.size	LcdWriteString, .-LcdWriteString
  170               	.global	LcdClear
  171               		.type	LcdClear, @function
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s 			page 4
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 4
 
 
  172               	LcdClear:
@@ -354,7 +225,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page
  213 0110 0E94 0000 		call LcdWriteByte
  214 0114 85E0      		ldi r24,lo8(5)
  215 0116 0E94 0000 		call NutDelay
- 216 011a 6BE0      		ldi r22,lo8(11)
+ 216 011a 6EE0      		ldi r22,lo8(14)
  217 011c 82E0      		ldi r24,lo8(2)
  218 011e 0E94 0000 		call LcdWriteByte
  219 0122 85E0      		ldi r24,lo8(5)
@@ -367,7 +238,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page
  226 0136 66E0      		ldi r22,lo8(6)
  227 0138 82E0      		ldi r24,lo8(2)
  228 013a 0E94 0000 		call LcdWriteByte
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s 			page 5
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 5
 
 
  229 013e 60E8      		ldi r22,lo8(-128)
@@ -380,40 +251,24 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s 			page
  236               	/* function LcdLowLevelInit size 53 (50) */
  237               		.size	LcdLowLevelInit, .-LcdLowLevelInit
  238               	/* File "source/display.c": code  169 = 0x00a9 ( 144), prologues   9, epilogues  16 */
-GAS LISTING C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s 			page 6
->>>>>>> 8734af555ce9d5804ce164a0e21360dad93051bc
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 display.c
-<<<<<<< HEAD
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:13     .text:00000000 LcdBackLight
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:32     .text:00000010 LcdWriteNibble
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:71     .text:00000046 LcdWriteByte
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:109    .text:0000007e LcdChar
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:122    .text:00000088 LcdWriteString
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:161    .text:000000c2 LcdClear
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccByguIn.s:179    .text:000000da LcdLowLevelInit
-=======
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:3      *ABS*:0000003f __SREG__
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:4      *ABS*:0000003e __SP_H__
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:5      *ABS*:0000003d __SP_L__
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:6      *ABS*:00000000 __tmp_reg__
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:7      *ABS*:00000001 __zero_reg__
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:13     .text:00000000 LcdBackLight
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:32     .text:00000010 LcdWriteNibble
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:71     .text:00000046 LcdWriteByte
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:109    .text:0000007e LcdWriteUchar
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:120    .text:00000084 LcdChar
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:133    .text:0000008e LcdWriteString
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:172    .text:000000c8 LcdClear
-C:/Users/no_no/AppData/Local/Temp/ccZdwCaN.s:190    .text:000000e0 LcdLowLevelInit
->>>>>>> 8734af555ce9d5804ce164a0e21360dad93051bc
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:3      *ABS*:0000003f __SREG__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:4      *ABS*:0000003e __SP_H__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:5      *ABS*:0000003d __SP_L__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:13     .text:00000000 LcdBackLight
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:32     .text:00000010 LcdWriteNibble
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:71     .text:00000046 LcdWriteByte
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:109    .text:0000007e LcdWriteUchar
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:120    .text:00000084 LcdChar
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:133    .text:0000008e LcdWriteString
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:172    .text:000000c8 LcdClear
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:190    .text:000000e0 LcdLowLevelInit
 
 UNDEFINED SYMBOLS
 __do_copy_data

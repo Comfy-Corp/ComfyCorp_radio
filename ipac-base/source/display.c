@@ -118,7 +118,7 @@ void LcdWriteUchar(u_char write, u_char byte)
     LcdWriteByte(WRITE_COMMAND, 0x28);          // function set: 4-bit mode, 5x7 dot mode, 2-lines
     NutDelay(5);
 
-    LcdWriteByte(WRITE_COMMAND, 0x0B);          // display ON/OFF: display ON, cursor OFF, blink OFF
+    LcdWriteByte(WRITE_COMMAND, 0x0E);          // display ON/OFF: display ON, cursor OFF, blink OFF
     NutDelay(5);
 
     LcdWriteByte(WRITE_COMMAND, 0x01);          // display clear
