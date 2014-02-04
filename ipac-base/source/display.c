@@ -52,11 +52,11 @@ static void LcdWaitBusy(void);
 /*                         start of code                                   */
 /*-------------------------------------------------------------------------*/
 
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 /*!
  * \brief control backlight
  */
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 void LcdBackLight(u_char Mode)
 {
     if (Mode==LCD_BACKLIGHT_ON)
@@ -70,7 +70,7 @@ void LcdBackLight(u_char Mode)
     }
 }
 
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 /*!
  * \brief Write a single character on the LCD
  *
@@ -78,7 +78,7 @@ void LcdBackLight(u_char Mode)
  *
  * \param LcdChar character to write
  */
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 void LcdChar(char MyChar)
 {
     LcdWriteByte(WRITE_DATA, MyChar);
@@ -89,7 +89,7 @@ void LcdWriteUchar(u_char write, u_char byte)
     LcdWriteByte(write, byte);
 }
 
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 /*!
  * \brief Low-level initialisation function of the LCD-controller
  *
@@ -98,7 +98,7 @@ void LcdWriteUchar(u_char write, u_char byte)
  *           1 line dislay, 10 dots high characters
  *
  */
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
  void LcdLowLevelInit()
 {
     u_char i;
@@ -131,7 +131,7 @@ void LcdWriteUchar(u_char write, u_char byte)
 }
 
 
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 /*!
  * \brief Low-level routine to write a byte to LCD-controller
  *
@@ -143,7 +143,7 @@ void LcdWriteUchar(u_char write, u_char byte)
  * \param LcdByte byte to write
  *
  */
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 static void LcdWriteByte(u_char CtrlState, u_char LcdByte)
 {
     LcdWaitBusy();                      // see if the controller is ready to receive next byte
@@ -152,7 +152,7 @@ static void LcdWriteByte(u_char CtrlState, u_char LcdByte)
 
 }
 
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 /*!
  * \brief Low-level routine to write a nibble to LCD-controller
  *
@@ -164,7 +164,7 @@ static void LcdWriteByte(u_char CtrlState, u_char LcdByte)
  * \param LcdNibble nibble to write (upper 4 bits in this byte
  *
  */
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 static void LcdWriteNibble(u_char CtrlState, u_char LcdNibble)
 {
     outp((inp(LCD_DATA_DDR) & 0x0F) | 0xF0, LCD_DATA_DDR);  // set data-port to output again
@@ -190,7 +190,7 @@ static void LcdWriteNibble(u_char CtrlState, u_char LcdNibble)
     outp((inp(LCD_DATA_PORT) & 0x0F) | 0xF0, LCD_DATA_PORT);  // enable pull-ups in data-port
 }
 
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 /*!
  * \brief Low-level routine to see if the controller is ready to receive
  *
@@ -198,7 +198,7 @@ static void LcdWriteNibble(u_char CtrlState, u_char LcdNibble)
  * has become '0'. If a '0' is detected on bit 7 the function returns.
  *
  */
-/* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
+/* รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร */
 static void LcdWaitBusy()
 {
     u_char Busy = 1;
@@ -222,9 +222,10 @@ static void LcdWaitBusy()
     cbi (LCD_RW_PORT, LCD_RW);              // we are going to write
 }
 
+
+    //TODO, continue on new line if string is too long!
 void LcdWriteString(char charArray[], int size)
 {
-    //int size = sizeof(charArray)/sizeof(charArray[0]);
   int i;
   for(i=0;i<size-1;i++){
     LcdChar((char)charArray[i]);
