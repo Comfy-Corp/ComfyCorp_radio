@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 1
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s 			page 1
 
 
    1               		.file	"display.c"
@@ -58,7 +58,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page
   55               	/* #NOAPP */
   56 0032 7298      		cbi 46-0x20,2
   57 0034 8A98      		cbi 49-0x20,2
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 2
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s 			page 2
 
 
   58 0036 8AB1      		in r24,42-0x20
@@ -118,7 +118,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page
  112 007e 0E94 0000 		call LcdWriteByte
  113               	/* epilogue: frame size=0 */
  114 0082 0895      		ret
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 3
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s 			page 3
 
 
  115               	/* epilogue end (size=1) */
@@ -178,7 +178,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page
  169               		.size	LcdWriteString, .-LcdWriteString
  170               	.global	LcdClear
  171               		.type	LcdClear, @function
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 4
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s 			page 4
 
 
  172               	LcdClear:
@@ -238,7 +238,7 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page
  226 0136 66E0      		ldi r22,lo8(6)
  227 0138 82E0      		ldi r24,lo8(2)
  228 013a 0E94 0000 		call LcdWriteByte
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 5
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s 			page 5
 
 
  229 013e 60E8      		ldi r22,lo8(-128)
@@ -251,24 +251,24 @@ GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page
  236               	/* function LcdLowLevelInit size 53 (50) */
  237               		.size	LcdLowLevelInit, .-LcdLowLevelInit
  238               	/* File "source/display.c": code  169 = 0x00a9 ( 144), prologues   9, epilogues  16 */
-GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s 			page 6
+GAS LISTING /var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 display.c
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:3      *ABS*:0000003f __SREG__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:4      *ABS*:0000003e __SP_H__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:5      *ABS*:0000003d __SP_L__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:13     .text:00000000 LcdBackLight
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:32     .text:00000010 LcdWriteNibble
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:71     .text:00000046 LcdWriteByte
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:109    .text:0000007e LcdWriteUchar
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:120    .text:00000084 LcdChar
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:133    .text:0000008e LcdWriteString
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:172    .text:000000c8 LcdClear
-/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//cc3LpOt1.s:190    .text:000000e0 LcdLowLevelInit
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:3      *ABS*:0000003f __SREG__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:4      *ABS*:0000003e __SP_H__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:5      *ABS*:0000003d __SP_L__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:13     .text:00000000 LcdBackLight
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:32     .text:00000010 LcdWriteNibble
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:71     .text:00000046 LcdWriteByte
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:109    .text:0000007e LcdWriteUchar
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:120    .text:00000084 LcdChar
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:133    .text:0000008e LcdWriteString
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:172    .text:000000c8 LcdClear
+/var/folders/_4/0gv1xzls4452yr8f8wz3qh880000gn/T//ccgUrmvu.s:190    .text:000000e0 LcdLowLevelInit
 
 UNDEFINED SYMBOLS
 __do_copy_data
