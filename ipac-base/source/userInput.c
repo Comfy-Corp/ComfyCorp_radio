@@ -7,58 +7,72 @@
 
 
 
-
-
 void buttonPressed(u_char keyPressed, u_char menuItem){
 	if (keyPressed == KEY_ESC || keyPressed == KEY_OK || keyPressed == KEY_ALT || keyPressed == KEY_POWER ||
 	 keyPressed == KEY_01 || keyPressed == KEY_02 || keyPressed == KEY_03 || keyPressed == KEY_04 ||
 	 keyPressed == KEY_05 || keyPressed == KEY_UP || keyPressed == KEY_DOWN || keyPressed == KEY_LEFT ||
 	 keyPressed == KEY_RIGHT){
+	 	char str [16];
 	 	LcdClear();
 		switch(keyPressed){
 			//special keys
 			case KEY_ESC:
-				LcdWriteString("Esc pressed " + menuItem, sizeof("Esc pressed " + menuItem));
+				sprintf(str, "Esc pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_OK:
-				LcdWriteString("Ok pressed " + menuItem, sizeof("Ok pressed " + menuItem));
+				sprintf(str, "Ok pressed at %c", menuItem);
+				LcdWriteString(str, 16 * sizeof(char));
 			break;
 			case KEY_ALT:
-				LcdWriteString("Alt pressed " + menuItem, sizeof("Alt pressed " + menuItem));
+				sprintf(str, "Alt pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_POWER:
-				LcdWriteString("Power pressed " + menuItem, sizeof("Power pressed " + menuItem));
+				sprintf(str, "Power pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			// number keys
 			case KEY_01:
-				LcdWriteString("01 pressed " + menuItem, sizeof("01 pressed " + menuItem));
+				sprintf(str, "01 pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_02:
-				LcdWriteString("02 pressed " + menuItem, sizeof("02 pressed " + menuItem));
+				sprintf(str, "02 pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_03:
-				LcdWriteString("03 pressed " + menuItem, sizeof("03 pressed " + menuItem));
+				sprintf(str, "03 pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_04:
-				LcdWriteString("04 pressed " + menuItem, sizeof("04 pressed " + menuItem));
+				sprintf(str, "04 pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_05:
-				LcdWriteString("05 pressed " + menuItem, sizeof("05 pressed " + menuItem));
+				sprintf(str, "05 pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			//direction keys
 			case KEY_UP:
-				LcdWriteString("Up pressed " + menuItem, sizeof("Up pressed " + menuItem));
+				sprintf(str, "Up pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_DOWN:
-				LcdWriteString("Down pressed " + menuItem, sizeof("Down pressed " + menuItem));
+				sprintf(str, "Down pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_RIGHT:
-				LcdWriteString("Right pressed " + menuItem, sizeof("Right pressed " + menuItem));
+				sprintf(str, "Right pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 			case KEY_LEFT:
-				LcdWriteString("Left pressed " + menuItem, sizeof("Left pressed " + menuItem));
+				sprintf(str, "Left pressed at %c", menuItem);
+				LcdWriteString(str, (int)sizeof(str));
 			break;
 		}
 	}
 }
+
+
 
