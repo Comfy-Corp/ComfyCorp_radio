@@ -1,1 +1,1 @@
-extern void buttonPressed(u_char);
+extern void buttonPressed(u_char, u_char);
