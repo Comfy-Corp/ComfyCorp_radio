@@ -1,42 +1,38 @@
 #include <stdio.h>
 #include "lcd.h"
+#include "ui.h"
 
-
- #define STATE_SHOWTIME 0
- #define STATE_SHOWMENU 1
- #define STATE_SHOWSETUP 2
- #define STATE_SHOWRESET 3
- #define STATE_SHOWALARM 4
- #define STATE_SHOWSYNCING 5
-
-char STATE;
-char timeBuffer[9];
-char screenStateChar = STATE_SHOWTIME;
+char screenStateChar = UISTATE_SHOWTIME;
 
 int UIshow()
 {
+	LcdClear();
 	switch (screenStateChar)
         {
-            case STATE_SHOWTIME:
-            	LcdClear();
-            	fillStringWithTime(timeBuffer);
-            	LcdWriteString(timeBuffer, sizeof(timeBuffer));
+            case UISTATE_SHOWTIME:
                 break;
-            case STATE_SHOWSYNCING:
+            case UISTATE_SHOWSYNCING:
                 break;
-            case STATE_SHOWALARM:
+            case UISTATE_SHOWALARM:
                 break;
-            case STATE_SHOWRESET:
+            case UISTATE_SHOWRESET:
                 break;
-            case STATE_SHOWSETUP:
+            case UISTATE_SHOWSETUP:
                 break;
-            case STATE_SHOWMENU:
+            case UISTATE_SHOWMENU:
                 break;
         }
-	return STATE;
+	return screenStateChar;
 }
 
 void UIchangeState(char newState)
 {
-	STATE = newState;
+	screenStateChar = newState;
+	UIshow();
 }
+
+/*struct menuItem[] mainMenu = {
+	{
+		"Dit is een mens"
+	}
+};*/
