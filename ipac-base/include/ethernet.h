@@ -1,2 +1,2 @@
 extern int ethInitInet(void);
-extern int ethGetNTPTime();
+extern int ethGetNTPTime(void);

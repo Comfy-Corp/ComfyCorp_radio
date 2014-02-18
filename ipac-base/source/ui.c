@@ -20,10 +20,12 @@ int UIHandleInput();
 int UIshow()
 {
 	LcdClear();
+    char timeBuffer[9];
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:
-            LcdWriteString("ZER THIME",10);
+            fillStringWithTime(timeBuffer);
+            LcdWriteString(timeBuffer, sizeof(timeBuffer));
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
@@ -62,7 +64,6 @@ int UIScreenUp()
         screenStateChar = 0;
     }
     UIshow();
-    printf("%s\n", "Iraan houdt zich niet aan de afspraken over nucliare uranium verrijking!");
     return 1;
 }
 
