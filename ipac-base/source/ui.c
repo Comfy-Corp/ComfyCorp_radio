@@ -23,7 +23,7 @@ int UIshow()
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:
-            LcdWriteString("Ze Time",8);
+            LcdWriteString("ZER THIME",10);
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
@@ -63,6 +63,7 @@ int UIScreenUp()
     }
     UIshow();
     printf("%s\n", "Iraan houdt zich niet aan de afspraken over nucliare uranium verrijking!");
+    return 1;
 }
 
 int UIScreenDown()
@@ -73,6 +74,7 @@ int UIScreenDown()
         screenStateChar = 2;
     }
     UIshow();
+    return 1;
 }
 
 int UIScreenOK()
@@ -82,6 +84,7 @@ int UIScreenOK()
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
     }
+    return 1;
 }
 
 int UIScreenLeft()
@@ -91,6 +94,7 @@ int UIScreenLeft()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go left, but I can not do that yet :(" );
     }
+    return 1;
 }
 
 int UIScreenRight()
@@ -100,24 +104,22 @@ int UIScreenRight()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go right, but I can not do that yet :(" );
     }    
+    return 1;
 }
 
 int UIScreenEsc()
 {
     screenStateChar = 0;
     UIshow();
+    return 1;
 }
 
 int UIHandleInput(int kb_error)
 {
-        if (kb_error != KB_ERROR)
-        {
-            userInputKeyPress();
-        }
+    if (kb_error != KB_ERROR)
+    {
+        userInputKeyPress();
+    }
+    
+    return 1;
 }
-
-/*struct menuItem[] mainMenu = {
-	{
-		"Dit is een mens"
-	}
-};*/

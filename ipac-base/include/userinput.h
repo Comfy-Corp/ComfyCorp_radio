@@ -1,1 +1,1 @@
-void userInputKeyPress();
+void userInputKeyPress(void);
