@@ -5,6 +5,17 @@
 #include "keyboard.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
+/*
+int UIshow();
+void UIchangeState(char);
+int UIGetState();
+int UIScreenUp();
+int UIScreenDown();
+int UIScreenOK();
+int UIScreenLeft();
+int UIScreenEsc();
+int UIHandleInput();
+*/
 
 int UIshow()
 {
