@@ -41,12 +41,14 @@ CFILES =        main.c			\
 				flash.c			\
 				rtc.c 			\
 				userInput.c		\
-				dispatcher.c
+				dispatcher.c 	\
+				ethernet.c
 			
 				
 # Header files.
 HFILES =        lcd.h        keyboard.h              \
 				ui.h         userInput.h          \
+				ethernet.h 	\
                 led.h                            \
                 portio.h         remcon.h         log.h          \
                 system.h                 settings.h     \

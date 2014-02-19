@@ -65,7 +65,7 @@ int UIScreenUp()
         screenStateChar = 0;
     }
     UIshow();
-    printf("%s\n", "Iraan houdt zich niet aan de afspraken over nucliare uranium verrijking!");
+    return 1;
 }
 
 int UIScreenDown()
@@ -76,6 +76,7 @@ int UIScreenDown()
         screenStateChar = 2;
     }
     UIshow();
+    return 1;
 }
 
 int UIScreenOK()
@@ -85,6 +86,7 @@ int UIScreenOK()
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
     }
+    return 1;
 }
 
 int UIScreenLeft()
@@ -94,6 +96,7 @@ int UIScreenLeft()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go left, but I can not do that yet :(" );
     }
+    return 1;
 }
 
 int UIScreenRight()
@@ -103,12 +106,14 @@ int UIScreenRight()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go right, but I can not do that yet :(" );
     }    
+    return 1;
 }
 
 int UIScreenEsc()
 {
     screenStateChar = 0;
     UIshow();
+    return 1;
 }
 
 int UIHandleInput(int kb_error)
@@ -118,6 +123,7 @@ int UIHandleInput(int kb_error)
             LcdBackLightBriefOn(100);
             userInputKeyPress();
         }
+        return 1;
 }
 
 int UIRefreshScreen(){
