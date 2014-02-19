@@ -27,6 +27,7 @@ LDFLAGS	=	-mmcu=atmega2561 -Wl,--defsym=main=0,-Map=TIStreamer.map,--cref
 CFILES =        main.c			\
 				ui.c 			\
 				uart0driver.c	\
+				player.c	\
 				log.c			\
                 led.c			\
 				keyboard.c		\
