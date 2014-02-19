@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include "lcd.h"
 #include "ui.h"
 #include "userinput.h"
@@ -124,3 +125,37 @@ int UIHandleInput(int kb_error)
     
     return 1;
 }
+
+int UISetTimeZone()
+{
+    tm timeZone = {0,0,0,1,0,100,0,0,0};
+    X12RtcGetClock(&timeZone);
+    
+    for(;;)
+    {
+        if(KbGetKey() == KEY_RIGHT)
+        {
+            ++timeZone.tm_hour;
+        }
+        else if (KbGetKey() == KEY_LEFT)
+        {
+            --timeZone.tm_hour;
+        }
+        else if(KbGetKey() == KEY_OK)
+        {
+            break;
+        }
+    }
+
+
+    return 1;
+}
+
+int UIDisplayTimeZoneSelection()
+{
+    LcdClear();
+//    LcdWriteString();
+    return 1;
+}
+
+
