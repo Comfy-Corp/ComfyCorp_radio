@@ -20,10 +20,13 @@ int UIHandleInput();
 int UIshow()
 {
 	LcdClear();
+    char *timeBuffer = malloc(sizeof(char) * 20);
 	switch (screenStateChar)
         {
-            case UISTATE_SHOWTIME:
-            LcdWriteString("Ze Time",8);
+            case UISTATE_SHOWTIME:                
+                fillStringWithTime(timeBuffer);
+                LcdSetCursor(0x00);
+                LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
@@ -112,8 +115,18 @@ int UIHandleInput(int kb_error)
 {
         if (kb_error != KB_ERROR)
         {
+            LcdBackLightBriefOn(100);
             userInputKeyPress();
         }
+}
+
+int UIRefreshScreen(){
+    if(screenStateChar == UISTATE_SHOWTIME){
+        char *timeBuffer = malloc(sizeof(char) * 20);
+        fillStringWithTime(timeBuffer);
+        LcdSetCursor(0x00);
+        LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+    }
 }
 
 /*struct menuItem[] mainMenu = {

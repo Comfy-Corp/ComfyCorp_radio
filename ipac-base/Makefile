@@ -40,12 +40,13 @@ CFILES =        main.c			\
                 fat.c			\
 				flash.c			\
 				rtc.c 			\
-				userinput.c
+				userInput.c		\
+				dispatcher.c
 			
 				
 # Header files.
 HFILES =        lcd.h        keyboard.h              \
-				ui.h         userinput.h             \
+				ui.h         userInput.h          \
                 led.h                            \
                 portio.h         remcon.h         log.h          \
                 system.h                 settings.h     \
@@ -56,7 +57,8 @@ HFILES =        lcd.h        keyboard.h              \
                 watchdog.h       mmc.h             \
                 flash.h          spidrv.h         command.h      \
                 parse.h          mmcdrv.h         fat.h          \
-                fatdrv.h         flash.h	  	rtc.h 		
+                fatdrv.h         flash.h	  	rtc.h 		\
+				dispatcher.h
 
 
 # Alle source files in de ./source dir
