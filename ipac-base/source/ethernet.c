@@ -20,6 +20,7 @@
 #include <sys/bankmem.h>
 #include <netinet/tcp.h>
 
+
 #define NOK 1
 #define OK 0
 
@@ -91,3 +92,22 @@ int ethGetNTPTime()
     X12RtcSetClock(ntp_datetime);
     return 0;
 }
+
+FILE* GetHTTPRawStream(char* ip)
+{
+    TCPSOCKET* sock;
+    sock = NutTcpCreateSocket();
+    if (NutTcpConnect(sock, inet_addr(*ip), 8000)) {
+        /* Error: Cannot connect server. */
+    }
+    else
+    {
+        FILE *stream;
+        /* ... more code here ... */
+ 
+        stream = _fdopen((int) sock, "r+b");
+        return stream;
+    }
+}
+
+
