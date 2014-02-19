@@ -105,6 +105,7 @@ FILE* GetHTTPRawStream(char* ip)
         /* ... more code here ... */
  
         stream = _fdopen((int) sock, "r+b");
+        fwrite("GET / HTTP/1.1\r\n\r\n", 1, 18, stream);
         return stream;
     }
 }
