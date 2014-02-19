@@ -65,6 +65,7 @@ int ethInitInet(void)
 
 int ethGetNTPTime()
 {
+	//Tijdelijke lokale tijdzone, LET OP, GMT +1 wordt in de code -1!!
 	_timezone = -1 *60*60;
 	time_t ntp_time = 0;
 	tm *ntp_datetime;
