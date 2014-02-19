@@ -27,6 +27,7 @@ LDFLAGS	=	-mmcu=atmega2561 -Wl,--defsym=main=0,-Map=TIStreamer.map,--cref
 CFILES =        main.c			\
 				ui.c 			\
 				uart0driver.c	\
+				player.c	\
 				log.c			\
                 led.c			\
 				keyboard.c		\
@@ -47,6 +48,7 @@ CFILES =        main.c			\
 				
 # Header files.
 HFILES =        lcd.h        keyboard.h              \
+		player.h	\
 				ethernet.h 	\
 				ui.h         userinput.h             \
                 led.h                            \
