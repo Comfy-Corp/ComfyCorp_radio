@@ -97,7 +97,7 @@ THREAD(StreamPlayer, arg)
 		{
 			printf("I am in ze while\n");
 			// Copy rbytes (van 1 byte) van stream naar mp3buf.
-			nrBytesRead = fread(mp3buf,1,5,stream);
+			nrBytesRead = fread(mp3buf,1,rbytes,stream);
 			printf("LOL\n");
 			
 			if( nrBytesRead > 0 )

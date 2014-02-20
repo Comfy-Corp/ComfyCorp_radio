@@ -107,13 +107,8 @@ FILE* GetHTTPRawStream(char* ip)
         FILE *stream;
         /* ... more code here ... */
  		printf("%s\n", "server connection ok");
-
         stream = _fdopen((int) sock, "r+b");
-
-        fwrite("a",1,1, stream);
-        char* got = malloc(1024);
-        fread(got, 1, 1024, stream);
-        puts(got);
+        fwrite("GET HTTP/1.0\r\n\r\n", 1, 18, stream);
         return stream;
     }
 }
