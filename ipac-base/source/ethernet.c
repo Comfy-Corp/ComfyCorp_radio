@@ -130,13 +130,19 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
 			dashLoc = i;
 			break;
 		}
+		else if (ip[i] ==0)
+		{
+			nullterm=-1;
+			break;
+		}
 	} 
 	if (!nullTerm)
 	{
 		ip[17] = 0;
 	}   
-    str[strlen(str) - 1] = 0;
+    //str[strlen(str) - 1] = 0;
     char* address = malloc(64*sizeof(char));
+    printf("connecting to ip %s\n", ip);
     if (NutTcpConnect(sock, inet_addr(*ip), port)) {
         /* Error: Cannot connect server. */
     }
@@ -144,9 +150,20 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     {
         FILE *stream;
         /* ... more code here ... */
- 
+        if (nullterm>0)
+        {
+	 		for (i=dashLoc;i < 81; ++i)
+	        {
+	            address[i-1] = netaddress[i];
+	        }
+    	}
+    	else
+    	{
+    		address = "";
+    	}	
+    	printf("opening %s%s\n", ip, address);
         stream = _fdopen((int) sock, "r+b");
-        fprintf(stream, "GET %s HTTP/1.1\r\n\r\n", );
+        fprintf(stream, "GET %s HTTP/1.1\r\n\r\n", address);
         return stream;
     }
 }
