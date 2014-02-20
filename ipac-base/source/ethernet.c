@@ -66,6 +66,7 @@ int ethInitInet(void)
 
 int ethGetNTPTime()
 {
+	//Tijdelijke lokale tijdzone, LET OP, GMT +1 wordt in de code -1!!
 	_timezone = -1 *60*60;
 	time_t ntp_time = 0;
 	tm *ntp_datetime;
@@ -95,17 +96,19 @@ int ethGetNTPTime()
 FILE* GetHTTPRawStream(char* ip)
 {
     TCPSOCKET* sock;
+    printf("connection to %s\n", ip);
     sock = NutTcpCreateSocket();
-    if (NutTcpConnect(sock, inet_addr(*ip), 8000)) {
+    if (NutTcpConnect(sock, inet_addr(ip), 8000)) {
         /* Error: Cannot connect server. */
+        printf("%s\n", "server connection failed");
     }
     else
     {
         FILE *stream;
         /* ... more code here ... */
- 
+ 		printf("%s\n", "server connection ok");
         stream = _fdopen((int) sock, "r+b");
-        fwrite("GET / HTTP/1.1\r\n\r\n", 1, 18, stream);
+        fwrite("GET HTTP/1.0\r\n\r\n", 1, 18, stream);
         return stream;
     }
 }
