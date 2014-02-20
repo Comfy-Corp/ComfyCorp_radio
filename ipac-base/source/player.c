@@ -44,6 +44,7 @@ THREAD(StreamPlayer, arg)
 	//
 	if( 0 != NutSegBufInit(8192) )
 	{
+		printf("%s\n", "opening buffer");
 		// Reset global buffer
 		iflag = VsPlayerInterrupts(0);
 		NutSegBufReset();
@@ -63,15 +64,20 @@ THREAD(StreamPlayer, arg)
 			}
 		}
 	}
+	printf("%s\n", "mp3 decoder initialized");
 	
 	for(;;)
 	{
+		printf("%s\n", "querying some bytes");
 		/*
 		 * Query number of byte available in MP3 buffer.
 		 */
         iflag = VsPlayerInterrupts(0);
+        printf("%s\n", "if flag set");
         mp3buf = NutSegBufWriteRequest(&rbytes);
+        printf("%s\n", "filled mp3buf");
         VsPlayerInterrupts(iflag);
+        printf("%s\n", "VS_PLAYER_INTERRUPT set");
 		
 		// Bij de eerste keer: als player niet draait maak player wakker (kickit)
 		if( VS_STATUS_RUNNING != VsGetStatus() )
@@ -82,30 +88,44 @@ THREAD(StreamPlayer, arg)
 				VsPlayerKick();
 			}
 		}
+		else
+		{
+			printf("%s\n", "Player is awake");
+		}
 		
 		while( rbytes )
 		{
+			printf("I am in ze while\n");
 			// Copy rbytes (van 1 byte) van stream naar mp3buf.
-			nrBytesRead = fread(mp3buf,1,rbytes,stream);
+			nrBytesRead = fread(mp3buf,1,5,stream);
+			printf("LOL\n");
 			
 			if( nrBytesRead > 0 )
 			{
+				printf("nrBytesRead thingy entered");
 				iflag = VsPlayerInterrupts(0);
+				printf("nrBytesRead  first thingy\n");
 				mp3buf = NutSegBufWriteCommit(nrBytesRead);
+				printf("nrBytesRead  second thingy\n");
 				VsPlayerInterrupts(iflag);
+				printf("nrBytesRead  third thingy\n");
 				if( nrBytesRead < rbytes && nrBytesRead < 512 )
 				{
+					printf("nrBytesRead if thingy\n");
 					NutSleep(250);
 				}
+
 			}
 			else
 			{
+				printf("leaving while because bytes <0\n");
 				break;
 			}
 			rbytes -= nrBytesRead;
 			
 			if( nrBytesRead <= 0 )
 			{
+				printf("Leaving while because bytes <=0\n");
 				break;
 			}				
 		}

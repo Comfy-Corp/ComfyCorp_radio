@@ -96,16 +96,24 @@ int ethGetNTPTime()
 FILE* GetHTTPRawStream(char* ip)
 {
     TCPSOCKET* sock;
+    printf("connection to %s\n", ip);
     sock = NutTcpCreateSocket();
-    if (NutTcpConnect(sock, inet_addr(*ip), 8000)) {
+    if (NutTcpConnect(sock, inet_addr(ip), 8000)) {
         /* Error: Cannot connect server. */
+        printf("%s\n", "server connection failed");
     }
     else
     {
         FILE *stream;
         /* ... more code here ... */
- 
+ 		printf("%s\n", "server connection ok");
+
         stream = _fdopen((int) sock, "r+b");
+
+        fwrite("a",1,1, stream);
+        char* got = malloc(1024);
+        fread(got, 1, 1024, stream);
+        puts(got);
         return stream;
     }
 }
