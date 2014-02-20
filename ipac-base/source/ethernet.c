@@ -110,4 +110,42 @@ FILE* GetHTTPRawStream(char* ip)
     }
 }
 
+FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
+{
+    TCPSOCKET* sock;
+    sock = NutTcpCreateSocket();
+	char* ip = malloc(17*sizeof(char));
+	strncopy(ip, netaddress, 17);
+	char nullTerm=0;
+	int dashLoc=0;
+	for(int i=0;i<=17;++i;)
+	{
+		if(ip[i]=='/')
+		{
+			ip[i]=0;
+			nullterm = 1;
+			dashLoc = i;
+			break;
+		}
+	} 
+	if (!nullTerm)
+	{
+		ip[17] = 0;
+	}   
+    str[strlen(str) - 1] = 0;
+    char* address = malloc(64*sizeof(char));
+    if (NutTcpConnect(sock, inet_addr(*ip), port)) {
+        /* Error: Cannot connect server. */
+    }
+    else
+    {
+        FILE *stream;
+        /* ... more code here ... */
+ 
+        stream = _fdopen((int) sock, "r+b");
+        fprintf(stream, "GET %s HTTP/1.1\r\n\r\n", );
+        return stream;
+    }
+}
+
 
