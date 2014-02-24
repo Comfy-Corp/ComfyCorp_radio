@@ -1,33 +1,28 @@
 #include <stdio.h>
+#include <time.h>
 #include "lcd.h"
 #include "ui.h"
 #include "userinput.h"
 #include "keyboard.h"
 #include "storage.h"
+#include "rtc.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
-/*
-int UIshow();
-void UIchangeState(char);
-int UIGetState();
-int UIScreenUp();
-int UIScreenDown();
-int UIScreenOK();
-int UIScreenLeft();
-int UIScreenEsc();
-int UIHandleInput();
-*/
+int tempTimezoneHours=0;
+
 
 int UIshow()
 {
 	LcdClear();
     char *timeBuffer = malloc(sizeof(char) * 16);
+    char *timeBuffer2 = malloc(sizeof(char) * 16);
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:                
-                fillStringWithTime(timeBuffer);
+                X12FillStringWithTime(timeBuffer);
                 LcdSetCursor(0x00);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+                free(timeBuffer);
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
@@ -39,7 +34,10 @@ int UIshow()
             LcdWriteString("FACTORY RESET?",16);
                 break;
             case UISTATE_SHOWSETUP:
-            LcdWriteString("SETUP SCREEN",13);
+            printf("UISTATE_SHOWSETUP\n");
+                X12GetTimeZoneString(timeBuffer2, 0);
+                LcdWriteString(timeBuffer2, strlen(timeBuffer2)+1);
+                free(timeBuffer2);
                 break;
             default:
                 break;
@@ -86,6 +84,8 @@ int UIScreenOK()
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
+
+        //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
     if (screenStateChar == UISTATE_SHOWRESET)
     {
@@ -104,6 +104,17 @@ int UIScreenLeft()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go left, but I can not do that yet :(" );
     }
+    if (screenStateChar == UISTATE_SHOWSETUP)
+    {
+        char timeBuffer[6];
+        --tempTimezoneHours;
+        if (tempTimezoneHours < -12)
+        {
+            tempTimezoneHours = 11;
+        }
+        X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
+        LcdWriteString(timeBuffer, sizeof(timeBuffer));
+    }
     return 1;
 }
 
@@ -114,6 +125,17 @@ int UIScreenRight()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go right, but I can not do that yet :(" );
     }    
+    if(screenStateChar == UISTATE_SHOWSETUP)
+    {
+        char timeBuffer[6];
+        ++tempTimezoneHours;
+        if (tempTimezoneHours >= 12)
+        {
+            tempTimezoneHours = -12;
+        }
+        X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
+        LcdWriteString(timeBuffer, sizeof(timeBuffer));
+    }
     return 1;
 }
 
@@ -138,15 +160,17 @@ int UIHandleInput(int kb_error)
 
 int UIRefreshScreen(){
     if(screenStateChar == UISTATE_SHOWTIME){
-        char *timeBuffer = malloc(sizeof(char) * 20);
-        fillStringWithTime(timeBuffer);
+        char *timeBuffer = malloc(sizeof(char) * 16);
+        X12FillStringWithTime(timeBuffer);
         LcdSetCursor(0x00);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
-    }
+        free(timeBuffer);
+    }    
+    return 1;
 }
 
-/*struct menuItem[] mainMenu = {
-	{
-		"Dit is een mens"
-	}
-};*/
+int UIGetUserSetTimezone(void)
+{
+    return tempTimezoneHours;
+}
+

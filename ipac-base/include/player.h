@@ -12,5 +12,4 @@
 int initPlayer(void);
 int play(FILE *stream);
 
-
 #endif

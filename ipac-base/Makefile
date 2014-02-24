@@ -49,6 +49,7 @@ CFILES =        main.c			\
 # Header files.
 HFILES =        lcd.h        keyboard.h              \
 				ui.h         userInput.h          \
+				player.h 	\
 				ethernet.h 	\
                 led.h                            \
                 portio.h         remcon.h         log.h          \
