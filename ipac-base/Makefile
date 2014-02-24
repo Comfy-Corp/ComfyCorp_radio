@@ -39,7 +39,6 @@ CFILES =        main.c			\
 				spidrv.c        \
                 mmcdrv.c        \
                 fat.c			\
-				flash.c			\
 				rtc.c 			\
 				userInput.c		\
 				dispatcher.c 	\
@@ -61,7 +60,7 @@ HFILES =        lcd.h        keyboard.h              \
                 watchdog.h       mmc.h             \
                 flash.h          spidrv.h         command.h      \
                 parse.h          mmcdrv.h         fat.h          \
-                fatdrv.h         flash.h	  	rtc.h 		\
+                fatdrv.h	  	rtc.h 		\
 				dispatcher.h 	 storage.h
 
 

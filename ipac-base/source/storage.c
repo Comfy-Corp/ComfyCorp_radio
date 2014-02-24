@@ -1,45 +1,34 @@
 /************************************************************************
  *Storage abstraction class. Allows quick volatile storage of           
- *any short amount of information. Interfaces mostly with 'flash' 
- *module.                                                                   
- *
- * Page mapping:
- * 0 - Timezone mapping
- * 1 - XXX                                                                      
+ *any short amount of information.                                                                 
+ *                                                                    
  ************************************************************************/
 #include "storage.h"
-#include "flash.h"
 #include <time.h>
+#include <dev/board.h>
+#include <stdio.h>
 
 
-void StorageInit(){
-	At45dbInit();
-}
-
+//On reboot increment, print amount of reboots.
 void StorageTestProcedure(void){
-	storageSaveConfig(3);
-	printf("Stored.\n");
-	NutSleep(5000);
-	char testResult;
-	printf("Loading...");
-	storageLoadConfig(&testResult);
-	printf("Retval: %d \n", testResult);
-	if(testResult == 3)
-		printf("Operation success\n");
-
+	_StorableSetting setting;
+	StorageLoadConfig(&setting);
+	if (setting.len != sizeof(setting))
+	{
+		setting.timezone = 0;
+		printf("no valid config found\n");
+	} else {
+		printf("amount of boots: %d\n", setting.timezone);
+	}
+	setting.len = sizeof(setting);
+	setting.timezone++;
+	StorageSaveConfig(&setting);
 }
 
-void StorageSaveConfig(char timeZone){
-	At45dbPageErase(1);
-	int result = At45dbPageWrite(1, timeZone, sizeof(timeZone));
-	printf(result);
-	if(!result)
-		printf("FUCK\n");
+void StorageSaveConfig(_StorableSetting* setting){
+	NutNvMemSave(512, setting, sizeof(setting));
 }
 
-void StorageLoadConfig(char *timeZone){
-	int result = At45dbPageRead(1, &timeZone, sizeof(timeZone));
-	printf(result);
-	if(!result)
-		printf("FUCK\n");
+void StorageLoadConfig(_StorableSetting* setting){
+	NutNvMemLoad(512, setting, sizeof(setting));
 }

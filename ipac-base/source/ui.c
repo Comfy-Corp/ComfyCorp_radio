@@ -3,6 +3,7 @@
 #include "ui.h"
 #include "userinput.h"
 #include "keyboard.h"
+#include "storage.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
 /*
@@ -20,7 +21,7 @@ int UIHandleInput();
 int UIshow()
 {
 	LcdClear();
-    char *timeBuffer = malloc(sizeof(char) * 20);
+    char *timeBuffer = malloc(sizeof(char) * 16);
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:                
@@ -35,7 +36,7 @@ int UIshow()
             LcdWriteString("ALARMZZ",8);
                 break;
             case UISTATE_SHOWRESET:
-            LcdWriteString("RESET ME",9);
+            LcdWriteString("FACTORY RESET?",16);
                 break;
             case UISTATE_SHOWSETUP:
             LcdWriteString("SETUP SCREEN",13);
@@ -86,6 +87,13 @@ int UIScreenOK()
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
     }
+    if (screenStateChar == UISTATE_SHOWRESET)
+    {
+        _StorableSetting zero = {0, sizeof(zero)};
+        StorageSaveConfig(&zero);
+        screenStateChar = UISTATE_SHOWSETUP;
+        UIshow();
+    }
     return 1;
 }
 
@@ -111,6 +119,8 @@ int UIScreenRight()
 
 int UIScreenEsc()
 {
+    if(screenStateChar == UISTATE_SHOWRESET)
+        return 1;
     screenStateChar = 0;
     UIshow();
     return 1;
