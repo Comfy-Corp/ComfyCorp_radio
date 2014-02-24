@@ -25,4 +25,4 @@ int UIScreenRight(void);
 int UIScreenOK(void);
 int UIScreenEsc(void);
 int UIHandleInput(int);
-int UIDisplayTimeZone(char *timeZoneBufferToFill);
+int UIGetUserSetTimezone(void);

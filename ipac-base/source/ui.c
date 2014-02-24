@@ -7,26 +7,16 @@
 #include "rtc.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
-/*
-int UIshow();
-void UIchangeState(char);
-int UIGetState();
-int UIScreenUp();
-int UIScreenDown();
-int UIScreenOK();
-int UIScreenLeft();
-int UIScreenEsc();
-int UIHandleInput();
-*/
+int tempTimezoneHours=0;
 
-extern tm timeZone;
 
 int UIshow()
 {
 	LcdClear();
-    char timeBuffer[9];
 	switch (screenStateChar)
         {
+            char timeBuffer[9];
+            char timeBuffer2[6];
             case UISTATE_SHOWTIME:
             fillStringWithTime(timeBuffer);
             LcdWriteString(timeBuffer, sizeof(timeBuffer));
@@ -41,8 +31,9 @@ int UIshow()
             LcdWriteString("RESET ME",9);
                 break;
             case UISTATE_SHOWSETUP:
-            UIDisplayTimeZoneSelection(timeBuffer);
-            LcdWriteString(timeBuffer, sizeof(timeBuffer));
+            printf("UISTATE_SHOWSETUP\n");
+            getTimeZoneString(timeBuffer2, 0);
+            LcdWriteString(timeBuffer2, sizeof(timeBuffer2));
                 break;
             default:
                 break;
@@ -102,9 +93,16 @@ int UIScreenLeft()
         //TODO ADD SCROLLING ALARMS
         printf("%s\n","I would like to go left, but I can not do that yet :(" );
     }
-    if (screenStateChar == UISTATE_SHOWSETUP){
-        //TODO executecode to make the timezone go to -
-        --timeZone.tm_hour;
+    if (screenStateChar == UISTATE_SHOWSETUP)
+    {
+        char timeBuffer[6];
+        --tempTimezoneHours;
+        if (tempTimezoneHours < -12)
+        {
+            tempTimezoneHours = 11;
+        }
+        getTimeZoneString(timeBuffer, tempTimezoneHours);
+        LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
 }
@@ -118,7 +116,14 @@ int UIScreenRight()
     }    
     if(screenStateChar == UISTATE_SHOWSETUP)
     {
-        +timeZone.tm_hour;
+        char timeBuffer[6];
+        ++tempTimezoneHours;
+        if (tempTimezoneHours >= 12)
+        {
+            tempTimezoneHours = -12;
+        }
+        getTimeZoneString(timeBuffer, tempTimezoneHours);
+        LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
 }
@@ -140,11 +145,8 @@ int UIHandleInput(int kb_error)
     return 1;
 }
 
-
-int UIDisplayTimeZone(char *timeZoneBufferToFill)
+int UIGetUserSetTimezone(void)
 {
-    getTimeZone(timeZone, timeZoneBufferToFill);
-    return 1;
+    return tempTimezoneHours;
 }
-
 
