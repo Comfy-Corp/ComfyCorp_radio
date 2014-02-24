@@ -14,12 +14,14 @@ int UIshow()
 {
 	LcdClear();
     char *timeBuffer = malloc(sizeof(char) * 20);
+    char timeBuffer2[6];
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:                
                 fillStringWithTime(timeBuffer);
                 LcdSetCursor(0x00);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+                free(timeBuffer);
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
@@ -34,6 +36,7 @@ int UIshow()
             printf("UISTATE_SHOWSETUP\n");
             getTimeZoneString(timeBuffer2, 0);
             LcdWriteString(timeBuffer2, sizeof(timeBuffer2));
+            free(timeBuffer2);
                 break;
             default:
                 break;
@@ -151,6 +154,7 @@ int UIRefreshScreen(){
         fillStringWithTime(timeBuffer);
         LcdSetCursor(0x00);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+        free(timeBuffer);
     }    
     return 1;
 }

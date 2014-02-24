@@ -43,8 +43,7 @@ CFILES =        main.c			\
 				rtc.c 			\
 				userInput.c		\
 				dispatcher.c 	\
-				ethernet.c 		\
-				shoutcast_test.c
+				ethernet.c 		
 			
 				
 # Header files.
@@ -63,7 +62,7 @@ HFILES =        lcd.h        keyboard.h              \
                 flash.h          spidrv.h         command.h      \
                 parse.h          mmcdrv.h         fat.h          \
                 fatdrv.h         flash.h	  	rtc.h 		\
-				dispatcher.h     shoutcast_test.h
+				dispatcher.h
 
 
 # Alle source files in de ./source dir
