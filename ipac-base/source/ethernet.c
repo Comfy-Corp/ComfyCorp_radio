@@ -23,7 +23,7 @@
 
 #define NOK 1
 #define OK 0
-
+FILE *stream;
 int ethInitInet(void)
 {
 	//uint8_t mac_addr[6] = { 0xC0, 0x01, 0x1E, 0x01, 0x02, 0x03 };
@@ -108,9 +108,59 @@ FILE* GetHTTPRawStream(char* ip)
         /* ... more code here ... */
  		printf("%s\n", "server connection ok");
         stream = _fdopen((int) sock, "r+b");
-        fwrite("GET HTTP/1.0\r\n\r\n", 1, 18, stream);
+        fwrite("GET /kiss HTTP/1.0\r\n\r\n", 1, 26, stream);
+        fflush(stream);
         return stream;
     }
+}
+
+int connectToStream(void)
+{
+	int result = OK;
+	char *data;
+	
+	TCPSOCKET *sock;
+	
+	sock = NutTcpCreateSocket();
+	if( NutTcpConnect(	sock,
+						inet_addr("195.95.206.14"), 
+						8000) )
+	{
+		printf("Error: >> NutTcpConnect()");
+		exit(1);
+	}
+	stream = _fdopen( (int) sock, "r+b" );
+	
+	fprintf(stream, "GET %s HTTP/1.0\r\n", "/kiss");
+	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
+	fprintf(stream, "User-Agent: Ethernut\r\n");
+	fprintf(stream, "Accept: */*\r\n");
+	fprintf(stream, "Icy-MetaData: 1\r\n");
+	fprintf(stream, "Connection: close\r\n\r\n");
+	fflush(stream);
+
+	
+	// Server stuurt nu HTTP header terug, catch in buffer
+	data = (char *) malloc(512 * sizeof(char));
+	
+	while( fgets(data, 512, stream) )
+	{
+		if( 0 == *data )
+			break;
+
+		printf("%s", data);
+	}
+	
+	free(data);
+	
+	return result;
+}
+
+int playStream(void)
+{
+	play(stream);
+	
+	return OK;
 }
 
 FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
@@ -118,21 +168,23 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     TCPSOCKET* sock;
     sock = NutTcpCreateSocket();
 	char* ip = malloc(17*sizeof(char));
-	strncopy(ip, netaddress, 17);
+	strncpy(ip, netaddress, 17);
 	char nullTerm=0;
 	int dashLoc=0;
-	for(int i=0;i<=17;++i;)
+	int i;
+	for(i = 0;i<=17;++i)
 	{
-		if(ip[i]=='/')
+		if(ip[i]=='/')\
 		{
 			ip[i]=0;
-			nullterm = 1;
+			nullTerm = 1;
 			dashLoc = i;
+			printf("dashLoc set to %d\n", dashLoc);
 			break;
 		}
 		else if (ip[i] ==0)
 		{
-			nullterm=-1;
+			nullTerm=-1;
 			break;
 		}
 	} 
@@ -143,14 +195,14 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     //str[strlen(str) - 1] = 0;
     char* address = malloc(64*sizeof(char));
     printf("connecting to ip %s\n", ip);
-    if (NutTcpConnect(sock, inet_addr(*ip), port)) {
-        /* Error: Cannot connect server. */
+    if (NutTcpConnect(sock, inet_addr(ip), port)) {
+        printf("connection to %s:%d failed\n", ip, port);
     }
     else
     {
         FILE *stream;
         /* ... more code here ... */
-        if (nullterm>0)
+        if (nullTerm>0)
         {
 	 		for (i=dashLoc;i < 81; ++i)
 	        {
@@ -161,9 +213,11 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     	{
     		address = "";
     	}	
-    	printf("opening %s%s\n", ip, address);
+    	//printf("opening %s%s\n", ip, address);
         stream = _fdopen((int) sock, "r+b");
         fprintf(stream, "GET %s HTTP/1.1\r\n\r\n", address);
+        printf("Bla bla bla\n");
+        fflush(stream);
         return stream;
     }
 }
