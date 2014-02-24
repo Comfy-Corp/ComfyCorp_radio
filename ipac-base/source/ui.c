@@ -13,13 +13,13 @@ int tempTimezoneHours=0;
 int UIshow()
 {
 	LcdClear();
+    char *timeBuffer = malloc(sizeof(char) * 20);
 	switch (screenStateChar)
         {
-            char timeBuffer[9];
-            char timeBuffer2[6];
-            case UISTATE_SHOWTIME:
-            fillStringWithTime(timeBuffer);
-            LcdWriteString(timeBuffer, sizeof(timeBuffer));
+            case UISTATE_SHOWTIME:                
+                fillStringWithTime(timeBuffer);
+                LcdSetCursor(0x00);
+                LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
@@ -137,11 +137,21 @@ int UIScreenEsc()
 
 int UIHandleInput(int kb_error)
 {
-    if (kb_error != KB_ERROR)
-    {
-        userInputKeyPress();
-    }
-    
+        if (kb_error != KB_ERROR)
+        {
+            LcdBackLightBriefOn(100);
+            userInputKeyPress();
+        }
+        return 1;
+}
+
+int UIRefreshScreen(){
+    if(screenStateChar == UISTATE_SHOWTIME){
+        char *timeBuffer = malloc(sizeof(char) * 20);
+        fillStringWithTime(timeBuffer);
+        LcdSetCursor(0x00);
+        LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+    }    
     return 1;
 }
 

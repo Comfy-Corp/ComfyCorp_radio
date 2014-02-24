@@ -1,0 +1,1 @@
+FILE* GetHTTPRawStream(char* ip);
