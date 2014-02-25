@@ -18,10 +18,10 @@ int UIshow()
     char *timeBuffer2 = malloc(sizeof(char) * 8);
 	switch (screenStateChar)
         {
-            case UISTATE_SHOWTIME:                
+            case UISTATE_SHOWTIME:             
                 X12FillStringWithTime(timeBuffer);
                 previousTime = timeBuffer;
-                LcdSetCursor(0x00);
+                LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
                 free(timeBuffer);
                 break;
@@ -37,6 +37,9 @@ int UIshow()
             case UISTATE_SHOWSETUP:
             printf("UISTATE_SHOWSETUP\n");
                 X12GetTimeZoneString(timeBuffer2, 0);
+                LcdSetCursor(0x00);
+                LcdWriteString("Hoe laat is het?", strlen("Hoe laat is het?")+1);
+                LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer2, strlen(timeBuffer2)+1);
                 free(timeBuffer2);
                 break;
@@ -102,6 +105,7 @@ int UIScreenOK()
         StorageSaveConfig(&timeZoneHour);
         printf("saved: %d", timeZoneHour);
         screenStateChar = UISTATE_SHOWTIME;
+        LcdClear();
         return 1;
     }
     return 1;
@@ -122,8 +126,10 @@ int UIScreenLeft()
         {
             tempTimezoneHours = 11;
         }
+        LcdSetCursor(0x00);
+        LcdWriteString("Hoe laat is het?", strlen("Hoe laat is het?")+1);
+        LcdSetCursor(0x44);
         X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
-        LcdClear();
         LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
@@ -144,8 +150,10 @@ int UIScreenRight()
         {
             tempTimezoneHours = -12;
         }
+        LcdSetCursor(0x00);
+        LcdWriteString("Hoe laat is het?", strlen("Hoe laat is het?")+1);
+        LcdSetCursor(0x44);
         X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
-        LcdClear();
         LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
@@ -174,7 +182,7 @@ int UIRefreshScreen(){
     if(screenStateChar == UISTATE_SHOWTIME){
         char *timeBuffer = malloc(sizeof(char) * 8);
         X12FillStringWithTime(timeBuffer);
-        LcdSetCursor(0x00);
+        LcdSetCursor(0x44);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
         free(timeBuffer);
     }    
