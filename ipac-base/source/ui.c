@@ -32,7 +32,7 @@ int UIshow()
             LcdWriteString("ALARMZZ",8);
                 break;
             case UISTATE_SHOWRESET:
-            LcdWriteString("FACTORY RESET?",16);
+            LcdWriteString("FACTORY RESET?",15);
                 break;
             case UISTATE_SHOWSETUP:
             printf("UISTATE_SHOWSETUP\n");
@@ -85,7 +85,7 @@ int UIScreenOK()
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
-
+        return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
     if (screenStateChar == UISTATE_SHOWRESET)
@@ -94,6 +94,15 @@ int UIScreenOK()
         StorageSaveConfig(&zero);
         screenStateChar = UISTATE_SHOWSETUP;
         UIshow();
+        return 1;
+    }
+    if(screenStateChar == UISTATE_SHOWSETUP)
+    {
+        _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
+        StorageSaveConfig(&timeZoneHour);
+        printf("saved: %d", timeZoneHour);
+        screenStateChar = UISTATE_SHOWTIME;
+        return 1;
     }
     return 1;
 }
@@ -114,6 +123,7 @@ int UIScreenLeft()
             tempTimezoneHours = 11;
         }
         X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
+        LcdClear();
         LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
@@ -135,6 +145,7 @@ int UIScreenRight()
             tempTimezoneHours = -12;
         }
         X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
+        LcdClear();
         LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
@@ -151,7 +162,7 @@ int UIScreenEsc()
 
 int UIHandleInput(int kb_error)
 {
-        if (kb_error != KB_ERROR)
+        if ((kb_error != KB_ERROR))
         {
             LcdBackLightBriefOn(100);
             userInputKeyPress();
