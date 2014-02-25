@@ -9,17 +9,18 @@
 
 char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
-
+char *previousTime;
 
 int UIshow()
 {
 	LcdClear();
-    char *timeBuffer = malloc(sizeof(char) * 16);
-    char *timeBuffer2 = malloc(sizeof(char) * 16);
+    char *timeBuffer = malloc(sizeof(char) * 8);
+    char *timeBuffer2 = malloc(sizeof(char) * 8);
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:                
                 X12FillStringWithTime(timeBuffer);
+                previousTime = timeBuffer;
                 LcdSetCursor(0x00);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
                 free(timeBuffer);
@@ -160,7 +161,7 @@ int UIHandleInput(int kb_error)
 
 int UIRefreshScreen(){
     if(screenStateChar == UISTATE_SHOWTIME){
-        char *timeBuffer = malloc(sizeof(char) * 16);
+        char *timeBuffer = malloc(sizeof(char) * 8);
         X12FillStringWithTime(timeBuffer);
         LcdSetCursor(0x00);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
