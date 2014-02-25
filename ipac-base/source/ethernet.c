@@ -94,23 +94,58 @@ int ethGetNTPTime()
 
 FILE* GetHTTPRawStream(char* ip)
 {
-    TCPSOCKET* sock;
-    printf("connection to %s\n", ip);
-    sock = NutTcpCreateSocket();
-    if (NutTcpConnect(sock, inet_addr(ip), 8000)) {
-        /* Error: Cannot connect server. */
-        printf("%s\n", "server connection failed");
-    }
-    else
-    {
-        FILE *stream;
-        /* ... more code here ... */
- 		printf("%s\n", "server connection ok");
-        stream = _fdopen((int) sock, "r+b");
-        fwrite("GET /kiss HTTP/1.0\r\n\r\n", 1, 26, stream);
-        fflush(stream);
-        return stream;
-    }
+   //  TCPSOCKET* sock;
+   //  printf("connecting to %s\n", ip);
+   //  sock = NutTcpCreateSocket();
+   //  if (NutTcpConnect(sock, inet_addr(ip), 8000)) {
+   //      /* Error: Cannot connect server. */
+   //      printf("%s\n", "server connection failed");
+   //  }
+   //  else
+   //  {
+   //      FILE *stream;
+ 		// printf("%s\n", "server connection ok");
+   //      stream = _fdopen((int) sock, "r+b");
+   //      fwrite("GET / HTTP/1.0\r\n\r\n", 1, 26, stream);
+   //      fflush(stream);
+   //      return stream;
+   //  }
+
+	int result = OK;
+	char *data;
+	
+	TCPSOCKET *sock;
+	
+	sock = NutTcpCreateSocket();
+	if( NutTcpConnect(	sock,
+						inet_addr(ip), 
+						8000) )
+	{
+		printf("Error: >> NutTcpConnect()");
+		exit(1);
+	}
+	stream = _fdopen( (int) sock, "r+b" );
+
+	fprintf(stream, "GET %s HTTP/1.0\r\n", "/");
+	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
+	fprintf(stream, "User-Agent: Ethernut\r\n");
+	fprintf(stream, "Accept: */*\r\n");
+	fprintf(stream, "Connection: close\r\n\r\n");
+	fflush(stream);
+
+	
+	// Server stuurt nu HTTP header terug, catch in buffer
+	data = (char *) malloc(512 * sizeof(char));
+	
+	while( fgets(data, 512, stream) )
+	{
+		if( 0 == *data )
+			break;
+	}
+	
+	free(data);
+
+	return stream;
 }
 
 int connectToStream(void)
@@ -122,7 +157,7 @@ int connectToStream(void)
 	
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
-						inet_addr("145.48.115.189"), 
+						inet_addr("192.168.1.142"), 
 						8000) )
 	{
 		printf("Error: >> NutTcpConnect()");
@@ -160,30 +195,44 @@ int playStream(void)
 }
 
 FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
-{
+{ 
+	int result = OK;
+	char *data;
+
     TCPSOCKET* sock;
     sock = NutTcpCreateSocket();
-	char* ip = malloc(17*sizeof(char));
+	char* ip = malloc(22*sizeof(char));
 	strncpy(ip, netaddress, 17);
 	char nullTerm=0;
-	int dashLoc=0;
+	int slashLoc=0;
+	int colonLoc=0;
 	int i;
-	for(i = 0;i<=17;++i)
+
+	/*-- Finding the forward slash and port colon --*/
+	for(i = 0;i<=23;++i)
 	{
-		if(ip[i]=='/')\
+		if(ip[i]=='/')
 		{
 			ip[i]=0;
 			nullTerm = 1;
-			dashLoc = i;
-			printf("dashLoc set to %d\n", dashLoc);
+			slashLoc = i;
+			printf("slashLoc set to %d\n", slashLoc);
 			break;
 		}
+
+		if(ip[i]==':')
+		{
+			colonLoc = i;
+			printf("colonLoc set to %d\n", colonLoc);
+		}
+
 		else if (ip[i] ==0)
 		{
 			nullTerm=-1;
 			break;
 		}
 	} 
+
 	if (!nullTerm)
 	{
 		ip[17] = 0;
@@ -191,18 +240,20 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     //str[strlen(str) - 1] = 0;
     char* address = malloc(64*sizeof(char));
     printf("connecting to ip %s\n", ip);
-    if (NutTcpConnect(sock, inet_addr(ip), port)) {
-        printf("connection to %s:%d failed\n", ip, port);
-    }
+    if( NutTcpConnect(	sock,
+						inet_addr(ip), 
+						port) )
+	{
+		printf("Error: >> NutTcpConnect()");
+	}
     else
     {
         FILE *stream;
-        /* ... more code here ... */
         if (nullTerm>0)
         {
-	 		for (i=dashLoc;i < 81; ++i)
+	 		for (i=slashLoc;i < 80; ++i)
 	        {
-	            address[i-1] = netaddress[i];
+	            address[i-slashLoc] = netaddress[i];
 	        }
     	}
     	else
@@ -211,8 +262,25 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     	}	
     	//printf("opening %s%s\n", ip, address);
         stream = _fdopen((int) sock, "r+b");
-        fprintf(stream, "GET %s HTTP/1.1\r\n\r\n", address);
-        fflush(stream);
+        printf("Address is: %s\n", address);
+        fprintf(stream, "GET %s HTTP/1.0\r\n", address);
+		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
+		fprintf(stream, "User-Agent: Ethernut\r\n");
+		fprintf(stream, "Accept: */*\r\n");
+		fprintf(stream, "Connection: close\r\n\r\n");
+		fflush(stream);
+
+		
+		// Server stuurt nu HTTP header terug, catch in buffer
+		data = (char *) malloc(512 * sizeof(char));
+		
+		while( fgets(data, 512, stream) )
+		{
+			if( 0 == *data )
+				break;
+		}
+		
+		free(data);
         return stream;
     }
 }
