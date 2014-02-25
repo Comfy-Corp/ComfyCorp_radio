@@ -122,15 +122,15 @@ int connectToStream(void)
 	
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
-						inet_addr("145.58.52.148"), 
-						80) )
+						inet_addr("145.48.115.189"), 
+						8000) )
 	{
 		printf("Error: >> NutTcpConnect()");
 		exit(1);
 	}
 	stream = _fdopen( (int) sock, "r+b" );
-	//http://icecast.omroep.nl/radio4-bb-mp3
-	fprintf(stream, "GET %s HTTP/1.0\r\n", "/radio4-bb-mp3");
+	//http://icecast.omroep.nl/radio4-bb-mp3 of http://icecast.omroep.nl/radio1-bb-mp3
+	fprintf(stream, "GET %s HTTP/1.0\r\n", "/");
 	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 	fprintf(stream, "User-Agent: Ethernut\r\n");
 	fprintf(stream, "Accept: */*\r\n");
