@@ -134,7 +134,6 @@ int connectToStream(void)
 	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 	fprintf(stream, "User-Agent: Ethernut\r\n");
 	fprintf(stream, "Accept: */*\r\n");
-	fprintf(stream, "Icy-MetaData: 1\r\n");
 	fprintf(stream, "Connection: close\r\n\r\n");
 	fflush(stream);
 
