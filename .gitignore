@@ -13,6 +13,8 @@
 *.so
 *.so.*
 *.dylib
+*.map
+*.lst
 
 # Executables
 *.exe
@@ -28,6 +30,8 @@
 *.log
 *.gz
 
-# OS X 
+#swap files
+*.swp
 
-.DS_Store
+#OSX files
+*.DS_Store
