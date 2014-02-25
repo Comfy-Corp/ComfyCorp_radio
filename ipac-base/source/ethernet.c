@@ -122,25 +122,23 @@ int connectToStream(void)
 	
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
-						inet_addr("213.75.57.118"), 
+						inet_addr("145.58.52.148"), 
 						80) )
 	{
 		printf("Error: >> NutTcpConnect()");
 		exit(1);
 	}
 	stream = _fdopen( (int) sock, "r+b" );
-	
-	fprintf(stream, "GET %s HTTP/1.0\r\n", "/CLASSICFM_SC");
+	//http://icecast.omroep.nl/radio4-bb-mp3
+	fprintf(stream, "GET %s HTTP/1.0\r\n", "/radio4-bb-mp3");
 	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 	fprintf(stream, "User-Agent: Ethernut\r\n");
 	fprintf(stream, "Accept: */*\r\n");
-	fprintf(stream, "Icy-MetaData: 1\r\n");
 	fprintf(stream, "Connection: close\r\n\r\n");
 	fflush(stream);
 
 	
 	// Server stuurt nu HTTP header terug, catch in buffer
-	/*
 	data = (char *) malloc(512 * sizeof(char));
 	
 	while( fgets(data, 512, stream) )
@@ -150,7 +148,7 @@ int connectToStream(void)
 	}
 	
 	free(data);
-	*/
+
 	return result;
 }
 
