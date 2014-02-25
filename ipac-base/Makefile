@@ -27,11 +27,11 @@ LDFLAGS	=	-mmcu=atmega2561 -Wl,--defsym=main=0,-Map=TIStreamer.map,--cref
 CFILES =        main.c			\
 				ui.c 			\
 				uart0driver.c	\
-				player.c	\
+				player.c	    \
 				log.c			\
                 led.c			\
 				keyboard.c		\
-				lcd.c		\
+				lcd.c		    \
                 vs10xx.c		\
                 remcon.c		\
                 watchdog.c		\
@@ -43,7 +43,10 @@ CFILES =        main.c			\
 				userInput.c		\
 				dispatcher.c 	\
 				ethernet.c 		\
-				storage.c
+				storage.c 		\
+				bankmem.c 		\
+				heap.c 			\
+				thread.c 		
 			
 				
 # Header files.
@@ -62,7 +65,8 @@ HFILES =        lcd.h        keyboard.h              \
                 flash.h          spidrv.h         command.h      \
                 parse.h          mmcdrv.h         fat.h          \
                 fatdrv.h	  	rtc.h 		\
-				dispatcher.h 	 storage.h
+				dispatcher.h 	 storage.h 			bankmem.h 	\
+				heap.h 	os.h 	thread.h 	
 
 
 # Alle source files in de ./source dir

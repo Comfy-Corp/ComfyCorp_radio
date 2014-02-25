@@ -1,4 +1,4 @@
-#include <sys/thread.h>
+#include "thread.h"
 #include <sys/timer.h>
 #include <dev/nicrtl.h>
 #include <arpa/inet.h>
@@ -16,8 +16,8 @@
 #include <string.h>
 #include <dev/vs1001k.h>
 #include <sys/version.h>
-#include <sys/heap.h>
-#include <sys/bankmem.h>
+#include "heap.h"
+#include "bankmem.h"
 #include <netinet/tcp.h>
 
 
@@ -31,7 +31,6 @@ int ethInitInet(void)
 
 	
 	int result = OK;
-	printf("%s\n", "makakakakakaka");
 
 	// Registreer NIC device (located in nictrl.h)
 	if( NutRegisterDevice(&DEV_ETHER, 0x8300, 5) )
@@ -123,15 +122,15 @@ int connectToStream(void)
 	
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
-						inet_addr("195.95.206.14"), 
-						8000) )
+						inet_addr("213.75.57.118"), 
+						80) )
 	{
 		printf("Error: >> NutTcpConnect()");
 		exit(1);
 	}
 	stream = _fdopen( (int) sock, "r+b" );
 	
-	fprintf(stream, "GET %s HTTP/1.0\r\n", "/kiss");
+	fprintf(stream, "GET %s HTTP/1.0\r\n", "/CLASSICFM_SC");
 	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 	fprintf(stream, "User-Agent: Ethernut\r\n");
 	fprintf(stream, "Accept: */*\r\n");
@@ -141,18 +140,17 @@ int connectToStream(void)
 
 	
 	// Server stuurt nu HTTP header terug, catch in buffer
+	/*
 	data = (char *) malloc(512 * sizeof(char));
 	
 	while( fgets(data, 512, stream) )
 	{
 		if( 0 == *data )
 			break;
-
-		printf("%s", data);
 	}
 	
 	free(data);
-	
+	*/
 	return result;
 }
 
@@ -216,7 +214,6 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
     	//printf("opening %s%s\n", ip, address);
         stream = _fdopen((int) sock, "r+b");
         fprintf(stream, "GET %s HTTP/1.1\r\n\r\n", address);
-        printf("Bla bla bla\n");
         fflush(stream);
         return stream;
     }

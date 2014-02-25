@@ -2,7 +2,7 @@
 #define PLAYER_INC
 
 #include <sys/nutconfig.h>
-#include <sys/types.h>
+#include "types.h"
 
 //#include <stdlib.h>
 //#include <string.h>

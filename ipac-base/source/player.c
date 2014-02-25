@@ -2,9 +2,9 @@
 ///
 #define LOG_MODULE  LOG_PLAYER_MODULE
 
-#include <sys/heap.h>
-#include <sys/bankmem.h>
-#include <sys/thread.h>
+#include "heap.h"
+#include "bankmem.h"
+#include "thread.h"
 #include <sys/timer.h>
 
 #include "player.h"
