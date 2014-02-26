@@ -235,14 +235,16 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 	} 
 	if (colonLoc)
 	{
-		char* Sport = malloc((slashLoc - colonLoc)*sizeof(char));
-		for (i=colonLoc;i<slashLoc;++i)
+		ip[colonLoc] = 0;
+		char* Sport = malloc((slashLoc - colonLoc)+2*sizeof(char));
+		for (i=colonLoc+1;i<slashLoc;++i)
 		{
-			Sport[i-colonLoc] = netaddress[i];
+			Sport[i-colonLoc-1] = netaddress[i];
 		}
-		Sport[i] = 0;
-		printf("discovered port %s", Sport);
+		Sport[slashLoc - colonLoc-1] = 0;
+		
 		port = atoi(Sport);
+		free(Sport);
 	}
 
 	if (!nullTerm)
