@@ -194,19 +194,20 @@ int playStream(void)
 	return OK;
 }
 
-FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
+FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 { 
 	int result = OK;
 	char *data;
 
     TCPSOCKET* sock;
     sock = NutTcpCreateSocket();
-	char* ip = malloc(22*sizeof(char));
-	strncpy(ip, netaddress, 17);
+	char* ip = malloc(23*sizeof(char));
+	strncpy(ip, netaddress, 22);
 	char nullTerm=0;
 	int slashLoc=0;
 	int colonLoc=0;
 	int i;
+	int port = 80;
 
 	/*-- Finding the forward slash and port colon --*/
 	for(i = 0;i<=23;++i)
@@ -232,6 +233,17 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
 			break;
 		}
 	} 
+	if (colonLoc)
+	{
+		char* Sport = malloc((slashLoc - colonLoc)*sizeof(char));
+		for (i=colonLoc;i<slashLoc;++i)
+		{
+			Sport[i-colonLoc] = netaddress[i];
+		}
+		Sport[i] = 0;
+		printf("discovered port %s", Sport);
+		port = atoi(Sport);
+	}
 
 	if (!nullTerm)
 	{
