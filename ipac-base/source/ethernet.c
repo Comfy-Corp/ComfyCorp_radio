@@ -20,6 +20,7 @@
 #include "bankmem.h"
 #include <netinet/tcp.h>
 #include "lcd.h"
+#include "ethernet.h"
 
 
 #define NOK 1
@@ -27,7 +28,6 @@
 FILE *stream;
 int* ignoredData = 0;
 int* metaInterval = 0;
-char* streamName = NULL;
 
 int ethInitInet(void)
 {
@@ -289,7 +289,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 		fprintf(stream, "User-Agent: Ethernut\r\n");
 		fprintf(stream, "Accept: */*\r\n");
-		//printf(stream, "Icy-MetaData: 1\r\n");
+		// fprintf(stream, "Icy-MetaData: 1\r\n");
 		fprintf(stream, "Connection: close\r\n\r\n");
 		fflush(stream);
 
@@ -299,28 +299,33 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		
 		while( fgets(data, 512, stream) )
 		{
-
 			char* stringData = strstr(data, "icy-metaint:");
 			char* stringStreamNameLoc = strstr(data, "icy-name:");
+			int* streamNameSizeTemp = &streamNameSize;
+			int* streamNameLocLCDTemp = &streamNameLocLCD;
+			char* streamNameTemp = malloc(sizeof(char)*16);
 			if (stringStreamNameLoc != NULL)
 			{
-				int size;
-				streamName = strstr(stringStreamNameLoc, ":")+1;
-				if (streamName)
+				streamNameTemp = strstr(stringStreamNameLoc, ":")+1;
+				if (streamNameTemp)
 				{
-
-					printf("%s", streamName);
-					for (size = 0; size < 16; ++size)
+					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
 					{
-						if (streamName[size] == 0)
+						if (streamNameTemp[*streamNameSizeTemp] == 0)
 						{
-							size-=1;
+							*streamNameSizeTemp-=1;
 							break;
 						}
 					}
-					int place = ( 8-(size/2));
-					LcdWriteStringAtLoc(streamName, size, place);
-
+					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
+					LcdWriteStringAtLoc(streamNameTemp, *streamNameSizeTemp, *streamNameLocLCDTemp);
+					stringStreamNameLoc = NULL;
+					// Dit alles crasht :S
+					// TODO FIX
+					// strcpy(streamName, streamNameTemp);
+					// free(streamNameSizeTemp);
+					// free(streamNameLocLCDTemp);
+					// free(streamNameTemp);
 				}
 			}
 
@@ -334,7 +339,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			if (EOT != NULL)
 			{
 				ignoredData = sizeof(EOT);
-				printf("%s\n", EOT);
+				//printf("%s\n", EOT);
 				break;
 			}
 			if( 0 == *data )

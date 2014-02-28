@@ -90,6 +90,7 @@ THREAD(StreamPlayer, arg)
 			//MetaInterval = 16000
 			if (bytesReadTemp+nrBytesRead >= metaInterval)
 			{
+				//printf("nrBytesRead == %x\n bytesReadTemp == %x",nrBytesRead,bytesReadTemp );
 				int bytesUntilBlock = metaInterval-bytesReadTemp/2;
 				//printf("bytesUntilBlock %d,= metaInterval %d, -  bytesReadTemp %d\n", bytesUntilBlock, metaInterval, bytesReadTemp);
 				if (bytesUntilBlock<0)
@@ -103,7 +104,7 @@ THREAD(StreamPlayer, arg)
 					bytesReadTemp = 0;
 					char* metaBuffer = malloc(1);
 					fread(metaBuffer,1,1,stream);
-					printf("stuff %d\n",metaBuffer );
+					printf("metaBuffer == %d\n",metaBuffer );
 					free(metaBuffer);
 				}
 				

@@ -6,6 +6,7 @@
 #include "keyboard.h"
 #include "storage.h"
 #include "rtc.h"
+#include "ethernet.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
@@ -23,6 +24,11 @@ int UIshow()
                 previousTime = timeBuffer;
                 LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+                if (streamName != NULL)
+                {
+                    //printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
+                    LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
+                }
                 free(timeBuffer);
                 break;
             case UISTATE_SHOWSYNCING:
@@ -185,6 +191,7 @@ int UIRefreshScreen(){
         LcdSetCursor(0x44);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
         free(timeBuffer);
+
     }    
     return 1;
 }
