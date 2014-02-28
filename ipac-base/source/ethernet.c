@@ -325,7 +325,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 					// strcpy(streamName, streamNameTemp);
 					// free(streamNameSizeTemp);
 					// free(streamNameLocLCDTemp);
-					// free(streamNameTemp);
+					free(streamNameTemp);
 				}
 			}
 
