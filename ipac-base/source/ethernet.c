@@ -303,29 +303,23 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			char* stringStreamNameLoc = strstr(data, "icy-name:");
 			int* streamNameSizeTemp = &streamNameSize;
 			int* streamNameLocLCDTemp = &streamNameLocLCD;
-			char* streamNameTemp = malloc(sizeof(char)*16);
 			if (stringStreamNameLoc != NULL)
 			{
-				streamNameTemp = strstr(stringStreamNameLoc, ":")+1;
-				if (streamNameTemp)
+				streamName = strstr(stringStreamNameLoc, ":")+1;
+				if (streamName)
 				{
 					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
 					{
-						if (streamNameTemp[*streamNameSizeTemp] == 0)
+						if (streamName[*streamNameSizeTemp] == 0)
 						{
 							*streamNameSizeTemp-=1;
 							break;
 						}
 					}
 					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
-					LcdWriteStringAtLoc(streamNameTemp, *streamNameSizeTemp, *streamNameLocLCDTemp);
+					LcdWriteStringAtLoc(streamName, *streamNameSizeTemp, *streamNameLocLCDTemp);
 					stringStreamNameLoc = NULL;
-					// Dit alles crasht :S
-					// TODO FIX
-					// strcpy(streamName, streamNameTemp);
-					// free(streamNameSizeTemp);
-					// free(streamNameLocLCDTemp);
-					free(streamNameTemp);
+
 				}
 			}
 
@@ -339,7 +333,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			if (EOT != NULL)
 			{
 				ignoredData = sizeof(EOT);
-				//printf("%s\n", EOT);
+				printf("%s\n", EOT);
 				break;
 			}
 			if( 0 == *data )
