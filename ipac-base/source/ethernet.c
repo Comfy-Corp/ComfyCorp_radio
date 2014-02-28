@@ -19,11 +19,16 @@
 #include "heap.h"
 #include "bankmem.h"
 #include <netinet/tcp.h>
+#include "lcd.h"
 
 
 #define NOK 1
 #define OK 0
 FILE *stream;
+int* ignoredData = 0;
+int* metaInterval = 0;
+char* streamName = NULL;
+
 int ethInitInet(void)
 {
 	//uint8_t mac_addr[6] = { 0xC0, 0x01, 0x1E, 0x01, 0x02, 0x03 };
@@ -130,6 +135,7 @@ FILE* GetHTTPRawStream(char* ip)
 	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 	fprintf(stream, "User-Agent: Ethernut\r\n");
 	fprintf(stream, "Accept: */*\r\n");
+	fprintf(stream, "Icy-MetaData: 1\r\n");
 	fprintf(stream, "Connection: close\r\n\r\n");
 	fflush(stream);
 
@@ -142,6 +148,7 @@ FILE* GetHTTPRawStream(char* ip)
 		if( 0 == *data )
 			break;
 	}
+	puts(data);
 	
 	free(data);
 
@@ -198,6 +205,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 { 
 	int result = OK;
 	char *data;
+	
 
     TCPSOCKET* sock;
     sock = NutTcpCreateSocket();
@@ -281,6 +289,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 		fprintf(stream, "User-Agent: Ethernut\r\n");
 		fprintf(stream, "Accept: */*\r\n");
+		fprintf(stream, "Icy-MetaData: 1\r\n");
 		fprintf(stream, "Connection: close\r\n\r\n");
 		fflush(stream);
 
@@ -290,10 +299,45 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		
 		while( fgets(data, 512, stream) )
 		{
+
+			char* stringData = strstr(data, "icy-metaint:");
+			char* stringStreamNameLoc = strstr(data, "icy-name:");
+			if (stringStreamNameLoc != NULL)
+			{
+				int i;
+				char* streamNameLengthCalc = malloc(sizeof(char)*16);
+				streamName = strstr(stringStreamNameLoc, ":")+1;
+				if (streamName)
+				{
+
+					printf("%s", streamName);
+					for (int i = 0; i < count; ++i)
+					{
+						/* code */
+					}
+					LcdWriteStringAtLoc(streamName, 8, 4);
+
+				}
+			}
+
+			if (stringData != NULL)
+			{
+				printf("Hoera, gevonden! %s\n", stringData );
+				metaInterval = atoi(strstr(stringData,":")+1);
+				printf("MetaInt = %d\n", metaInterval);
+			}
+			char* EOT = strstr(data, "\r\n\r\n");
+			if (EOT != NULL)
+			{
+				ignoredData = sizeof(EOT);
+				printf("%s\n", EOT);
+				break;
+			}
 			if( 0 == *data )
 				break;
 		}
 		
+
 		free(data);
         return stream;
     }
