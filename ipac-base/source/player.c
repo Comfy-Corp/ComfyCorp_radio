@@ -87,27 +87,27 @@ THREAD(StreamPlayer, arg)
 		{
 			
 			// Copy rbytes (van 1 byte) van stream naar mp3buf.
-			// MetaInterval = 16000
-			// if (bytesReadTemp+nrBytesRead >= metaInterval)
-			// {
-			// 	int bytesUntilBlock = metaInterval-bytesReadTemp/2;
-			// 	//printf("bytesUntilBlock %d,= metaInterval %d, -  bytesReadTemp %d\n", bytesUntilBlock, metaInterval, bytesReadTemp);
-			// 	if (bytesUntilBlock<0)
-			// 	{
-			// 		bytesReadTemp = 0; //we went over the block, bail
-			// 	}
-			// 	else
-			// 	{
-			// 		int read = fread(mp3buf,1,bytesUntilBlock,stream);
-			// 		//mp3buf = NutSegBufWriteCommit(read);
-			// 		bytesReadTemp = 0;
-			// 		char* metaBuffer = malloc(1);
-			// 		fread(metaBuffer,1,1,stream);
-			// 		printf("stuff %d\n",metaBuffer );
-			// 		free(metaBuffer);
-			// 	}
+			//MetaInterval = 16000
+			if (bytesReadTemp+nrBytesRead >= metaInterval)
+			{
+				int bytesUntilBlock = metaInterval-bytesReadTemp/2;
+				//printf("bytesUntilBlock %d,= metaInterval %d, -  bytesReadTemp %d\n", bytesUntilBlock, metaInterval, bytesReadTemp);
+				if (bytesUntilBlock<0)
+				{
+					bytesReadTemp = 0; //we went over the block, bail
+				}
+				else
+				{
+					int read = fread(mp3buf,1,bytesUntilBlock,stream);
+					//mp3buf = NutSegBufWriteCommit(read);
+					bytesReadTemp = 0;
+					char* metaBuffer = malloc(1);
+					fread(metaBuffer,1,1,stream);
+					printf("stuff %d\n",metaBuffer );
+					free(metaBuffer);
+				}
 				
-			// }
+			}
 
 			nrBytesRead = fread(mp3buf,1,rbytes,stream);
 			
