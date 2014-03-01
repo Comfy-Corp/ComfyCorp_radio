@@ -6,6 +6,7 @@
 #include "keyboard.h"
 #include "storage.h"
 #include "rtc.h"
+#include "watchdog.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
@@ -96,6 +97,7 @@ int UIScreenOK()
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
+        LcdHelloAnimation();
         return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
@@ -196,6 +198,12 @@ int UIRefreshScreen(){
         free(timeBuffer);
     }    
     return 1;
+}
+
+int UIHandleReset(){
+    WatchDogEnable();
+    WatchDogStart(30);
+    for (;;) {};
 }
 
 int UIGetUserSetTimezone(void)

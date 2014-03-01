@@ -15,7 +15,7 @@ void AlarmControlTestProcedure(void){
 	X12RtcGetClock(&testAlarm);
 	testAlarm.tm_min += 5;
 	testAlarm.tm_min %= 60;
-	AlarmControlCreateAlarm(testAlarm); //Set alarm to 5 seconds.
+	AlarmControlCreatePrimaryAlarm(testAlarm); //Set alarm to 5 seconds.
 }
 
 //Compares Sec, Min & Hour default alarm slot 0
@@ -24,7 +24,7 @@ void AlarmControlCreatePrimaryAlarm(tm AlarmTime){
 }
 
 void AlarmControlCreateSecondaryAlarm(tm AlarmTime){
-	X12RtcSetAlarm(0, &AlarmTime, 0x06);	
+	X12RtcSetAlarm(1, &AlarmTime, 0x06);	
 }
 
 void AlarmControlPrintActiveAlarm(){

@@ -47,7 +47,8 @@ CFILES =        main.c			\
 				bankmem.c 		\
 				heap.c 			\
 				thread.c 		\
-				alarmControl.c
+				alarmControl.c	\
+				customChars.c
 			
 				
 # Header files.
@@ -67,7 +68,8 @@ HFILES =        lcd.h        keyboard.h              \
                 parse.h          mmcdrv.h         fat.h          \
                 fatdrv.h	  	rtc.h 		\
 				dispatcher.h 	 storage.h 			bankmem.h 	\
-				heap.h 	os.h 	thread.h 	alarmControl.h
+				heap.h 	os.h 	thread.h 	alarmControl.h		\
+				customChars.h
 
 
 # Alle source files in de ./source dir

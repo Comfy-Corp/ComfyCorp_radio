@@ -25,5 +25,6 @@ int UIScreenLeft(void);
 int UIScreenRight(void);
 int UIScreenOK(void);
 int UIScreenEsc(void);
+int UIHandleReset(void);
 int UIHandleInput(int);
 int UIGetUserSetTimezone(void);
