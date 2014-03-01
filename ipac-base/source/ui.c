@@ -18,7 +18,7 @@ int UIshow()
     char *timeBuffer2 = malloc(sizeof(char) * 8);
 	switch (screenStateChar)
         {
-            case UISTATE_SHOWTIME:             
+            case UISTATE_SHOWTIME:           
                 X12FillStringWithTime(timeBuffer);
                 previousTime = timeBuffer;
                 LcdSetCursor(0x44);
@@ -42,6 +42,14 @@ int UIshow()
                 LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer2, strlen(timeBuffer2)+1);
                 free(timeBuffer2);
+                break;
+            case UISTATE_ALARMEVENT:
+                LcdClear();
+                LcdSetCursor(0x00);
+                LcdWriteString("Beep beep.", strlen("Beep beep."));
+                LcdSetCursor(0x40);
+                LcdWriteString("Faggot.", strlen("Faggot."));
+                LcdBackLightBriefOn(200);
                 break;
             default:
                 break;
@@ -99,6 +107,7 @@ int UIScreenOK()
         UIshow();
         return 1;
     }
+
     if(screenStateChar == UISTATE_SHOWSETUP)
     {
         _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
