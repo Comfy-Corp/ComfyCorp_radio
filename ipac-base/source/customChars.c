@@ -11,7 +11,8 @@
 
 #include "Lcd.h"
 #include "customChars.h"
-u_char loadingTicks = 0;
+
+u_char loadingTicks = 0; //Could be replaced with a global tick system, so animations van be interrupted. For now: only used in loading.
  
 void CustomCharsAnimation(){
 	unsigned int animationTiming = 200;  
