@@ -1,9 +1,4 @@
-
-//Result possibilities of AlarmControlCheck
-#define NO_ALARM 1
-#define ALARM_01 2
-#define ALARM_02 3
-
-extern void AlarmControlCreateAlarm(void *params);
-extern int AlarmControlCheck();
-
+extern void AlarmControlCreatePrimaryAlarm(tm);
+extern void AlarmControlCreateSecondaryAlarm(tm);
+extern u_long  AlarmControlCheck();
+extern void AlarmControlTestProcedure(void);

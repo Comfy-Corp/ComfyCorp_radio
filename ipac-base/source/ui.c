@@ -6,6 +6,7 @@
 #include "keyboard.h"
 #include "storage.h"
 #include "rtc.h"
+#include "watchdog.h"
 #include "ethernet.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
@@ -19,7 +20,7 @@ int UIshow()
     char *timeBuffer2 = malloc(sizeof(char) * 8);
 	switch (screenStateChar)
         {
-            case UISTATE_SHOWTIME:             
+            case UISTATE_SHOWTIME:           
                 X12FillStringWithTime(timeBuffer);
                 previousTime = timeBuffer;
                 LcdSetCursor(0x44);
@@ -48,6 +49,14 @@ int UIshow()
                 LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer2, strlen(timeBuffer2)+1);
                 free(timeBuffer2);
+                break;
+            case UISTATE_ALARMEVENT:
+                LcdClear();
+                LcdSetCursor(0x00);
+                LcdWriteString("Beep beep.", strlen("Beep beep."));
+                LcdSetCursor(0x40);
+                LcdWriteString("Faggot.", strlen("Faggot."));
+                LcdBackLightBriefOn(200);
                 break;
             default:
                 break;
@@ -94,6 +103,7 @@ int UIScreenOK()
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         printf("%s\n","I would like to sync, but I can not do that yet :(" );
+        LcdHelloAnimation();
         return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
@@ -105,6 +115,7 @@ int UIScreenOK()
         UIshow();
         return 1;
     }
+
     if(screenStateChar == UISTATE_SHOWSETUP)
     {
         _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
@@ -194,6 +205,12 @@ int UIRefreshScreen(){
 
     }    
     return 1;
+}
+
+int UIHandleReset(){
+    WatchDogEnable();
+    WatchDogStart(30);
+    for (;;) {};
 }
 
 int UIGetUserSetTimezone(void)

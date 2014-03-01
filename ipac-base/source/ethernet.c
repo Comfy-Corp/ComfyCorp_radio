@@ -52,7 +52,6 @@ int ethInitInet(void)
 			result = NOK;
 		}
 	}
-	
 	if( OK == result )
 	{
 		printf("%s\nif_name: %s\nip-addr: %s\nip-mask: %s\ngw     : %s\n",
@@ -62,8 +61,7 @@ int ethInitInet(void)
 			inet_ntoa(confnet.cdn_ip_mask),
 			inet_ntoa(confnet.cdn_gateway));
 	}
-	
-	NutSleep(1000);
+	//NutSleep(1000);
 	
 	return result;
 }

@@ -26,7 +26,9 @@ void userInputKeyPress()
 		case KEY_ESC:
 			UIScreenEsc();
 			break;
-
+		case KEY_POWER:
+			UIHandleReset();
+			break;
 	}
 }
 
