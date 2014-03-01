@@ -9,7 +9,7 @@
 
 #include "player.h"
 #include "vs10xx.h"
-
+#include "ethernet.h"
 
 #define OK			1
 #define NOK			0
@@ -38,7 +38,7 @@ THREAD(StreamPlayer, arg)
 	int result = NOK;
 	int nrBytesRead = 0;
 	unsigned char iflag;
-	
+	int bytesReadTemp = ignoredData;
 	//
 	// Init MP3 buffer. NutSegBuf is een globale, systeem buffer
 	//
@@ -82,11 +82,37 @@ THREAD(StreamPlayer, arg)
 				VsPlayerKick();
 			}
 		}
-		
+		//printf("bytesReadTemp: %d", bytesReadTemp);
 		while( rbytes )
 		{
+			
 			// Copy rbytes (van 1 byte) van stream naar mp3buf.
+			//MetaInterval = 16000
+			if (bytesReadTemp+nrBytesRead >= metaInterval)
+			{
+				//printf("nrBytesRead == %x\n bytesReadTemp == %x",nrBytesRead,bytesReadTemp );
+				int bytesUntilBlock = metaInterval-bytesReadTemp/2;
+				//printf("bytesUntilBlock %d,= metaInterval %d, -  bytesReadTemp %d\n", bytesUntilBlock, metaInterval, bytesReadTemp);
+				if (bytesUntilBlock<0)
+				{
+					bytesReadTemp = 0; //we went over the block, bail
+				}
+				else
+				{
+					int read = fread(mp3buf,1,bytesUntilBlock,stream);
+					//mp3buf = NutSegBufWriteCommit(read);
+					bytesReadTemp = 0;
+					char* metaBuffer = malloc(1);
+					fread(metaBuffer,1,1,stream);
+					printf("metaBuffer == %d\n",metaBuffer );
+					free(metaBuffer);
+				}
+				
+			}
+
 			nrBytesRead = fread(mp3buf,1,rbytes,stream);
+			
+			//printf("nrBytesRead == %d\n", nrBytesRead);
 			
 			if( nrBytesRead > 0 )
 			{
@@ -102,8 +128,9 @@ THREAD(StreamPlayer, arg)
 			{
 				break;
 			}
+			//printf("%d is nrBytesRead\n", nrBytesRead);
+			bytesReadTemp+=nrBytesRead;
 			rbytes -= nrBytesRead;
-			
 			if( nrBytesRead <= 0 )
 			{
 				break;

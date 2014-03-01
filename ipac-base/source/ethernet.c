@@ -19,11 +19,16 @@
 #include "heap.h"
 #include "bankmem.h"
 #include <netinet/tcp.h>
+#include "lcd.h"
+#include "ethernet.h"
 
 
 #define NOK 1
 #define OK 0
 FILE *stream;
+int* ignoredData = 0;
+int* metaInterval = 0;
+
 int ethInitInet(void)
 {
 	//uint8_t mac_addr[6] = { 0xC0, 0x01, 0x1E, 0x01, 0x02, 0x03 };
@@ -128,6 +133,7 @@ FILE* GetHTTPRawStream(char* ip)
 	fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 	fprintf(stream, "User-Agent: Ethernut\r\n");
 	fprintf(stream, "Accept: */*\r\n");
+	fprintf(stream, "Icy-MetaData: 1\r\n");
 	fprintf(stream, "Connection: close\r\n\r\n");
 	fflush(stream);
 
@@ -140,6 +146,7 @@ FILE* GetHTTPRawStream(char* ip)
 		if( 0 == *data )
 			break;
 	}
+	puts(data);
 	
 	free(data);
 
@@ -192,19 +199,21 @@ int playStream(void)
 	return OK;
 }
 
-FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
+FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 { 
 	int result = OK;
 	char *data;
+	
 
     TCPSOCKET* sock;
     sock = NutTcpCreateSocket();
-	char* ip = malloc(22*sizeof(char));
-	strncpy(ip, netaddress, 17);
+	char* ip = malloc(23*sizeof(char));
+	strncpy(ip, netaddress, 22);
 	char nullTerm=0;
 	int slashLoc=0;
 	int colonLoc=0;
 	int i;
+	int port = 80;
 
 	/*-- Finding the forward slash and port colon --*/
 	for(i = 0;i<=23;++i)
@@ -230,6 +239,19 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
 			break;
 		}
 	} 
+	if (colonLoc)
+	{
+		ip[colonLoc] = 0;
+		char* Sport = malloc((slashLoc - colonLoc)+2*sizeof(char));
+		for (i=colonLoc+1;i<slashLoc;++i)
+		{
+			Sport[i-colonLoc-1] = netaddress[i];
+		}
+		Sport[slashLoc - colonLoc-1] = 0;
+		
+		port = atoi(Sport);
+		free(Sport);
+	}
 
 	if (!nullTerm)
 	{
@@ -265,6 +287,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
 		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 		fprintf(stream, "User-Agent: Ethernut\r\n");
 		fprintf(stream, "Accept: */*\r\n");
+		// fprintf(stream, "Icy-MetaData: 1\r\n");
 		fprintf(stream, "Connection: close\r\n\r\n");
 		fflush(stream);
 
@@ -274,10 +297,48 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress, int port)
 		
 		while( fgets(data, 512, stream) )
 		{
+			char* stringData = strstr(data, "icy-metaint:");
+			char* stringStreamNameLoc = strstr(data, "icy-name:");
+			int* streamNameSizeTemp = &streamNameSize;
+			int* streamNameLocLCDTemp = &streamNameLocLCD;
+			if (stringStreamNameLoc != NULL)
+			{
+				streamName = strstr(stringStreamNameLoc, ":")+1;
+				if (streamName)
+				{
+					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
+					{
+						if (streamName[*streamNameSizeTemp] == 0)
+						{
+							*streamNameSizeTemp-=1;
+							break;
+						}
+					}
+					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
+					LcdWriteStringAtLoc(streamName, *streamNameSizeTemp, *streamNameLocLCDTemp);
+					stringStreamNameLoc = NULL;
+
+				}
+			}
+
+			if (stringData != NULL)
+			{
+				printf("Hoera, gevonden! %s\n", stringData );
+				metaInterval = atoi(strstr(stringData,":")+1);
+				printf("MetaInt = %d\n", metaInterval);
+			}
+			char* EOT = strstr(data, "\r\n\r\n");
+			if (EOT != NULL)
+			{
+				ignoredData = sizeof(EOT);
+				printf("%s\n", EOT);
+				break;
+			}
 			if( 0 == *data )
 				break;
 		}
 		
+
 		free(data);
         return stream;
     }
