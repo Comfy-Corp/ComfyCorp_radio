@@ -11,20 +11,27 @@
 
 void AlarmControlTestProcedure(void){
 	X12RtcClearStatus(0x30);
-	tm testAlarm;
-	X12RtcGetClock(&testAlarm);
-	testAlarm.tm_min += 5;
-	testAlarm.tm_min %= 60;
-	AlarmControlCreatePrimaryAlarm(testAlarm); //Set alarm to 5 seconds.
+	tm testTime;
+	X12RtcGetClock(&testTime);
+	testTime.tm_min += 1;
+	testTime.tm_min %= 60;
+	struct _alarm testAlarm;
+	testAlarm.alarmText = "TestAlarm";
+	testAlarm.streamName = "Kiss FM";
+	testAlarm.alarmType = 0; //Primary
+	testAlarm.alarmTime = testTime;
+	AlarmControlCreateDaylyAlarm(testAlarm); //Set alarm to 5 seconds.
 }
 
 //Compares Sec, Min & Hour default alarm slot 0
-void AlarmControlCreatePrimaryAlarm(tm AlarmTime){
-	 X12RtcSetAlarm(0, &AlarmTime, 0x06);
+void AlarmControlCreateDaylyAlarm(struct _alarm alarm){
+	AlarmControlActivePrimaryAlarm = alarm;
+	 X12RtcSetAlarm(0, &alarm.alarmTime, 0x06); //Checks on HH:MM
 }
 
-void AlarmControlCreateSecondaryAlarm(tm AlarmTime){
-	X12RtcSetAlarm(1, &AlarmTime, 0x06);	
+void AlarmControlCreateYearlyAlarm(struct _alarm alarm){
+	AlarmControlActiveSecondaryAlarm = alarm;	
+	X12RtcSetAlarm(1, &alarm.alarmTime, 0x1E); //Checks on Month + Day of Month + HH:MM. Requires alarmTime to contain these.
 }
 
 void AlarmControlPrintActiveAlarm(){
@@ -38,7 +45,7 @@ void AlarmControlPrintActiveAlarm(){
 u_long AlarmControlCheck(){
 	u_long result;
 	X12RtcGetStatus(&result);
-	if(result == RTC_STATUS_AL0){
+	if(result == RTC_STATUS_AL0){ //Primary alarm (Dayly)
 		AlarmControlAlarmEvent();
 		X12RtcClearStatus(0x30);
 	}
