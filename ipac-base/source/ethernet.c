@@ -297,6 +297,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		
 		while( fgets(data, 512, stream) )
 		{
+			streamName = malloc(16);
 			char* stringData = strstr(data, "icy-metaint:");
 			char* stringStreamNameLoc = strstr(data, "icy-name:");
 			int* streamNameSizeTemp = &streamNameSize;

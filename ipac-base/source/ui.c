@@ -21,15 +21,17 @@ int UIshow()
 	switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:           
+                printf("%s\n",streamName );
                 X12FillStringWithTime(timeBuffer);
                 previousTime = timeBuffer;
                 LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
                 if (streamName != NULL)
                 {
-                    //printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
+                    printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
                     LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
                 }
+                printf("%s\n",streamName );
                 free(timeBuffer);
                 break;
             case UISTATE_SHOWSYNCING:

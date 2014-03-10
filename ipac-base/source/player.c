@@ -15,6 +15,15 @@
 #define NOK			0
 
 THREAD(StreamPlayer, arg);
+char runningStream = 0;
+char isPlaying()
+{
+	return runningStream;
+}
+void setPlaying(char val)
+{
+	runningStream = val;
+}
 
 int initPlayer(void)
 {
@@ -32,6 +41,7 @@ int play(FILE *stream)
 
 THREAD(StreamPlayer, arg)
 {
+	runningStream = 1;
 	FILE *stream = (FILE *) arg;
 	size_t rbytes = 0;
 	char *mp3buf;
@@ -82,10 +92,17 @@ THREAD(StreamPlayer, arg)
 				VsPlayerKick();
 			}
 		}
+		if (!runningStream)
+		{
+			break;
+		}
 		//printf("bytesReadTemp: %d", bytesReadTemp);
 		while( rbytes )
 		{
-			
+			if (!runningStream)
+			{
+				break;
+			}
 			// Copy rbytes (van 1 byte) van stream naar mp3buf.
 			//MetaInterval = 16000
 			if (bytesReadTemp+nrBytesRead >= metaInterval)
@@ -137,7 +154,10 @@ THREAD(StreamPlayer, arg)
 			}				
 		}
 	}
+	printf("Lekker killen\n");
+	NutThreadExit();
 }
+
 
 
 
