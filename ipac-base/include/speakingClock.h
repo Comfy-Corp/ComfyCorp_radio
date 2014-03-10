@@ -1,0 +1,2 @@
+//headerfile for the speakingClock
+
