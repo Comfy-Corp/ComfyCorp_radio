@@ -16,8 +16,8 @@ typedef struct menuItemContainer {
 	struct menuItem* lastMenuItem;
 } menuItemContainer;
 
-int UIshow(void);
 void UIchangeState(char);
+int UIshow(void);
 int UIGetState(void);
 int UIScreenUp(void);
 int UIScreenDown(void);

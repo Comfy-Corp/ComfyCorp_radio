@@ -8,6 +8,7 @@
 #include "rtc.h"
 #include "watchdog.h"
 #include "ethernet.h"
+#include "alarmControl.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
@@ -53,9 +54,8 @@ int UIshow()
             case UISTATE_ALARMEVENT:
                 LcdClear();
                 LcdSetCursor(0x00);
-                LcdWriteString("Beep beep.", strlen("Beep beep."));
-                LcdSetCursor(0x40);
-                LcdWriteString("Faggot.", strlen("Faggot."));
+                LcdWriteString( AlarmControlActivePrimaryAlarm.alarmText,
+                                strlen(AlarmControlActivePrimaryAlarm.alarmText)+1);
                 LcdBackLightBriefOn(200);
                 break;
             default:
