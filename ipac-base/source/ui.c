@@ -32,7 +32,6 @@ int UIshow()
                     printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
                     LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
                 }
-                printf("%s\n",streamName );
                 free(timeBuffer);
                 break;
             case UISTATE_SHOWSYNCING:
