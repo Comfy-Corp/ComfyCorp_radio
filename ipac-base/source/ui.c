@@ -37,7 +37,10 @@ int UIshow()
             LcdWriteString("SYNCING",8);
                 break;
             case UISTATE_SHOWALARM:
-            LcdWriteString("ALARMZZ",8);
+            if(AlarmControlActivePrimaryAlarm == NULL)
+                LcdWriteString("Sleep 2 min",strlen("Sleep 2 min")+1);
+            else
+                LcdWriteString("Remove alarm",strlen("Remove alarm")+1);
                 break;
             case UISTATE_SHOWRESET:
             LcdWriteString("FACTORY RESET?",15);
@@ -77,6 +80,10 @@ int UIGetState()
 
 int UIScreenUp()
 {
+    if (screenStateChar == UISTATE_SHOWALARM)
+    {
+        return 0;
+    }
     ++screenStateChar;
     if (screenStateChar > 2)
     {
@@ -88,6 +95,10 @@ int UIScreenUp()
 
 int UIScreenDown()
 {
+    if ((screenStateChar == UISTATE_SHOWALARM)&&(screenStateChar == UISTATE_ALARMEVENT))
+    {
+        return 0;
+    }
     --screenStateChar;
     if (screenStateChar < 0)
     {
@@ -116,6 +127,16 @@ int UIScreenOK()
         return 1;
     }
 
+    if (screenStateChar == UISTATE_SHOWALARM)
+    {
+        if(AlarmControlActivePrimaryAlarm == NULL)
+            AlarmControlTestProcedure();
+        else
+            AlarmControlRemoveDaylyAlarm();
+        UIchangeState(UISTATE_SHOWTIME);
+        return 1;
+    }
+
     if(screenStateChar == UISTATE_SHOWSETUP)
     {
         _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
@@ -127,9 +148,9 @@ int UIScreenOK()
     }
     if(screenStateChar == UISTATE_ALARMEVENT)
     {
-        screenStateChar == UISTATE_SHOWTIME;
+        screenStateChar = UISTATE_SHOWTIME;
+        UIshow();        
         AlarmControlSnoozePrimary();
-        UIshow();
         return 1;
     }
     return 1;
