@@ -28,7 +28,7 @@ int UIshow()
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
                 if(streamName != NULL)
                 {
-                    //printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
+                    printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
                     LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
                 }
                 free(timeBuffer);
