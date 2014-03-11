@@ -73,7 +73,13 @@ void CustomCharsAnimation(){
 	NutSleep(animationTiming);	
 }
 
-void CustomCharsLoading(u_char pos){
+void CustomCharsAlarmIcon(u_char pos){
+	LcdDefinePattern(alarmChar, 2);
+    LcdSetCursor(pos);
+    LcdChar(0x02);
+}
+
+void CustomCharsLoading(u_char pos, u_char isLast){
 	LcdDefinePattern(forwardSlash, 1);
 	LcdSetCursor(pos);
 	if(loadingTicks == 0)
@@ -84,7 +90,10 @@ void CustomCharsLoading(u_char pos){
 		LcdChar(0x01);	
 	else if (loadingTicks == 3)		
 		LcdChar('|');		
-	NutSleep(100);	
-	loadingTicks++;
-	loadingTicks%=4;
+	NutSleep(100);
+	if(isLast)
+	{
+		loadingTicks++;
+		loadingTicks%=4;
+	}	
 }
