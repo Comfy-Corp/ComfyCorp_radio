@@ -8,6 +8,7 @@
 #include "rtc.h"
 #include "watchdog.h"
 #include "ethernet.h"
+#include "alarmControl.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
@@ -20,14 +21,14 @@ int UIshow()
     char *timeBuffer2 = malloc(sizeof(char) * 8);
 	switch (screenStateChar)
         {
-            case UISTATE_SHOWTIME:           
+            case UISTATE_SHOWTIME:
                 X12FillStringWithTime(timeBuffer);
                 previousTime = timeBuffer;
                 LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
-                if (streamName != NULL)
+                if(streamName != NULL)
                 {
-                    //printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
+                    printf("LcdWriteStringAtLoc(%s, %d, %d);\n",streamName, streamNameSize, streamNameLocLCD );
                     LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
                 }
                 free(timeBuffer);
@@ -36,7 +37,10 @@ int UIshow()
             LcdWriteString("SYNCING",8);
                 break;
             case UISTATE_SHOWALARM:
-            LcdWriteString("ALARMZZ",8);
+            if(AlarmControlActivePrimaryAlarm == NULL)
+                LcdWriteString("Sleep 2 min",strlen("Sleep 2 min")+1);
+            else
+                LcdWriteString("Remove alarm",strlen("Remove alarm")+1);
                 break;
             case UISTATE_SHOWRESET:
             LcdWriteString("FACTORY RESET?",15);
@@ -53,9 +57,8 @@ int UIshow()
             case UISTATE_ALARMEVENT:
                 LcdClear();
                 LcdSetCursor(0x00);
-                LcdWriteString("Beep beep.", strlen("Beep beep."));
-                LcdSetCursor(0x40);
-                LcdWriteString("Faggot.", strlen("Faggot."));
+                LcdWriteString( AlarmControlActivePrimaryAlarm -> alarmText,
+                                strlen(AlarmControlActivePrimaryAlarm -> alarmText)+1);
                 LcdBackLightBriefOn(200);
                 break;
             default:
@@ -77,6 +80,10 @@ int UIGetState()
 
 int UIScreenUp()
 {
+    if ((screenStateChar == UISTATE_SHOWALARM)&&(screenStateChar == UISTATE_ALARMEVENT))
+    {
+        return 0;
+    }
     ++screenStateChar;
     if (screenStateChar > 2)
     {
@@ -88,6 +95,10 @@ int UIScreenUp()
 
 int UIScreenDown()
 {
+    if ((screenStateChar == UISTATE_SHOWALARM)&&(screenStateChar == UISTATE_ALARMEVENT))
+    {
+        return 0;
+    }
     --screenStateChar;
     if (screenStateChar < 0)
     {
@@ -116,6 +127,16 @@ int UIScreenOK()
         return 1;
     }
 
+    if (screenStateChar == UISTATE_SHOWALARM)
+    {
+        if(AlarmControlActivePrimaryAlarm == NULL)
+            AlarmControlTestProcedure();
+        else
+            AlarmControlRemoveDaylyAlarm();
+        UIchangeState(UISTATE_SHOWTIME);
+        return 1;
+    }
+
     if(screenStateChar == UISTATE_SHOWSETUP)
     {
         _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
@@ -123,6 +144,13 @@ int UIScreenOK()
         printf("saved: %d", timeZoneHour);
         screenStateChar = UISTATE_SHOWTIME;
         LcdClear();
+        return 1;
+    }
+    if(screenStateChar == UISTATE_ALARMEVENT)
+    {
+        screenStateChar = UISTATE_SHOWTIME;
+        UIshow();        
+        AlarmControlSnoozePrimary();
         return 1;
     }
     return 1;
@@ -178,6 +206,8 @@ int UIScreenRight()
 
 int UIScreenEsc()
 {
+    if(screenStateChar == UISTATE_ALARMEVENT)
+        AlarmControlRemoveDaylyAlarm();
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
     screenStateChar = 0;
@@ -202,7 +232,10 @@ int UIRefreshScreen(){
         LcdSetCursor(0x44);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
         free(timeBuffer);
-
+        if(AlarmControlActivePrimaryAlarm != NULL){
+            LcdSetCursor(0x40);
+            LcdAlarmIcon(0x4F);
+        }
     }    
     return 1;
 }

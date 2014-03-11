@@ -295,6 +295,8 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
+		streamName = malloc(sizeof(char)*16);
+		
 		while( fgets(data, 512, stream) )
 		{
 			char* stringData = strstr(data, "icy-metaint:");
@@ -303,7 +305,8 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			int* streamNameLocLCDTemp = &streamNameLocLCD;
 			if (stringStreamNameLoc != NULL)
 			{
-				streamName = strstr(stringStreamNameLoc, ":")+1;
+				strcpy(streamName,strstr(stringStreamNameLoc, ":")+1);
+				printf("%s\n",streamName );
 				if (streamName)
 				{
 					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
@@ -315,6 +318,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 						}
 					}
 					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
+					LcdClear();
 					LcdWriteStringAtLoc(streamName, *streamNameSizeTemp, *streamNameLocLCDTemp);
 					stringStreamNameLoc = NULL;
 

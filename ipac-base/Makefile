@@ -49,8 +49,8 @@ CFILES =        main.c			\
 				thread.c 		\
 				alarmControl.c	\
 				customChars.c	\
-				speakingClock.c
-			
+				speakingClock.c	\
+				weatherReport.c	
 				
 # Header files.
 HFILES =        lcd.h        keyboard.h              \
@@ -70,9 +70,9 @@ HFILES =        lcd.h        keyboard.h              \
                 fatdrv.h	  	rtc.h 		\
 				dispatcher.h 	 storage.h 			bankmem.h 	\
 				heap.h 	os.h 	thread.h 	alarmControl.h		\
-				customChars.h 	\
+				customChars.h 	weatherReport.h\
 				speakingClock.h
-
+				
 
 # Alle source files in de ./source dir
 SRCS =	$(addprefix $(SRC_DIR)/,$(CFILES))

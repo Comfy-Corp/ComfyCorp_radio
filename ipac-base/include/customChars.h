@@ -1,6 +1,7 @@
 //Animation functions
 extern void CustomCharsAnimation();
-extern void CustomCharsLoading(u_char);
+extern void CustomCharsAlarmIcon(u_char);
+extern void CustomCharsLoading(u_char, u_char);
 
 
 u_char forwardSlash[] = {
@@ -14,6 +15,17 @@ u_char forwardSlash[] = {
 	0x00
 };
 
+u_char alarmChar[] = { //Stolen from http://www.quinapalus.com/hd44780udg.html
+	0x04,
+	0x0e,
+	0x0e,
+	0x0e,
+	0x1f,
+	0x00,
+	0x04,
+	0x00
+};
+
 //Custom char definitions
 u_char animationA[] = {
 	0x00,  // 00000
@@ -23,7 +35,7 @@ u_char animationA[] = {
 	0x00,  // 00000
 	0x00,  // 00000
 	0x10,  // 10000
-	0x00  // 00000
+	0x00   // 00000
 };
 
 u_char animationB[] = {
@@ -114,7 +126,7 @@ u_char animationI[] = { //Reusable stick figure frame, in case the animation loo
 	0x04, // 00100
 	0x0E, // 01110
 	0x15, // 10101
-	0x04 // 00100
+	0x04  // 00100
 };
 
 u_char animationJ[] = {

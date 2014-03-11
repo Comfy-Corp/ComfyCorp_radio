@@ -11,5 +11,7 @@
 
 int initPlayer(void);
 int play(FILE *stream);
+char isPlaying(void);
+void setPlaying(char);
 
 #endif
