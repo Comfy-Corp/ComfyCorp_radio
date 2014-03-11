@@ -348,4 +348,154 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
     }
 }
 
+FILE* GetSettingsHTTP(char* netaddress)
+{ 
+	int result = OK;
+	char *data;
+	
+
+    TCPSOCKET* sock;
+    sock = NutTcpCreateSocket();
+	char* ip = malloc(23*sizeof(char));
+	strncpy(ip, netaddress, 22);
+	char nullTerm=0;
+	int slashLoc=0;
+	int colonLoc=0;
+	int i;
+	int port = 80;
+
+	/*-- Finding the forward slash and port colon --*/
+	for(i = 0;i<=23;++i)
+	{
+		if(ip[i]=='/')
+		{
+			ip[i]=0;
+			nullTerm = 1;
+			slashLoc = i;
+			printf("slashLoc set to %d\n", slashLoc);
+			break;
+		}
+
+		if(ip[i]==':')
+		{
+			colonLoc = i;
+			printf("colonLoc set to %d\n", colonLoc);
+		}
+
+		else if (ip[i] ==0)
+		{
+			nullTerm=-1;
+			break;
+		}
+	} 
+	if (colonLoc)
+	{
+		ip[colonLoc] = 0;
+		char* Sport = malloc((slashLoc - colonLoc)+2*sizeof(char));
+		for (i=colonLoc+1;i<slashLoc;++i)
+		{
+			Sport[i-colonLoc-1] = netaddress[i];
+		}
+		Sport[slashLoc - colonLoc-1] = 0;
+		
+		port = atoi(Sport);
+		free(Sport);
+	}
+
+	if (!nullTerm)
+	{
+		ip[17] = 0;
+	}   
+    //str[strlen(str) - 1] = 0;
+    char* address = malloc(64*sizeof(char));
+    printf("connecting to ip %s\n", ip);
+    if( NutTcpConnect(	sock,
+						inet_addr(ip), 
+						port) )
+	{
+		printf("Error: >> NutTcpConnect()");
+	}
+    else
+    {
+        FILE *stream;
+        if (nullTerm>0)
+        {
+	 		for (i=slashLoc;i < 80; ++i)
+	        {
+	            address[i-slashLoc] = netaddress[i];
+	        }
+    	}
+    	else
+    	{
+    		address = "";
+    	}	
+    	//printf("opening %s%s\n", ip, address);
+        stream = _fdopen((int) sock, "r+b");
+        printf("Address is: %s\n", address);
+        fprintf(stream, "GET %s HTTP/1.0\r\n", address);
+		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
+		fprintf(stream, "User-Agent: Ethernut\r\n");
+		fprintf(stream, "Accept: */*\r\n");
+		// fprintf(stream, "Icy-MetaData: 1\r\n");
+		fprintf(stream, "Connection: close\r\n\r\n");
+		fflush(stream);
+
+		
+		// Server stuurt nu HTTP header terug, catch in buffer
+		data = (char *) malloc(512 * sizeof(char));
+		
+		streamName = malloc(sizeof(char)*16);
+		
+		while( fgets(data, 512, stream) )
+		{
+			printf("%s\n",data);
+			char* stringData = strstr(data, "icy-metaint:");
+			char* stringStreamNameLoc = strstr(data, "icy-name:");
+			int* streamNameSizeTemp = &streamNameSize;
+			int* streamNameLocLCDTemp = &streamNameLocLCD;
+			if (stringStreamNameLoc != NULL)
+			{
+				strcpy(streamName,strstr(stringStreamNameLoc, ":")+1);
+				printf("%s\n",streamName );
+				if (streamName)
+				{
+					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
+					{
+						if (streamName[*streamNameSizeTemp] == 0)
+						{
+							*streamNameSizeTemp-=1;
+							break;
+						}
+					}
+					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
+					LcdClear();
+					LcdWriteStringAtLoc(streamName, *streamNameSizeTemp, *streamNameLocLCDTemp);
+					stringStreamNameLoc = NULL;
+
+				}
+			}
+
+			if (stringData != NULL)
+			{
+				printf("Hoera, gevonden! %s\n", stringData );
+				metaInterval = atoi(strstr(stringData,":")+1);
+				printf("MetaInt = %d\n", metaInterval);
+			}
+			char* EOT = strstr(data, "\r\n\r\n");
+			if (EOT != NULL)
+			{
+				ignoredData = sizeof(EOT);
+				printf("%s\n", EOT);
+				break;
+			}
+			if( 0 == *data )
+				break;
+		}
+		
+
+		free(data);
+        return stream;
+    }
+}
+
 
