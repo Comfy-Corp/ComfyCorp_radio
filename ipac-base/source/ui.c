@@ -80,7 +80,7 @@ int UIGetState()
 
 int UIScreenUp()
 {
-    if (screenStateChar == UISTATE_SHOWALARM)
+    if ((screenStateChar == UISTATE_SHOWALARM)&&(screenStateChar == UISTATE_ALARMEVENT))
     {
         return 0;
     }
@@ -206,6 +206,8 @@ int UIScreenRight()
 
 int UIScreenEsc()
 {
+    if(screenStateChar == UISTATE_ALARMEVENT)
+        AlarmControlRemoveDaylyAlarm();
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
     screenStateChar = 0;
