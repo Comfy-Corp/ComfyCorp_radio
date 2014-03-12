@@ -436,7 +436,6 @@ FILE* GetSettingsHTTP(char* netaddress)
 		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 		fprintf(stream, "User-Agent: Ethernut\r\n");
 		fprintf(stream, "Accept: */*\r\n");
-		// fprintf(stream, "Icy-MetaData: 1\r\n");
 		fprintf(stream, "Connection: close\r\n\r\n");
 		fflush(stream);
 
@@ -449,47 +448,6 @@ FILE* GetSettingsHTTP(char* netaddress)
 		while( fgets(data, 512, stream) )
 		{
 			printf("%s\n",data);
-			char* stringData = strstr(data, "icy-metaint:");
-			char* stringStreamNameLoc = strstr(data, "icy-name:");
-			int* streamNameSizeTemp = &streamNameSize;
-			int* streamNameLocLCDTemp = &streamNameLocLCD;
-			if (stringStreamNameLoc != NULL)
-			{
-				strcpy(streamName,strstr(stringStreamNameLoc, ":")+1);
-				printf("%s\n",streamName );
-				if (streamName)
-				{
-					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
-					{
-						if (streamName[*streamNameSizeTemp] == 0)
-						{
-							*streamNameSizeTemp-=1;
-							break;
-						}
-					}
-					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
-					LcdClear();
-					LcdWriteStringAtLoc(streamName, *streamNameSizeTemp, *streamNameLocLCDTemp);
-					stringStreamNameLoc = NULL;
-
-				}
-			}
-
-			if (stringData != NULL)
-			{
-				printf("Hoera, gevonden! %s\n", stringData );
-				metaInterval = atoi(strstr(stringData,":")+1);
-				printf("MetaInt = %d\n", metaInterval);
-			}
-			char* EOT = strstr(data, "\r\n\r\n");
-			if (EOT != NULL)
-			{
-				ignoredData = sizeof(EOT);
-				printf("%s\n", EOT);
-				break;
-			}
-			if( 0 == *data )
-				break;
 		}
 		
 
