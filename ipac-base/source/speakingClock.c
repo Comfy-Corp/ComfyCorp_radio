@@ -15,23 +15,29 @@ int doSpeakingClockSequence(char stringToParse[]){
 		switch(sequence){
 			case 0:
 				sayTheTimeIs();
+				printf("\nsay The Time Is\n");
 			break;
 			case 1:
-				sayClockNumber();
+				sayClockNumber(parsedHours);
+				printf("say hour\n");
 			break;
 			case 2:
-				sayClockNumber();
+				sayClockNumber(parsedMinutes);
+				printf("say minutes\n");
 			break;
 			case 3:
-				sayClockHoursTextAmPm();
+				sayClockHoursTextAmPm(parsedHours);
+				printf("say AM or PM");
 			break;
 			default:
 			break;
 		}
 		++sequence;
 	}
+	return 0;
 }
 
+///// array van links naar de server, sequentiueel ophalen en aflaten spelen
 
 int parseTimeClock(char stringToParse[], int *hours, int *minutes){
 	if (strlen(stringToParse) < 4)
@@ -56,16 +62,12 @@ int sayTheTimeIs( void ){
 }
 
 int sayClockNumber( int number ){
-    LcdWriteString("sayClockNumber %d", number, strlen("sayClockNumber %d", number)+1);
-
+    LcdWriteString("sayClockNumber %d", number, strlen("sayClockNumber ")+3);
 	//TODO: add speak method "number"
 	return 0;
 }
 
 int sayClockHoursTextAmPm( int hour ){
-    
-    int hourOfTheDay = atio(hour);
-
     if (hour >= 12){
     	LcdWriteString("It is PM", strlen("It is PM")+1);
 	//TODO: add speak method "PM"
