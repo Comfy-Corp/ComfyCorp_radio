@@ -11,7 +11,8 @@ int playStream(void);
 extern FILE* GetHTTPRawStream(char*);
 FILE* GetHTTPRawStreamWithAddress(char* netaddress);
 void fillStringWithStreamName(char requestName[]);
+void freeBeforeNewSettingsFile(void);
 /* -- Stream names and meta data -- */
 char* streamName;
-int* streamNameSize;
-int* streamNameLocLCD;
+int streamNameSize;
+int streamNameLocLCD;

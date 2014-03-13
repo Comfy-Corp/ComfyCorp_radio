@@ -34,8 +34,6 @@ int play(FILE *stream)
 {
 	NutThreadCreate("Bg", StreamPlayer, stream, 512);
 	printf("Play thread created. Device is playing stream now !\n");
-
-	
 	return OK;
 }
 
@@ -73,7 +71,7 @@ THREAD(StreamPlayer, arg)
 			}
 		}
 	}
-	
+
 	for(;;)
 	{
 		/*
@@ -107,9 +105,8 @@ THREAD(StreamPlayer, arg)
 			//MetaInterval = 16000
 			if (bytesReadTemp+nrBytesRead >= metaInterval)
 			{
-				//printf("nrBytesRead == %x\n bytesReadTemp == %x",nrBytesRead,bytesReadTemp );
 				int bytesUntilBlock = metaInterval-bytesReadTemp/2;
-				//printf("bytesUntilBlock %d,= metaInterval %d, -  bytesReadTemp %d\n", bytesUntilBlock, metaInterval, bytesReadTemp);
+
 				if (bytesUntilBlock<0)
 				{
 					bytesReadTemp = 0; //we went over the block, bail
@@ -121,7 +118,6 @@ THREAD(StreamPlayer, arg)
 					bytesReadTemp = 0;
 					char* metaBuffer = malloc(1);
 					fread(metaBuffer,1,1,stream);
-					printf("metaBuffer == %d\n",metaBuffer );
 					free(metaBuffer);
 				}
 				
@@ -155,6 +151,7 @@ THREAD(StreamPlayer, arg)
 		}
 	}
 	printf("Lekker killen\n");
+	//fclose(stream);
 	NutThreadExit();
 }
 

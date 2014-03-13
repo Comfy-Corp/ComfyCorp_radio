@@ -129,12 +129,6 @@ int UIScreenOK()
 
     if (screenStateChar == UISTATE_SHOWALARM)
     {
-        if(AlarmControlActivePrimaryAlarm == NULL)
-            AlarmControlTestProcedure();
-        else
-            AlarmControlRemoveDaylyAlarm();
-        UIchangeState(UISTATE_SHOWTIME);
-        return 1;
     }
 
     if(screenStateChar == UISTATE_SHOWSETUP)

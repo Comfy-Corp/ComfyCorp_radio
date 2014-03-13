@@ -8,7 +8,7 @@ typedef struct _alarm{
 extern void AlarmControlCreateDaylyAlarm(struct _alarm);
 extern void AlarmControlCreateYearlyAlarm(struct _alarm);
 extern u_long AlarmControlCheck();
-extern void AlarmControlTestProcedure(void);
+extern void AlarmControlInit(void);
 extern void AlarmControlRemoveDaylyAlarm(void);
 
 struct _alarm *AlarmControlActivePrimaryAlarm;

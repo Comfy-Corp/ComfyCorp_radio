@@ -21,14 +21,16 @@
 #include <netinet/tcp.h>
 #include "lcd.h"
 #include "ethernet.h"
+#include <errno.h>
 
 
 #define NOK 1
 #define OK 0
-FILE *stream;
-int* ignoredData = 0;
-int* metaInterval = 0;
 
+FILE *streampie;
+TCPSOCKET *sock;
+TCPSOCKET *sockie;
+	
 int ethInitInet(void)
 {
 	//uint8_t mac_addr[6] = { 0xC0, 0x01, 0x1E, 0x01, 0x02, 0x03 };
@@ -97,28 +99,11 @@ int ethGetNTPTime()
 
 FILE* GetHTTPRawStream(char* ip)
 {
-   //  TCPSOCKET* sock;
-   //  printf("connecting to %s\n", ip);
-   //  sock = NutTcpCreateSocket();
-   //  if (NutTcpConnect(sock, inet_addr(ip), 8000)) {
-   //      /* Error: Cannot connect server. */
-   //      printf("%s\n", "server connection failed");
-   //  }
-   //  else
-   //  {
-   //      FILE *stream;
- 		// printf("%s\n", "server connection ok");
-   //      stream = _fdopen((int) sock, "r+b");
-   //      fwrite("GET / HTTP/1.0\r\n\r\n", 1, 26, stream);
-   //      fflush(stream);
-   //      return stream;
-   //  }
 
 	int result = OK;
 	char *data;
 	
-	TCPSOCKET *sock;
-	
+	sock = NULL;
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
 						inet_addr(ip), 
@@ -158,7 +143,7 @@ int connectToStream(void)
 	int result = OK;
 	char *data;
 	
-	TCPSOCKET *sock;
+	sock = NULL;
 	
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
@@ -203,9 +188,8 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 { 
 	int result = OK;
 	char *data;
-	
-
-    TCPSOCKET* sock;
+	puts(NutTcpCloseSocket(sock));
+	sock = NULL;
     sock = NutTcpCreateSocket();
 	char* ip = malloc(23*sizeof(char));
 	strncpy(ip, netaddress, 22);
@@ -258,7 +242,8 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		ip[17] = 0;
 	}   
     //str[strlen(str) - 1] = 0;
-    char* address = malloc(64*sizeof(char));
+    char* address = malloc(80*sizeof(char));
+    memset(address, 0, sizeof(address));
     printf("connecting to ip %s\n", ip);
     if( NutTcpConnect(	sock,
 						inet_addr(ip), 
@@ -268,20 +253,28 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 	}
     else
     {
+    	//free(ip);
         FILE *stream;
         if (nullTerm>0)
         {
-	 		for (i=slashLoc;i < 80; ++i)
+	 		for (i=slashLoc;i < 79; ++i)
 	        {
 	            address[i-slashLoc] = netaddress[i];
 	        }
     	}
     	else
     	{
-    		address = "";
+    		address[0] = 0;
     	}	
+    	//free(netaddress);
     	//printf("opening %s%s\n", ip, address);
         stream = _fdopen((int) sock, "r+b");
+        if (stream == NULL)
+        {
+        	printf("%s\n", "STREAM IS NULL ABORT!");
+        	printf("%d\n",errno );
+        	exit(1);
+        }
         printf("Address is: %s\n", address);
         fprintf(stream, "GET %s HTTP/1.0\r\n", address);
 		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
@@ -301,26 +294,26 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		{
 			char* stringData = strstr(data, "icy-metaint:");
 			char* stringStreamNameLoc = strstr(data, "icy-name:");
-			int* streamNameSizeTemp = &streamNameSize;
-			int* streamNameLocLCDTemp = &streamNameLocLCD;
+			//int* streamNameSizeTemp = &streamNameSize;
+			//int* streamNameLocLCDTemp = &streamNameLocLCD;
 			if (stringStreamNameLoc != NULL)
 			{
 				strcpy(streamName,strstr(stringStreamNameLoc, ":")+1);
 				printf("%s\n",streamName );
-				if (streamName)
+				//if (streamName)
 				{
-					for (*streamNameSizeTemp = 0; *streamNameSizeTemp < 16; ++*streamNameSizeTemp)
+					for (streamNameSize = 0; streamNameSize < 16; ++streamNameSize)
 					{
-						if (streamName[*streamNameSizeTemp] == 0)
+						if (streamName[streamNameSize] == 0)
 						{
-							*streamNameSizeTemp-=1;
+							streamNameSize-=1;
 							break;
 						}
 					}
-					*streamNameLocLCDTemp = ( 8-(*streamNameSizeTemp/2));
+					streamNameLocLCD = ( 8-(streamNameSize/2));
 					LcdClear();
-					LcdWriteStringAtLoc(streamName, *streamNameSizeTemp, *streamNameLocLCDTemp);
-					stringStreamNameLoc = NULL;
+					LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
+					//stringStreamNameLoc = NULL;
 
 				}
 			}
@@ -334,7 +327,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			char* EOT = strstr(data, "\r\n\r\n");
 			if (EOT != NULL)
 			{
-				ignoredData = sizeof(EOT);
+				ignoredData = sizeof(EOT); // fout.
 				printf("%s\n", EOT);
 				break;
 			}
@@ -348,14 +341,22 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
     }
 }
 
-FILE* GetSettingsHTTP(char* netaddress)
+char* GetSettingsHTTP(char* netaddress)
 { 
+	FILE *stream;
+	int* ignoredData = 0;
+	int* metaInterval = 0;
+	char* stringDataType;
+	char* stringStreamAddr;
+	char* settingsType;
+	char* streamAddrStripped;
+
+	streampie = NULL;
 	int result = OK;
 	char *data;
 	
-
-    TCPSOCKET* sock;
-    sock = NutTcpCreateSocket();
+	sockie = NULL;
+    sockie = NutTcpCreateSocket();
 	char* ip = malloc(23*sizeof(char));
 	strncpy(ip, netaddress, 22);
 	char nullTerm=0;
@@ -391,7 +392,7 @@ FILE* GetSettingsHTTP(char* netaddress)
 	if (colonLoc)
 	{
 		ip[colonLoc] = 0;
-		char* Sport = malloc((slashLoc - colonLoc)+2*sizeof(char));
+		char* Sport = malloc(((slashLoc - colonLoc)+2)*sizeof(char));
 		for (i=colonLoc+1;i<slashLoc;++i)
 		{
 			Sport[i-colonLoc-1] = netaddress[i];
@@ -407,9 +408,10 @@ FILE* GetSettingsHTTP(char* netaddress)
 		ip[17] = 0;
 	}   
     //str[strlen(str) - 1] = 0;
-    char* address = malloc(64*sizeof(char));
+    char* address = malloc(80*sizeof(char));
+    memset(address, 0, sizeof(80*sizeof(char)));
     printf("connecting to ip %s\n", ip);
-    if( NutTcpConnect(	sock,
+    if( NutTcpConnect(	sockie,
 						inet_addr(ip), 
 						port) )
 	{
@@ -417,42 +419,82 @@ FILE* GetSettingsHTTP(char* netaddress)
 	}
     else
     {
-        FILE *stream;
         if (nullTerm>0)
         {
-	 		for (i=slashLoc;i < 80; ++i)
+	 		for (i=slashLoc;i < 79; ++i)
 	        {
 	            address[i-slashLoc] = netaddress[i];
 	        }
     	}
     	else
     	{
-    		address = "";
+    		address[0] = 0;
     	}	
     	//printf("opening %s%s\n", ip, address);
-        stream = _fdopen((int) sock, "r+b");
+        streampie = _fdopen((int) sockie, "r+b");
         printf("Address is: %s\n", address);
-        fprintf(stream, "GET %s HTTP/1.0\r\n", address);
-		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
-		fprintf(stream, "User-Agent: Ethernut\r\n");
-		fprintf(stream, "Accept: */*\r\n");
-		fprintf(stream, "Connection: close\r\n\r\n");
-		fflush(stream);
+        fprintf(streampie, "GET %s HTTP/1.0\r\n", address);
+		fprintf(streampie, "Host: %s\r\n", "62.212.132.54");
+		fprintf(streampie, "User-Agent: Ethernut\r\n");
+		fprintf(streampie, "Accept: */*\r\n");
+		fprintf(streampie, "Connection: close\r\n\r\n");
+		fflush(streampie);
 
 		
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
-		streamName = malloc(sizeof(char)*16);
-		
-		while( fgets(data, 512, stream) )
-		{
-			printf("%s\n",data);
-		}
-		
+		//streamName = NULL;
+		//stringStreamAddr = NULL;
+		//stringDataType = NULL;
+		//settingsType = NULL;
+		//streamAddrStripped = NULL;
 
+		//streamName = malloc(sizeof(char)*16);
+		//stringStreamAddr = malloc(sizeof(char)*100);
+		//stringDataType = malloc(sizeof(char)*24);
+		settingsType = malloc (sizeof(char)*16);
+		streamAddrStripped = malloc(sizeof(char)*100);
+		while( fgets(data, 512, streampie) )
+		{
+			stringDataType = strstr(data, "Type:");
+			stringStreamAddr = strstr(data, "StreamAddr:");
+			
+			if (stringDataType != NULL)
+			{
+				strncpy(settingsType,strstr(stringDataType, ":")+1, 16);
+			}
+			if (stringStreamAddr != NULL)
+			{
+				strncpy(streamAddrStripped,strstr(stringStreamAddr, ":")+1, 100);
+				break;
+			}
+
+		}
+		printf("settingsType: %s\n", settingsType);
+		printf("streamAddrStripped: %s\n",streamAddrStripped);
 		free(data);
-        return stream;
+		
+		int i;
+		for (i = 0; i < 100; ++i)
+		{
+			if (streamAddrStripped[i]==10) //lf
+			{
+				streamAddrStripped[i] = 0;
+				fclose(streampie);
+				printf("socket close exit code %d", NutTcpCloseSocket(sockie));
+				break;
+			}
+		}
+		NutSleep(1500);
+        FILE* webstream = GetHTTPRawStreamWithAddress(streamAddrStripped);
+        initPlayer();
+        int playResult = play(webstream);
+        free(settingsType);
+        free(ip);
+		free(address);
+		free(streamAddrStripped);
+		return "";
     }
 }
 

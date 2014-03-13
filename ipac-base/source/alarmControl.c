@@ -9,18 +9,14 @@
 #include "ui.h"
 #include "alarmControl.h"
 
-void AlarmControlTestProcedure(void){
+void AlarmControlInit(void){
 	X12RtcClearStatus(0x30);
-	tm testTime;
-	X12RtcGetClock(&testTime);
-	testTime.tm_min += 2;
-	testTime.tm_min %= 60;
-	struct _alarm testAlarm;
-	testAlarm.alarmText = "Wake up!";
-	testAlarm.alarmStreamName = "Kiss FM";
-	testAlarm.alarmType = 0; //Primary
-	testAlarm.alarmTime = &testTime;
-	AlarmControlCreateDaylyAlarm(testAlarm); //Set alarm to 5 seconds.
+	tm *testAlarm = malloc(sizeof(tm));
+	testAlarm -> tm_min = 99; //Primary
+	testAlarm -> tm_hour = 99;
+	X12RtcSetAlarm(0, testAlarm, 0x06); //Checks on HH:MM
+	//Warning, you didn't free :(
+	free(testAlarm);
 }
 
 void AlarmControlSnoozePrimary(){
