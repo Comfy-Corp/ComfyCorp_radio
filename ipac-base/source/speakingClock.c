@@ -37,6 +37,16 @@ int doSpeakingClockSequence(char stringToParse[]){
 	return 0;
 }
 
+int getTimeStructToStringSpeakingClock(char *timeString)
+{
+    tm timeStruct;
+    X12RtcGetClock(&gmt);
+    char stringOfTheTimeZone[6];
+    sprintf(stringOfTheTimeZone, "%02d:%02d", (gmt.tm_hour+tempTimeZoneHours)%24, gmt.tm_min);
+    strcpy(timeZoneString, stringOfTheTimeZone);
+    return 1;
+}
+
 ///// array van links naar de server, sequentiueel ophalen en aflaten spelen
 
 int parseTimeClock(char stringToParse[], int *hours, int *minutes){
