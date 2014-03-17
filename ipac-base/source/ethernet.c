@@ -22,6 +22,7 @@
 #include "lcd.h"
 #include "ethernet.h"
 #include <errno.h>
+#include "player.h"
 
 
 #define NOK 1
@@ -30,6 +31,7 @@
 FILE *streampie;
 TCPSOCKET *sock;
 TCPSOCKET *sockie;
+char* streamURLCurrent;
 	
 int ethInitInet(void)
 {
@@ -289,6 +291,11 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		data = (char *) malloc(512 * sizeof(char));
 		
 		streamName = malloc(sizeof(char)*16);
+
+		// streamName = "";
+		// streamNameSize = 1;
+		// streamNameLocLCD = 1;
+		LcdClear();
 		
 		while( fgets(data, 512, stream) )
 		{
@@ -444,15 +451,6 @@ char* GetSettingsHTTP(char* netaddress)
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
-		//streamName = NULL;
-		//stringStreamAddr = NULL;
-		//stringDataType = NULL;
-		//settingsType = NULL;
-		//streamAddrStripped = NULL;
-
-		//streamName = malloc(sizeof(char)*16);
-		//stringStreamAddr = malloc(sizeof(char)*100);
-		//stringDataType = malloc(sizeof(char)*24);
 		settingsType = malloc (sizeof(char)*16);
 		streamAddrStripped = malloc(sizeof(char)*100);
 		while( fgets(data, 512, streampie) )
@@ -486,15 +484,34 @@ char* GetSettingsHTTP(char* netaddress)
 				break;
 			}
 		}
-		NutSleep(1500);
-        FILE* webstream = GetHTTPRawStreamWithAddress(streamAddrStripped);
-        initPlayer();
-        int playResult = play(webstream);
-        free(settingsType);
-        free(ip);
-		free(address);
-		free(streamAddrStripped);
-		return "";
+
+		if (strcmp(streamURLCurrent,streamAddrStripped)!=0)
+		{
+			if (isPlaying())
+            {
+                setPlaying(0);
+                NutSleep(1500);
+            }
+	        FILE* webstream = GetHTTPRawStreamWithAddress(streamAddrStripped);
+	        initPlayer();
+	        int playResult = play(webstream);
+	        streamURLCurrent = streamAddrStripped;
+	        free(settingsType);
+	        free(ip);
+			free(address);
+			// free(streamAddrStripped);
+			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			return "";
+		}
+		else
+		{
+	        free(settingsType);
+	        free(ip);
+			free(address);
+			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			return "";
+		}
+
     }
 }
 
