@@ -59,6 +59,8 @@ int UIshow()
                 LcdSetCursor(0x00);
                 LcdWriteString( AlarmControlActivePrimaryAlarm -> alarmText,
                                 strlen(AlarmControlActivePrimaryAlarm -> alarmText)+1);
+                LcdSetCursor(0x40);
+                LcdWriteString("OK:Snooze", strlen("OK:Snooze")+1);
                 LcdBackLightBriefOn(200);
                 break;
             default:
@@ -80,7 +82,7 @@ int UIGetState()
 
 int UIScreenUp()
 {
-    if ((screenStateChar == UISTATE_SHOWALARM)&&(screenStateChar == UISTATE_ALARMEVENT))
+    if ((screenStateChar == UISTATE_SHOWALARM)||(screenStateChar == UISTATE_ALARMEVENT))
     {
         return 0;
     }
@@ -95,7 +97,7 @@ int UIScreenUp()
 
 int UIScreenDown()
 {
-    if ((screenStateChar == UISTATE_SHOWALARM)&&(screenStateChar == UISTATE_ALARMEVENT))
+    if ((screenStateChar == UISTATE_SHOWALARM)||(screenStateChar == UISTATE_ALARMEVENT))
     {
         return 0;
     }
@@ -129,6 +131,10 @@ int UIScreenOK()
 
     if (screenStateChar == UISTATE_SHOWALARM)
     {
+        AlarmControlSleep();
+        screenStateChar = UISTATE_SHOWTIME;
+        UIshow();
+        return 1;
     }
 
     if(screenStateChar == UISTATE_SHOWSETUP)
