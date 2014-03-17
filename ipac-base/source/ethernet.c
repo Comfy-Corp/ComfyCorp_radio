@@ -380,14 +380,14 @@ char* GetSettingsHTTP(char* netaddress)
 			ip[i]=0;
 			nullTerm = 1;
 			slashLoc = i;
-			printf("slashLoc set to %d\n", slashLoc);
+			// printf("slashLoc set to %d\n", slashLoc);
 			break;
 		}
 
 		if(ip[i]==':')
 		{
 			colonLoc = i;
-			printf("colonLoc set to %d\n", colonLoc);
+			// printf("colonLoc set to %d\n", colonLoc);
 		}
 
 		else if (ip[i] ==0)
@@ -417,7 +417,7 @@ char* GetSettingsHTTP(char* netaddress)
     //str[strlen(str) - 1] = 0;
     char* address = malloc(80*sizeof(char));
     memset(address, 0, sizeof(80*sizeof(char)));
-    printf("connecting to ip %s\n", ip);
+    // printf("connecting to ip %s\n", ip);
     if( NutTcpConnect(	sockie,
 						inet_addr(ip), 
 						port) )
@@ -470,7 +470,7 @@ char* GetSettingsHTTP(char* netaddress)
 
 		}
 		printf("settingsType: %s\n", settingsType);
-		printf("streamAddrStripped: %s\n",streamAddrStripped);
+		// printf("streamAddrStripped: %s\n",streamAddrStripped);
 		free(data);
 		
 		int i;
