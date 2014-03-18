@@ -469,6 +469,8 @@ char* GetSettingsHTTP(char* netaddress)
 				{
 					setPlaying(0);
 					streamURLCurrent = NULL;
+					LcdClear();
+					streamName = NULL;
 				}
 				break;
 			}
