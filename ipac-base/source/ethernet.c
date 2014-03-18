@@ -458,13 +458,18 @@ char* GetSettingsHTTP(char* netaddress)
 			stringDataType = strstr(data, "Type:");
 			stringStreamAddr = strstr(data, "StreamAddr:");
 			
-			if (stringDataType != NULL)
+			if (strncmp(data, "Type:", strlen("Type:")) == 0)
 			{
 				strncpy(settingsType,strstr(stringDataType, ":")+1, 16);
 			}
-			if (stringStreamAddr != NULL)
+			if (strncmp(data, "StreamAddr:", strlen("StreamAddr:")) == 0)
 			{
 				strncpy(streamAddrStripped,strstr(stringStreamAddr, ":")+1, 100);
+				if (strncmp(streamAddrStripped, "STOP", strlen("STOP")) == 0)
+				{
+					setPlaying(0);
+					streamURLCurrent = NULL;
+				}
 				break;
 			}
 
@@ -485,7 +490,7 @@ char* GetSettingsHTTP(char* netaddress)
 			}
 		}
 
-		if (strcmp(streamURLCurrent,streamAddrStripped)!=0)
+		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 && strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0)
 		{
 			if (isPlaying())
             {
