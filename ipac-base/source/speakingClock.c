@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lcd.h"
+#include "player.h"
+#include "ethernet.h"
 
 int doSpeakingClockSequence(char stringToParse[]){
 	int sequence = 0;
@@ -11,7 +13,9 @@ int doSpeakingClockSequence(char stringToParse[]){
 
 	parseTimeClock(stringToParse, &parsedHours, &parsedMinutes);
 
-	while(sequence > 3){
+	doSpeakingClockSample();
+
+	while(sequence <= 3){
 		switch(sequence){
 			case 0:
 				sayTheTimeIs();
@@ -19,15 +23,15 @@ int doSpeakingClockSequence(char stringToParse[]){
 			break;
 			case 1:
 				sayClockNumber(parsedHours);
-				printf("say hour\n");
+				printf("say %d\n", parsedHours);
 			break;
 			case 2:
 				sayClockNumber(parsedMinutes);
-				printf("say minutes\n");
+				printf("say %d\n", parsedMinutes);
 			break;
 			case 3:
 				sayClockHoursTextAmPm(parsedHours);
-				printf("say AM or PM");
+				printf("say AM or PM\n");
 			break;
 			default:
 			break;
@@ -37,17 +41,16 @@ int doSpeakingClockSequence(char stringToParse[]){
 	return 0;
 }
 
-int getTimeStructToStringSpeakingClock(char *timeString)
-{
-    tm timeStruct;
-    X12RtcGetClock(&gmt);
-    char stringOfTheTimeZone[6];
-    sprintf(stringOfTheTimeZone, "%02d:%02d", (gmt.tm_hour+tempTimeZoneHours)%24, gmt.tm_min);
-    strcpy(timeZoneString, stringOfTheTimeZone);
-    return 1;
+void doSpeakingClockSample(){
+	printf("Proof of concept\n");
+	if (isPlaying()){
+		setPlaying(0);
+	}
+	FILE *stream = GetHTTPRawStreamWithAddress("37.46.136.205:80/audiofiles/proofOfConceptSpeakingClock.mp3");
+	initPlayer();
+	int PlayerResult = play(stream);
+	LcdWriteString("Proof of concept", strlen("Proof of concept")+1);
 }
-
-///// array van links naar de server, sequentiueel ophalen en aflaten spelen
 
 int parseTimeClock(char stringToParse[], int *hours, int *minutes){
 	if (strlen(stringToParse) < 4)
@@ -67,17 +70,17 @@ int parseTimeClock(char stringToParse[], int *hours, int *minutes){
 	return 0;
 }
 
-int sayTheTimeIs( void ){
+void sayTheTimeIs(){
 	//TODO: add speak method "The time is "
+	LcdWriteString("sayTheTimeIs", strlen("sayTheTimeIs")+1);
 }
 
-int sayClockNumber( int number ){
+void sayClockNumber( int number ){
     LcdWriteString("sayClockNumber %d", number, strlen("sayClockNumber ")+3);
 	//TODO: add speak method "number"
-	return 0;
 }
 
-int sayClockHoursTextAmPm( int hour ){
+void sayClockHoursTextAmPm( int hour ){
     if (hour >= 12){
     	LcdWriteString("It is PM", strlen("It is PM")+1);
 	//TODO: add speak method "PM"
@@ -85,5 +88,4 @@ int sayClockHoursTextAmPm( int hour ){
     	LcdWriteString("It is AM", strlen("It is AM")+1);
 	//TODO: add speak method "AM"
     }
-	return 0;
 } 

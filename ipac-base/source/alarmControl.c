@@ -8,6 +8,8 @@
 #include "rtc.h"
 #include "ui.h"
 #include "alarmControl.h"
+#include "speakingClock.h"
+#include "storage.h"
 
 void AlarmControlInit(void){
 	X12RtcClearStatus(0x30);
@@ -90,5 +92,16 @@ u_long AlarmControlCheck(){
 //ideas 
 void AlarmControlAlarmEvent(){
 	UIchangeState(UISTATE_ALARMEVENT);
+
+	//for the speaking clock
+	tm parsingTime;
+	X12RtcGetClock(&parsingTime);
+	_StorableSetting storedTimezone;
+	StorageLoadConfig(&storedTimezone);
+	parsingTime.tm_hour += storedTimezone.timezone;
+	char stringToParseForSpeakingClock[6]; 
+	sprintf(stringToParseForSpeakingClock, "%02d:%02d", (parsingTime.tm_hour)%24, parsingTime.tm_min);
+	doSpeakingClockSequence(stringToParseForSpeakingClock);
+	
 	printf("Alarm!\n");
 }
