@@ -5,6 +5,7 @@ typedef struct _alarm{
 	struct tm *alarmTime;
 }_alarm;
 
+extern void AlarmControlSleep(void);
 extern void AlarmControlCreateDaylyAlarm(struct _alarm);
 extern void AlarmControlCreateYearlyAlarm(struct _alarm);
 extern u_long AlarmControlCheck();

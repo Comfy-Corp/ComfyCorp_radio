@@ -19,6 +19,19 @@ void AlarmControlInit(void){
 	free(testAlarm);
 }
 
+void AlarmControlSleep(void){
+	tm sleepTime;
+	X12RtcGetClock(&sleepTime);
+	sleepTime.tm_min += 2;
+	sleepTime.tm_min %= 60;
+	struct _alarm sleepAlarm;
+	sleepAlarm.alarmText = "Wake up!";
+	sleepAlarm.alarmStreamName = "Kiss FM";
+	sleepAlarm.alarmType = 0; //Primary
+	sleepAlarm.alarmTime = &sleepTime;
+	AlarmControlCreateDaylyAlarm(sleepAlarm); //Set alarm to 5 seconds.
+}
+
 void AlarmControlSnoozePrimary(){
 	tm now;
 	X12RtcGetClock(&now);
@@ -26,7 +39,7 @@ void AlarmControlSnoozePrimary(){
 	now.tm_min %= 60;
 	struct _alarm snoozeAlarm;
 	snoozeAlarm.alarmText = "Snooze";
-	snoozeAlarm.alarmStreamName = "Kiss FM";
+	snoozeAlarm.alarmStreamName;
 	snoozeAlarm.alarmType = 0; //Primary
 	snoozeAlarm.alarmTime = &now;
 	AlarmControlCreateDaylyAlarm(snoozeAlarm); //Set alarm to 5 seconds.
