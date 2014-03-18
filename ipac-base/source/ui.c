@@ -131,7 +131,10 @@ int UIScreenOK()
 
     if (screenStateChar == UISTATE_SHOWALARM)
     {
-        AlarmControlSleep();
+        if(AlarmControlActivePrimaryAlarm == NULL)
+            AlarmControlSleep();
+        else
+            AlarmControlRemoveDaylyAlarm();
         screenStateChar = UISTATE_SHOWTIME;
         UIshow();
         return 1;
