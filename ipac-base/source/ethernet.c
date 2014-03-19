@@ -6,6 +6,7 @@
 #include <pro/dhcp.h>
 #include <time.h>
 #include "ethernet.h"
+#include "alarmControl.h"
 #include <sys/socket.h>
 #include <dev/board.h>
 #include <net/route.h>
@@ -23,7 +24,6 @@
 #include "ethernet.h"
 #include <errno.h>
 #include "player.h"
-
 
 #define NOK 1
 #define OK 0
@@ -395,7 +395,7 @@ char* GetSettingsHTTP(char* netaddress)
 			nullTerm=-1;
 			break;
 		}
-	} 
+	}
 	if (colonLoc)
 	{
 		ip[colonLoc] = 0;
@@ -409,7 +409,6 @@ char* GetSettingsHTTP(char* netaddress)
 		port = atoi(Sport);
 		free(Sport);
 	}
-
 	if (!nullTerm)
 	{
 		ip[17] = 0;
@@ -511,8 +510,208 @@ char* GetSettingsHTTP(char* netaddress)
 			printf("streamURLCurrent: %s\n", streamURLCurrent);
 			return "";
 		}
-
     }
 }
 
+char* GetAlarmsHTTP(char* netaddress){
+	FILE* stream;
 
+	streampie = NULL;
+	int result = OK;
+	char *data;
+	
+	sockie = NULL;
+    sockie = NutTcpCreateSocket();
+	char* ip = malloc(23*sizeof(char));
+	strncpy(ip, netaddress, 22);
+	char nullTerm=0;
+	int slashLoc=0;
+	int colonLoc=0;
+	int i;
+	int port = 80;
+
+	/*-- Finding the forward slash and port colon --*/
+	for(i = 0;i<=23;++i)
+	{
+		if(ip[i]=='/')
+		{
+			ip[i]=0;
+			nullTerm = 1;
+			slashLoc = i;
+			printf("slashLoc set to %d\n", slashLoc);
+			break;
+		}
+
+		if(ip[i]==':')
+		{
+			colonLoc = i;
+			printf("colonLoc set to %d\n", colonLoc);
+		}
+
+		else if (ip[i] ==0)
+		{
+			nullTerm=-1;
+			break;
+		}
+	}
+	if (colonLoc)
+	{
+		ip[colonLoc] = 0;
+		char* Sport = malloc(((slashLoc - colonLoc)+2)*sizeof(char));
+		for (i=colonLoc+1;i<slashLoc;++i)
+		{
+			Sport[i-colonLoc-1] = netaddress[i];
+		}
+		Sport[slashLoc - colonLoc-1] = 0;
+		
+		port = atoi(Sport);
+		free(Sport);
+	}
+	if (!nullTerm)
+	{
+		ip[17] = 0;
+	}   
+    //str[strlen(str) - 1] = 0;
+    char* address = malloc(80*sizeof(char));
+    memset(address, 0, sizeof(80*sizeof(char)));
+    printf("connecting to ip %s\n", ip);
+    if( NutTcpConnect(	sockie,
+						inet_addr(ip), 
+						port) )
+	{
+		printf("Error: >> NutTcpConnect()");
+	}
+    else
+    {
+        if (nullTerm>0)
+        {
+	 		for (i=slashLoc;i < 79; ++i)
+	        {
+	            address[i-slashLoc] = netaddress[i];
+	        }
+    	}
+    	else
+    	{
+    		address[0] = 0;
+    	}	
+    	//printf("opening %s%s\n", ip, address);
+        streampie = _fdopen((int) sockie, "r+b");
+        printf("Address is: %s\n", address);
+        fprintf(streampie, "GET %s HTTP/1.0\r\n", address);
+		fprintf(streampie, "Host: %s\r\n", "62.212.132.54");
+		fprintf(streampie, "User-Agent: Ethernut\r\n");
+		fprintf(streampie, "Accept: */*\r\n");
+		fprintf(streampie, "Connection: close\r\n\r\n");
+		fflush(streampie);
+		
+		// Server stuurt nu HTTP header terug, catch in buffer
+		data = (char *) malloc(512 * sizeof(char));
+		
+		char *alarmText;
+		char *alarmStreamName;
+		char *alarmType; //0 : primary  1 : secondary
+		char *alarmTimeText;
+
+		char *alarmTextTag;
+		char *alarmStreamNameTag;
+		char *alarmTypeTag; //0 : primary  1 : secondary
+		char *alarmTimeTextTag;
+
+		alarmText = malloc (sizeof(char)*100);
+		alarmStreamName = malloc(sizeof(char)*16);
+		alarmType = malloc(sizeof(char) * 4);
+		alarmTimeText = malloc(sizeof(char)*32);
+		
+		int i;
+		while( fgets(data, 512, streampie) )
+		{
+			//Alarm parts
+			alarmTextTag = strstr(data, "AlarmTextA:");
+			alarmStreamNameTag = strstr(data, "AlarmStreamIDA:");
+			alarmTypeTag = strstr(data, "AlarmTypeA:"); //0 : primary  1 : secondary
+			alarmTimeTextTag = strstr(data, "AlarmTimeA:");
+
+			if (strncmp(data, "AlarmTextA:", strlen("AlarmTextA:")) == 0)
+			{
+				strncpy(alarmText,strstr(alarmTextTag, ":")+1, 100);
+				for (i = 0; i < 100; ++i)
+				{
+					if (alarmText[i]==10) //lf
+					{
+						alarmText[i] = 0;
+						break;
+					}
+				}
+			}
+			if (strncmp(data, "AlarmStreamIDA:", strlen("AlarmStreamIDA:")) == 0)
+			{
+				strncpy(alarmStreamName,strstr(alarmStreamNameTag, ":")+1, 16);
+				for (i = 0; i < 16; ++i)
+				{
+					if (alarmStreamName[i]==10) //lf
+					{
+						alarmStreamName[i] = 0;
+						break;
+					}
+				}
+			}
+			// if (strncmp(data, "AlarmTypeA:", strlen("AlarmTypeA:")) == 0)
+			// {
+			// 	strncpy(alarmType,strstr(alarmTypeTag, ":")+1, 4);
+			// 	for (i = 0; i < 4; ++i)
+			// 	{
+			// 		if (alarmType[i]==10) //lf
+			// 		{
+			// 			alarmType[i] = 0;
+			// 			break;
+			// 		}
+			// 	}							
+			// }
+			if (strncmp(data, "AlarmTimeA:", strlen("AlarmTimeA:")) == 0)
+			{
+				strncpy(alarmTimeText,strstr(alarmTimeTextTag, ":")+1, 32);	
+				for (i = 0; i < 32; ++i)
+				{
+					if (alarmTimeText[i]==10) //lf
+					{
+						alarmTimeText[i] = 0;
+						break;
+					}
+				}		
+			}
+			if (data == "end")
+				break;
+		}
+		printf("alarmText: %s\n", alarmText);
+		printf("alarmStreamName %s\n",alarmStreamName);
+		printf("alarmTimeText %s\n",alarmTimeText);
+		_alarm *constructedAlarm = malloc(sizeof(_alarm));
+		alarmText[strlen(alarmText)-1]=0;
+		constructedAlarm->alarmText = alarmText;
+		constructedAlarm->alarmStreamName = alarmStreamName;
+		//constructedAlarm->alarmType = alarmType;
+		constructedAlarm->alarmType = 0;
+		tm *alarmTime = malloc(sizeof(tm));
+		alarmTime -> tm_min  = atoi(strstr(alarmTimeText,":")+1);		
+		alarmTimeText[2] = 0;
+		alarmTime -> tm_hour = atoi(alarmTimeText);
+		constructedAlarm->alarmTime = alarmTime;	
+		tm *newTime = constructedAlarm->alarmTime;
+		printf("Text:%s Stream:%s Type:%d Time:%d:%d\n",constructedAlarm->alarmText,
+														constructedAlarm->alarmStreamName,
+														constructedAlarm->alarmType,
+														newTime->tm_hour,
+														newTime->tm_min);
+		AlarmControlCreateDailyAlarm(constructedAlarm);
+		free(data);
+		//free(alarmTime);
+		//free(alarmText);
+		//free(alarmStreamName);
+		//free(alarmType);
+		//free(alarmTimeText);
+
+		//
+		fclose(streampie);
+		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
+    }
+}

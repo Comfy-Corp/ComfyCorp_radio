@@ -4,6 +4,7 @@
  *                                                                    
  ************************************************************************/
 #include "storage.h"
+#include "alarmControl.h"
 #include <time.h>
 #include <dev/board.h>
 #include <stdio.h>
@@ -32,3 +33,15 @@ void StorageSaveConfig(_StorableSetting* setting){
 void StorageLoadConfig(_StorableSetting* setting){
 	NutNvMemLoad(512, setting, sizeof(setting));
 }
+
+void StorageSavePrimaryAlarm(_alarm* alarm){
+	NutNvMemSave(1024, alarm, sizeof(alarm));
+}
+
+void StorageLoadPrimaryAlarm(_alarm* alarm){
+	NutNvMemLoad(1024, alarm, sizeof(alarm));
+}
+
+
+
+

@@ -58,7 +58,7 @@ int UIshow()
                 LcdClear();
                 LcdSetCursor(0x00);
                 LcdWriteString( AlarmControlActivePrimaryAlarm -> alarmText,
-                                strlen(AlarmControlActivePrimaryAlarm -> alarmText)+1);
+                                strlen(AlarmControlActivePrimaryAlarm -> alarmText));
                 LcdSetCursor(0x40);
                 LcdWriteString("OK:Snooze", strlen("OK:Snooze")+1);
                 LcdBackLightBriefOn(200);
@@ -82,7 +82,7 @@ int UIGetState()
 
 int UIScreenUp()
 {
-    if ((screenStateChar == UISTATE_SHOWALARM)||(screenStateChar == UISTATE_ALARMEVENT))
+    if (screenStateChar == UISTATE_ALARMEVENT)
     {
         return 0;
     }
@@ -97,7 +97,7 @@ int UIScreenUp()
 
 int UIScreenDown()
 {
-    if ((screenStateChar == UISTATE_SHOWALARM)||(screenStateChar == UISTATE_ALARMEVENT))
+    if (screenStateChar == UISTATE_ALARMEVENT)
     {
         return 0;
     }
@@ -115,8 +115,8 @@ int UIScreenOK()
     if (screenStateChar == UISTATE_SHOWSYNCING)
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
-        printf("%s\n","I would like to sync, but I can not do that yet :(" );
-        LcdHelloAnimation();
+        //printf("%s\n","I would like to sync, but I can not do that yet :(" );
+        char* url2= GetAlarmsHTTP("37.46.136.205/alarms");  
         return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
@@ -131,7 +131,10 @@ int UIScreenOK()
 
     if (screenStateChar == UISTATE_SHOWALARM)
     {
-        AlarmControlSleep();
+        if(AlarmControlActivePrimaryAlarm == NULL)
+            AlarmControlSleep();
+        else
+            AlarmControlRemoveDailyAlarm();
         screenStateChar = UISTATE_SHOWTIME;
         UIshow();
         return 1;
@@ -207,7 +210,7 @@ int UIScreenRight()
 int UIScreenEsc()
 {
     if(screenStateChar == UISTATE_ALARMEVENT)
-        AlarmControlRemoveDaylyAlarm();
+        AlarmControlRemoveDailyAlarm();
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
     screenStateChar = 0;

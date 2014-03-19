@@ -7,7 +7,11 @@
 #include <time.h>
 #include "rtc.h"
 #include "ui.h"
+#include <string.h>
 #include "alarmControl.h"
+#include <io.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 void AlarmControlInit(void){
 	X12RtcClearStatus(0x30);
@@ -17,45 +21,59 @@ void AlarmControlInit(void){
 	X12RtcSetAlarm(0, testAlarm, 0x06); //Checks on HH:MM
 	//Warning, you didn't free :(
 	free(testAlarm);
+	_alarm *nonVolAlarm = malloc(sizeof(_alarm));
+	StorageLoadPrimaryAlarm(&nonVolAlarm);
+	AlarmControlCreateDailyAlarm(nonVolAlarm);
+	free(nonVolAlarm);
 }
 
 void AlarmControlSleep(void){
-	tm sleepTime;
-	X12RtcGetClock(&sleepTime);
-	sleepTime.tm_min += 2;
-	sleepTime.tm_min %= 60;
-	struct _alarm sleepAlarm;
-	sleepAlarm.alarmText = "Wake up!";
-	sleepAlarm.alarmStreamName = "Kiss FM";
-	sleepAlarm.alarmType = 0; //Primary
-	sleepAlarm.alarmTime = &sleepTime;
-	AlarmControlCreateDaylyAlarm(sleepAlarm); //Set alarm to 5 seconds.
+	tm *sleepTime = malloc(sizeof(tm));
+	X12RtcGetClock(sleepTime);
+	sleepTime->tm_min += 2;
+	if(sleepTime->tm_min>59){
+		sleepTime->tm_min %= 60;
+		sleepTime->tm_hour++;
+	}	
+	struct _alarm *sleepAlarm = malloc(sizeof(_alarm));
+	sleepAlarm->alarmText = "Wake up!";
+	sleepAlarm->alarmStreamName = "19";
+	sleepAlarm->alarmType = 0; //Primary
+	sleepAlarm->alarmTime = sleepTime;
+	AlarmControlCreateDailyAlarm(sleepAlarm); //Set alarm to 5 seconds.
 }
 
 void AlarmControlSnoozePrimary(){
-	tm now;
-	X12RtcGetClock(&now);
-	now.tm_min += 5;
-	now.tm_min %= 60;
-	struct _alarm snoozeAlarm;
-	snoozeAlarm.alarmText = "Snooze";
-	snoozeAlarm.alarmStreamName;
-	snoozeAlarm.alarmType = 0; //Primary
-	snoozeAlarm.alarmTime = &now;
-	AlarmControlCreateDaylyAlarm(snoozeAlarm); //Set alarm to 5 seconds.
+	tm *now = malloc(sizeof(tm));
+	X12RtcGetClock(now);
+	now->tm_min += 5;
+	if(now->tm_min>59){
+		now->tm_min %= 60;
+		now->tm_hour++;
+	}
+	struct _alarm *snoozeAlarm = malloc(sizeof(_alarm));
+	snoozeAlarm->alarmText = "Snooze";
+	snoozeAlarm->alarmStreamName;
+	snoozeAlarm->alarmType = 0; //Primary
+	snoozeAlarm->alarmTime = now;
+	AlarmControlCreateDailyAlarm(snoozeAlarm); //Set alarm to 5 seconds.
 }
 
 //Compares Sec, Min & Hour default alarm slot 0
-void AlarmControlCreateDaylyAlarm(struct _alarm alarm){
+void AlarmControlCreateDailyAlarm(struct _alarm *alarm){
 	if(AlarmControlActivePrimaryAlarm != NULL)
 		free(AlarmControlActivePrimaryAlarm);
 	AlarmControlActivePrimaryAlarm = malloc(sizeof(_alarm));
-	*AlarmControlActivePrimaryAlarm = alarm;
+	AlarmControlActivePrimaryAlarm->alarmText = alarm->alarmText;	
+	AlarmControlActivePrimaryAlarm->alarmStreamName = alarm -> alarmStreamName;
+	AlarmControlActivePrimaryAlarm->alarmTime = alarm->alarmTime; //Fix here
+	memcpy(AlarmControlActivePrimaryAlarm, alarm, sizeof(_alarm));
 	AlarmControlPrintActiveAlarm();
-	X12RtcSetAlarm(0, alarm.alarmTime, 0x06); //Checks on HH:MM
+	X12RtcSetAlarm(0, alarm->alarmTime, 0x06); //Checks on HH:MM
 }
 
-void AlarmControlRemoveDaylyAlarm(){
+void AlarmControlRemoveDailyAlarm(){
+	AlarmControlPrintActiveAlarm();
 	AlarmControlActivePrimaryAlarm = NULL;
 	tm beyondTime;
 	beyondTime.tm_min = 99;
@@ -73,7 +91,7 @@ void AlarmControlCreateYearlyAlarm(struct _alarm alarm){
 
 void AlarmControlPrintActiveAlarm(){
 	 tm *AlarmTime = AlarmControlActivePrimaryAlarm -> alarmTime;
-	 printf("AlarmA: %02d:%02d:%02d \n", AlarmTime -> tm_hour, AlarmTime -> tm_min, AlarmTime -> tm_sec);
+	 printf("AlarmA: \"%s\" %02d:%02d:%02d \n",AlarmControlActivePrimaryAlarm->alarmText, AlarmTime -> tm_hour, AlarmTime -> tm_min, AlarmTime -> tm_sec);
 }
 
 u_long AlarmControlCheck(){
