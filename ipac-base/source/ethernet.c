@@ -380,14 +380,14 @@ char* GetSettingsHTTP(char* netaddress)
 			ip[i]=0;
 			nullTerm = 1;
 			slashLoc = i;
-			printf("slashLoc set to %d\n", slashLoc);
+			// printf("slashLoc set to %d\n", slashLoc);
 			break;
 		}
 
 		if(ip[i]==':')
 		{
 			colonLoc = i;
-			printf("colonLoc set to %d\n", colonLoc);
+			// printf("colonLoc set to %d\n", colonLoc);
 		}
 
 		else if (ip[i] ==0)
@@ -416,7 +416,7 @@ char* GetSettingsHTTP(char* netaddress)
     //str[strlen(str) - 1] = 0;
     char* address = malloc(80*sizeof(char));
     memset(address, 0, sizeof(80*sizeof(char)));
-    printf("connecting to ip %s\n", ip);
+    // printf("connecting to ip %s\n", ip);
     if( NutTcpConnect(	sockie,
 						inet_addr(ip), 
 						port) )
@@ -457,19 +457,26 @@ char* GetSettingsHTTP(char* netaddress)
 			stringDataType = strstr(data, "Type:");
 			stringStreamAddr = strstr(data, "StreamAddr:");
 			
-			if (stringDataType != NULL)
+			if (strncmp(data, "Type:", strlen("Type:")) == 0)
 			{
 				strncpy(settingsType,strstr(stringDataType, ":")+1, 16);
 			}
-			if (stringStreamAddr != NULL)
+			if (strncmp(data, "StreamAddr:", strlen("StreamAddr:")) == 0)
 			{
 				strncpy(streamAddrStripped,strstr(stringStreamAddr, ":")+1, 100);
+				if (strncmp(streamAddrStripped, "STOP", strlen("STOP")) == 0)
+				{
+					setPlaying(0);
+					streamURLCurrent = NULL;
+					LcdClear();
+					streamName = NULL;
+				}
 				break;
 			}
 
 		}
 		printf("settingsType: %s\n", settingsType);
-		printf("streamAddrStripped: %s\n",streamAddrStripped);
+		// printf("streamAddrStripped: %s\n",streamAddrStripped);
 		free(data);
 		
 		int i;
@@ -484,7 +491,7 @@ char* GetSettingsHTTP(char* netaddress)
 			}
 		}
 
-		if (strcmp(streamURLCurrent,streamAddrStripped)!=0)
+		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 && strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0)
 		{
 			if (isPlaying())
             {
