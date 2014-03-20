@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+char* baseUrl = "37.46.136.205/cgi-bin/api.php?q=getstreamurl&id=";
+
 void AlarmControlInit(void){
 	X12RtcClearStatus(0x30);
 	tm *testAlarm = malloc(sizeof(tm));
@@ -34,6 +36,8 @@ void AlarmControlSleep(void){
 	if(sleepTime->tm_min>59){
 		sleepTime->tm_min %= 60;
 		sleepTime->tm_hour++;
+		if(sleepTime->tm_hour>23)
+			sleepTime->tm_hour = 0;
 	}	
 	struct _alarm *sleepAlarm = malloc(sizeof(_alarm));
 	sleepAlarm->alarmText = "Wake up!";
@@ -107,6 +111,24 @@ u_long AlarmControlCheck(){
 //params: no idea what to do here either
 //ideas 
 void AlarmControlAlarmEvent(){
-	UIchangeState(UISTATE_ALARMEVENT);
+	size_t urlLength = strlen(baseUrl) + 6;
+	char* streamID = AlarmControlActivePrimaryAlarm->alarmStreamName;
+    char* netaddress = malloc(urlLength);
+    memset (netaddress, 0, urlLength); 
+    memcpy (netaddress, baseUrl, strlen(baseUrl));
+    netaddress = strcat(netaddress, streamID);
+	char *streamMe = GetStreamURL(netaddress);
+	printf("Prepping:%s\n",streamMe);
+    if (isPlaying())
+    {
+        setPlaying(0);
+        NutSleep(1500);
+    }
+    FILE* stream = GetHTTPRawStreamWithAddress(streamMe);
 	printf("Alarm!\n");
+   	initPlayer();
+    puts(stream);
+    int playResult = play(stream);
+    UIchangeState(UISTATE_ALARMEVENT);
+	free(netaddress);
 }

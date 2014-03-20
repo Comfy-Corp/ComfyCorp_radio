@@ -722,3 +722,137 @@ char* GetAlarmsHTTP(char* netaddress){
 		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
     }
 }
+
+char* GetStreamURL(char* netaddress){
+	FILE* stream;
+
+	streampie = NULL;
+	int result = OK;
+	char *data;
+	
+	sockie = NULL;
+    sockie = NutTcpCreateSocket();
+	char* ip = malloc(23*sizeof(char));
+	strncpy(ip, netaddress, 22);
+	char nullTerm=0;
+	int slashLoc=0;
+	int colonLoc=0;
+	int i;
+	int port = 80;
+
+	/*-- Finding the forward slash and port colon --*/
+	for(i = 0;i<=23;++i)
+	{
+		if(ip[i]=='/')
+		{
+			ip[i]=0;
+			nullTerm = 1;
+			slashLoc = i;
+			printf("slashLoc set to %d\n", slashLoc);
+			break;
+		}
+		if(ip[i]==':')
+		{
+			colonLoc = i;
+			printf("colonLoc set to %d\n", colonLoc);
+		}
+
+		else if (ip[i] ==0)
+		{
+			nullTerm=-1;
+			break;
+		}
+	}
+	if (colonLoc)
+	{
+		ip[colonLoc] = 0;
+		char* Sport = malloc(((slashLoc - colonLoc)+2)*sizeof(char));
+		for (i=colonLoc+1;i<slashLoc;++i)
+		{
+			Sport[i-colonLoc-1] = netaddress[i];
+		}
+		Sport[slashLoc - colonLoc-1] = 0;
+		
+		port = atoi(Sport);
+		free(Sport);
+	}
+	if (!nullTerm)
+	{
+		ip[17] = 0;
+	}   
+    //str[strlen(str) - 1] = 0;
+    char* address = malloc(80*sizeof(char));
+    memset(address, 0, sizeof(80*sizeof(char)));
+    printf("connecting to ip %s\n", ip);
+    if( NutTcpConnect(	sockie,
+						inet_addr(ip), 
+						port) )
+	{
+		printf("Error: >> NutTcpConnect()");
+	}
+    else
+    {
+        if (nullTerm>0)
+        {
+	 		for (i=slashLoc;i < 79; ++i)
+	        {
+	            address[i-slashLoc] = netaddress[i];
+	        }
+    	}
+    	else
+    	{
+    		address[0] = 0;
+    	}	
+    	//printf("opening %s%s\n", ip, address);
+        streampie = _fdopen((int) sockie, "r+b");
+        printf("Address is: %s\n", address);
+        fprintf(streampie, "GET %s HTTP/1.0\r\n", address);
+		fprintf(streampie, "Host: %s\r\n", "62.212.132.54");
+		fprintf(streampie, "User-Agent: Ethernut\r\n");
+		fprintf(streampie, "Accept: */*\r\n");
+		fprintf(streampie, "Connection: close\r\n\r\n");
+		fflush(streampie);
+		
+		// Server stuurt nu HTTP header terug, catch in buffer
+		data = (char *) malloc(512 * sizeof(char));
+		
+		char *streamURL;
+
+		char *streamURLtag;
+
+		streamURL = malloc (sizeof(char)*100);
+		
+		int i;
+		while( fgets(data, 512, streampie) )
+		{
+			//Alarm parts
+			streamURLtag = strstr(data, "StreamURL:");
+
+			if (strncmp(data, "StreamURL:", strlen("StreamURL:")) == 0)
+			{
+				strncpy(streamURL,strstr(streamURLtag, ":")+1, 100);
+				for (i = 0; i < 100; ++i)
+				{
+					if (streamURL[i]==10) //lf
+					{
+						streamURL[i] = 0;
+						break;
+					}
+				}
+				break;
+			}
+		}
+		printf("streamURL: %s\n", streamURL);
+		free(data);
+		//free(alarmTime);
+		//free(alarmText);
+		//free(alarmStreamName);
+		//free(alarmType);
+		//free(alarmTimeText);
+
+		//
+		fclose(streampie);
+		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
+		return streamURL;
+    }
+}
