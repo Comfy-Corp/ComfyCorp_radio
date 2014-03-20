@@ -520,7 +520,7 @@ char* GetSettingsHTTP(char* netaddress)
     }
 }
 
-char* GetAlarmsHTTP(char* netaddress){
+void GetAlarmsHTTP(char* netaddress){
 	FILE* stream;
 
 	streampie = NULL;

@@ -115,8 +115,8 @@ int UIScreenOK()
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
         //printf("%s\n","I would like to sync, but I can not do that yet :(" );
-        char* url2= GetAlarmsHTTP("37.46.136.205/alarms");  
-      
+        //char* url2= GetAlarmsHTTP("37.46.136.205/alarms");  
+        AlarmControlAlarmEvent();
         return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
