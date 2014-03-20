@@ -4,9 +4,10 @@ typedef struct _StorableSetting {
 	unsigned char len;
 } _StorableSetting;
 
-//extern void StorageTestProcedure(void);
-
 extern void StorageSaveConfig(_StorableSetting*);
 
 extern void StorageLoadConfig(_StorableSetting*);
-//extern void StorageSaveConfig(char);
+
+//extern void StorageSavePrimaryAlarm(_alarm*);
+
+//extern void StorageLoadPrimaryAlarm(_alarm*);
