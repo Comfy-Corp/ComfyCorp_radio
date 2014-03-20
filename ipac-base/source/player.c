@@ -33,7 +33,7 @@ int initPlayer(void)
 int play(FILE *stream)
 {
 	NutThreadCreate("Bg", StreamPlayer, stream, 512);
-	printf("Play thread created. Device is playing stream now !\n");
+	printf("Play thread created. Device should be playing a stream now !\n");
 	return OK;
 }
 
@@ -86,7 +86,6 @@ THREAD(StreamPlayer, arg)
 		{
 			if( rbytes < 1024 )
 			{
-				printf("VsPlayerKick()\n");
 				VsPlayerKick();
 			}
 		}
@@ -151,7 +150,7 @@ THREAD(StreamPlayer, arg)
 		}
 	}
 	printf("Lekker killen\n");
-	//fclose(stream);
+	fclose(stream);
 	NutThreadExit();
 }
 

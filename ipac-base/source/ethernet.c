@@ -23,6 +23,7 @@
 #include "ethernet.h"
 #include <errno.h>
 #include "player.h"
+#include "led.h"
 
 
 #define NOK 1
@@ -105,7 +106,10 @@ FILE* GetHTTPRawStream(char* ip)
 	int result = OK;
 	char *data;
 	
-	sock = NULL;
+	if (sock != NULL)
+	{
+		NutTcpCloseSocket(sock);
+	}
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
 						inet_addr(ip), 
@@ -145,7 +149,10 @@ int connectToStream(void)
 	int result = OK;
 	char *data;
 	
-	sock = NULL;
+	if (sock != NULL)
+	{
+		NutTcpCloseSocket(sock);
+	}
 	
 	sock = NutTcpCreateSocket();
 	if( NutTcpConnect(	sock,
@@ -188,10 +195,13 @@ int playStream(void)
 
 FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 { 
+	LcdBackLightBriefOn(100);
 	int result = OK;
 	char *data;
-	puts(NutTcpCloseSocket(sock));
-	sock = NULL;
+	if (sock != NULL)
+	{
+		NutTcpCloseSocket(sock);
+	}
     sock = NutTcpCreateSocket();
 	char* ip = malloc(23*sizeof(char));
 	strncpy(ip, netaddress, 22);
@@ -200,6 +210,9 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 	int colonLoc=0;
 	int i;
 	int port = 80;
+	char* stringData;
+	char* stringStreamNameLoc;
+	streamName = "_";
 
 	/*-- Finding the forward slash and port colon --*/
 	for(i = 0;i<=23;++i)
@@ -282,46 +295,38 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		fprintf(stream, "Host: %s\r\n", "62.212.132.54");
 		fprintf(stream, "User-Agent: Ethernut\r\n");
 		fprintf(stream, "Accept: */*\r\n");
-		// fprintf(stream, "Icy-MetaData: 1\r\n");
 		fprintf(stream, "Connection: close\r\n\r\n");
 		fflush(stream);
-
-		
-		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
-		streamName = malloc(sizeof(char)*16);
-
-		// streamName = "";
-		// streamNameSize = 1;
-		// streamNameLocLCD = 1;
 		LcdClear();
-		
+		strncpy(streamName, "", 1);
 		while( fgets(data, 512, stream) )
 		{
-			char* stringData = strstr(data, "icy-metaint:");
-			char* stringStreamNameLoc = strstr(data, "icy-name:");
-			//int* streamNameSizeTemp = &streamNameSize;
-			//int* streamNameLocLCDTemp = &streamNameLocLCD;
+			stringData = strstr(data, "icy-metaint:");
+			stringStreamNameLoc = strstr(data, "icy-name:");
 			if (stringStreamNameLoc != NULL)
 			{
+				streamName = "";
 				strcpy(streamName,strstr(stringStreamNameLoc, ":")+1);
 				printf("%s\n",streamName );
-				//if (streamName)
+				for (streamNameSize = 0; streamNameSize < 16; ++streamNameSize)
 				{
-					for (streamNameSize = 0; streamNameSize < 16; ++streamNameSize)
+					if (streamName[streamNameSize] == 0)
 					{
-						if (streamName[streamNameSize] == 0)
-						{
-							streamNameSize-=1;
-							break;
-						}
+						streamNameSize-=1;
+						break;
 					}
-					streamNameLocLCD = ( 8-(streamNameSize/2));
-					LcdClear();
+				}
+				streamNameLocLCD = ( 8-(streamNameSize/2));
+				LcdClear();
+				if (streamNameSize < 16)
+				{
 					LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
-					//stringStreamNameLoc = NULL;
-
+				}
+				else
+				{
+					LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
 				}
 			}
 
@@ -342,7 +347,33 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 				break;
 		}
 		
+		printf("Stream name: %s\n",streamName);
+		if (strcmp(streamName,"_") == 0)
+		{
 
+			LcdClear();
+			strcpy(streamName,strstr(address, "/")+1);
+			printf("Address name: %s\n",streamName );
+			
+			for (streamNameSize = 0; streamNameSize < 16; ++streamNameSize)
+			{
+				if (streamName[streamNameSize] == 0)
+				{
+					streamNameSize+=1;
+					break;
+				}
+			}
+			streamNameLocLCD = ( 8-(streamNameSize/2));
+			LcdClear();
+			if (streamNameSize < 16)
+			{
+				LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
+			}
+			else
+			{
+				LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
+			}
+		}
 		free(data);
         return stream;
     }
@@ -350,6 +381,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 
 char* GetSettingsHTTP(char* netaddress)
 { 
+	LedControl(LED_TOGGLE);
 	FILE *stream;
 	int* ignoredData = 0;
 	int* metaInterval = 0;
@@ -364,6 +396,13 @@ char* GetSettingsHTTP(char* netaddress)
 	
 	sockie = NULL;
     sockie = NutTcpCreateSocket();
+    uint32_t socketTimeout = 1000;
+    int errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
+    printf("NutTcpSetSockOpt: %d\n", errorCodeNutTcpSetSockOpt);
+    if (errorCodeNutTcpSetSockOpt)
+    {
+    	printf("%d\n", NutTcpError(sockie));
+    }
 	char* ip = malloc(23*sizeof(char));
 	strncpy(ip, netaddress, 22);
 	char nullTerm=0;
@@ -396,6 +435,7 @@ char* GetSettingsHTTP(char* netaddress)
 			break;
 		}
 	} 
+	LedControl(LED_TOGGLE);
 	if (colonLoc)
 	{
 		ip[colonLoc] = 0;
@@ -409,7 +449,7 @@ char* GetSettingsHTTP(char* netaddress)
 		port = atoi(Sport);
 		free(Sport);
 	}
-
+	LedControl(LED_TOGGLE);
 	if (!nullTerm)
 	{
 		ip[17] = 0;
@@ -438,6 +478,7 @@ char* GetSettingsHTTP(char* netaddress)
     		address[0] = 0;
     	}	
     	//printf("opening %s%s\n", ip, address);
+    	LedControl(LED_TOGGLE);
         streampie = _fdopen((int) sockie, "r+b");
         printf("Address is: %s\n", address);
         fprintf(streampie, "GET %s HTTP/1.0\r\n", address);
@@ -446,8 +487,8 @@ char* GetSettingsHTTP(char* netaddress)
 		fprintf(streampie, "Accept: */*\r\n");
 		fprintf(streampie, "Connection: close\r\n\r\n");
 		fflush(streampie);
+		LedControl(LED_TOGGLE);
 
-		
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
@@ -455,6 +496,7 @@ char* GetSettingsHTTP(char* netaddress)
 		streamAddrStripped = malloc(sizeof(char)*100);
 		while( fgets(data, 512, streampie) )
 		{
+			LedControl(LED_TOGGLE);
 			stringDataType = strstr(data, "Type:");
 			stringStreamAddr = strstr(data, "StreamAddr:");
 			
@@ -468,16 +510,15 @@ char* GetSettingsHTTP(char* netaddress)
 				if (strncmp(streamAddrStripped, "STOP", strlen("STOP")) == 0)
 				{
 					setPlaying(0);
-					streamURLCurrent = NULL;
+					streamURLCurrent = "";
 					LcdClear();
-					streamName = NULL;
+					// streamName = "_";
 				}
 				break;
 			}
 
 		}
 		printf("settingsType: %s\n", settingsType);
-		// printf("streamAddrStripped: %s\n",streamAddrStripped);
 		free(data);
 		
 		int i;
@@ -492,7 +533,7 @@ char* GetSettingsHTTP(char* netaddress)
 			}
 		}
 
-		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 && strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0)
+		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 && strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0 && strncmp(settingsType, "STREAMREQ", 7) == 0 && strcmp(streamAddrStripped,"") != 0)
 		{
 			if (isPlaying())
             {
@@ -506,8 +547,8 @@ char* GetSettingsHTTP(char* netaddress)
 	        free(settingsType);
 	        free(ip);
 			free(address);
-			// free(streamAddrStripped);
 			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			LedControl(LED_OFF);
 			return "";
 		}
 		else
@@ -516,6 +557,7 @@ char* GetSettingsHTTP(char* netaddress)
 	        free(ip);
 			free(address);
 			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			LedControl(LED_OFF);
 			return "";
 		}
 
