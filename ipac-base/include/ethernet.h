@@ -16,3 +16,4 @@ void freeBeforeNewSettingsFile(void);
 char* streamName;
 int streamNameSize;
 int streamNameLocLCD;
+char* streamURLCurrent;

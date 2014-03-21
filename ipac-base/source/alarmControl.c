@@ -12,6 +12,7 @@
 #include <io.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "player.h"
 
 char* baseUrl = "37.46.136.205/cgi-bin/api.php?q=getstreamurl&id=";
 char* constExtens = "&time=";
@@ -116,15 +117,16 @@ void AlarmControlAlarmEvent(){
 	char* streamID = AlarmControlActivePrimaryAlarm->alarmStreamName;
     char* netaddress = malloc(urlLength);
     memset (netaddress, 0, urlLength); 
-    memcpy (netaddress, baseUrl, strlen(baseUrl));
+    strcpy (netaddress, baseUrl);
     netaddress = strcat(netaddress, streamID);
     tm *timeNow = malloc(sizeof(tm));
    	X12RtcGetClock(timeNow);
     char* tijd = malloc(6);
     sprintf(tijd, "%d:%d\0", timeNow->tm_hour, timeNow->tm_min);
+    free(timeNow);
     printf("tijd:%s\n", tijd);
     netaddress = strcat(netaddress, constExtens);
-    netaddress = strcat(netaddress, tijd);
+    //netaddress = strcat(netaddress, tijd);
 	char *streamMe = GetStreamURL(netaddress);
 	printf("Prepping:%s\n",streamMe);
     if (isPlaying())
@@ -135,7 +137,7 @@ void AlarmControlAlarmEvent(){
     FILE* stream = GetHTTPRawStreamWithAddress(streamMe);
 	printf("Alarm!\n");
    	initPlayer();
-    puts(stream);
+    //puts(stream);
     int playResult = play(stream);
     UIchangeState(UISTATE_ALARMEVENT);
 	free(netaddress);

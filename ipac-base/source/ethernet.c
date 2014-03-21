@@ -32,7 +32,7 @@
 FILE *streampie;
 TCPSOCKET *sock;
 TCPSOCKET *sockie;
-char* streamURLCurrent;
+char stopped;
 	
 int ethInitInet(void)
 {
@@ -299,7 +299,6 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		fflush(stream);
 		data = (char *) malloc(512 * sizeof(char));
 		
-		LcdClear();
 		strncpy(streamName, "", 1);
 		while( fgets(data, 512, stream) )
 		{
@@ -351,7 +350,6 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		if (strcmp(streamName,"_") == 0)
 		{
 
-			LcdClear();
 			strcpy(streamName,strstr(address, "/")+1);
 			printf("Address name: %s\n",streamName );
 			
@@ -451,10 +449,9 @@ char* GetSettingsHTTP(char* netaddress)
 		port = atoi(Sport);
 		free(Sport);
 	}
-<<<<<<< HEAD
+
 	LedControl(LED_TOGGLE);
-=======
->>>>>>> bba5559c3541680797c79aaafa6a72653ee02a60
+
 	if (!nullTerm)
 	{
 		ip[17] = 0;
@@ -512,12 +509,12 @@ char* GetSettingsHTTP(char* netaddress)
 			if (strncmp(data, "StreamAddr:", strlen("StreamAddr:")) == 0)
 			{
 				strncpy(streamAddrStripped,strstr(stringStreamAddr, ":")+1, 100);
-				if (strncmp(streamAddrStripped, "STOP", strlen("STOP")) == 0)
+				if (strncmp(streamAddrStripped, "STOP", strlen("STOP")) == 0 && !stopped)
 				{
 					setPlaying(0);
 					streamURLCurrent = "";
 					LcdClear();
-					// streamName = "_";
+					stopped = 1;
 				}
 				break;
 			}
@@ -540,6 +537,7 @@ char* GetSettingsHTTP(char* netaddress)
 
 		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 && strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0 && strncmp(settingsType, "STREAMREQ", 7) == 0 && strcmp(streamAddrStripped,"") != 0)
 		{
+			stopped = 0;
 			if (isPlaying())
             {
                 setPlaying(0);
@@ -649,7 +647,6 @@ void GetAlarmsHTTP(char* netaddress){
     	{
     		address[0] = 0;
     	}	
-    	//printf("opening %s%s\n", ip, address);
         streampie = _fdopen((int) sockie, "r+b");
         printf("Address is: %s\n", address);
         fprintf(streampie, "GET %s HTTP/1.0\r\n", address);
@@ -710,18 +707,6 @@ void GetAlarmsHTTP(char* netaddress){
 					}
 				}
 			}
-			// if (strncmp(data, "AlarmTypeA:", strlen("AlarmTypeA:")) == 0)
-			// {
-			// 	strncpy(alarmType,strstr(alarmTypeTag, ":")+1, 4);
-			// 	for (i = 0; i < 4; ++i)
-			// 	{
-			// 		if (alarmType[i]==10) //lf
-			// 		{
-			// 			alarmType[i] = 0;
-			// 			break;
-			// 		}
-			// 	}							
-			// }
 			if (strncmp(data, "AlarmTimeA:", strlen("AlarmTimeA:")) == 0)
 			{
 				strncpy(alarmTimeText,strstr(alarmTimeTextTag, ":")+1, 32);	
@@ -759,13 +744,7 @@ void GetAlarmsHTTP(char* netaddress){
 														newTime->tm_min);
 		AlarmControlCreateDailyAlarm(constructedAlarm);
 		free(data);
-		//free(alarmTime);
-		//free(alarmText);
-		//free(alarmStreamName);
-		//free(alarmType);
-		//free(alarmTimeText);
 
-		//
 		fclose(streampie);
 		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
     }
@@ -869,10 +848,12 @@ char* GetStreamURL(char* netaddress){
 		char *streamURLtag;
 
 		streamURL = malloc (sizeof(char)*100);
+		streamURL[0] = 0;
 		
 		int i;
 		while( fgets(data, 512, streampie) )
 		{
+			printf("data %s\n", data);
 			//Alarm parts
 			streamURLtag = strstr(data, "StreamURL:");
 
