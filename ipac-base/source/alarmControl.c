@@ -69,11 +69,11 @@ void AlarmControlSnoozePrimary(){
 void AlarmControlCreateDailyAlarm(struct _alarm *alarm){
 	if(AlarmControlActivePrimaryAlarm != NULL)
 		free(AlarmControlActivePrimaryAlarm);
-	AlarmControlActivePrimaryAlarm = malloc(sizeof(_alarm));
+	AlarmControlActivePrimaryAlarm = calloc(1,sizeof(_alarm));
 	AlarmControlActivePrimaryAlarm->alarmText = alarm->alarmText;	
 	AlarmControlActivePrimaryAlarm->alarmStreamName = alarm -> alarmStreamName;
 	AlarmControlActivePrimaryAlarm->alarmTime = alarm->alarmTime; //Fix here
-	memcpy(AlarmControlActivePrimaryAlarm, alarm, sizeof(_alarm));
+	//memcpy(AlarmControlActivePrimaryAlarm, alarm, sizeof(_alarm));
 	AlarmControlPrintActiveAlarm();
 	X12RtcSetAlarm(0, alarm->alarmTime, 0x06); //Checks on HH:MM
 }
@@ -113,33 +113,12 @@ u_long AlarmControlCheck(){
 //params: no idea what to do here either
 //ideas 
 void AlarmControlAlarmEvent(){
-	size_t urlLength = strlen(baseUrl) + 32;
-	char* streamID = AlarmControlActivePrimaryAlarm->alarmStreamName;
-    char* netaddress = malloc(urlLength);
-    memset (netaddress, 0, urlLength); 
-    strcpy (netaddress, baseUrl);
-    netaddress = strcat(netaddress, streamID);
-    tm *timeNow = malloc(sizeof(tm));
-   	X12RtcGetClock(timeNow);
-    char* tijd = malloc(6);
-    sprintf(tijd, "%d:%d\0", timeNow->tm_hour, timeNow->tm_min);
-    free(timeNow);
-    printf("tijd:%s\n", tijd);
-    netaddress = strcat(netaddress, constExtens);
-    //netaddress = strcat(netaddress, tijd);
-	char *streamMe = GetStreamURL(netaddress);
-	printf("Prepping:%s\n",streamMe);
-    if (isPlaying())
+	if (isPlaying())
     {
         setPlaying(0);
         NutSleep(1500);
     }
-    FILE* stream = GetHTTPRawStreamWithAddress(streamMe);
-	printf("Alarm!\n");
-   	initPlayer();
-    //puts(stream);
-    int playResult = play(stream);
-    UIchangeState(UISTATE_ALARMEVENT);
-	free(netaddress);
-	free(tijd);
+	alarmEventFlag = 1; //Raise ethernet's alarm flag
+	UIchangeState(UISTATE_ALARMEVENT);
+    printf("Alarm!\n");
 }

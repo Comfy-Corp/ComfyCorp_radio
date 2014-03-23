@@ -102,7 +102,6 @@ int ethGetNTPTime()
 
 FILE* GetHTTPRawStream(char* ip)
 {
-
 	int result = OK;
 	char *data;
 	
@@ -379,6 +378,8 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 
 char* GetSettingsHTTP(char* netaddress)
 { 
+	if(alarmEventFlag)
+		return;
 	LedControl(LED_TOGGLE);
 	FILE *stream;
 	int* ignoredData = 0;
@@ -731,7 +732,7 @@ void GetAlarmsHTTP(char* netaddress){
 		constructedAlarm->alarmStreamName = alarmStreamName;
 		//constructedAlarm->alarmType = alarmType;
 		constructedAlarm->alarmType = 0;
-		tm *alarmTime = malloc(sizeof(tm));
+		tm *alarmTime = calloc(1,sizeof(tm));
 		alarmTime -> tm_min  = atoi(strstr(alarmTimeText,":")+1);		
 		alarmTimeText[2] = 0;
 		alarmTime -> tm_hour = atoi(alarmTimeText);
@@ -744,13 +745,31 @@ void GetAlarmsHTTP(char* netaddress){
 														newTime->tm_min);
 		AlarmControlCreateDailyAlarm(constructedAlarm);
 		free(data);
-
+		free(ip);
 		fclose(streampie);
 		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
     }
 }
 
-char* GetStreamURL(char* netaddress){
+char* GetStreamURL(){
+	char* baseUrl = "37.46.136.205/cgi-bin/api.php?q=getstreamurl&id=";
+	char* constExtens = "&time=";
+	size_t urlLength = strlen(baseUrl) + 32;
+	char* streamID = AlarmControlActivePrimaryAlarm->alarmStreamName;
+    char* netaddress = malloc(urlLength);
+    memset (netaddress, 0, urlLength); 
+    strcpy (netaddress, baseUrl);
+    netaddress = strcat(netaddress, streamID);
+    tm *timeNow = malloc(sizeof(tm));
+   	X12RtcGetClock(timeNow);
+    char* timeStr = malloc(6);
+    sprintf(timeStr, "%d:%d\0", timeNow->tm_hour, timeNow->tm_min);
+    free(timeNow);
+    printf("time:%s\n", timeStr);
+    netaddress = strcat(netaddress, constExtens);
+    //netaddress = strcat(netaddress, constExtens);
+    netaddress = strcat(netaddress, timeStr);
+
 	FILE* stream;
 
 	streampie = NULL;
@@ -847,13 +866,11 @@ char* GetStreamURL(char* netaddress){
 
 		char *streamURLtag;
 
-		streamURL = malloc (sizeof(char)*100);
-		streamURL[0] = 0;
-		
+		streamURL = calloc(1, sizeof(char)*64);		
 		int i;
 		while( fgets(data, 512, streampie) )
 		{
-			printf("data %s\n", data);
+			printf("data[%s]\n", data);
 			//Alarm parts
 			streamURLtag = strstr(data, "StreamURL:");
 
@@ -871,17 +888,31 @@ char* GetStreamURL(char* netaddress){
 				break;
 			}
 		}
-		printf("streamURL: %s\n", streamURL);
-		free(data);
-		//free(alarmTime);
-		//free(alarmText);
-		//free(alarmStreamName);
-		//free(alarmType);
-		//free(alarmTimeText);
-
-		//
-		fclose(streampie);
-		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
-		return streamURL;
+		if (strcmp(streamURLCurrent,streamURL)!=0 && strncmp(streamURL, "STOP", strlen("STOP")) != 0 && strcmp(streamURL,"") != 0)
+		{
+			stopped = 0;
+			if (isPlaying())
+            {
+                setPlaying(0);
+                NutSleep(1500);
+            }
+	        FILE* webstream = GetHTTPRawStreamWithAddress(streamURL);
+	        initPlayer();
+	        int playResult = play(webstream);
+	        streamURLCurrent = streamURL;
+	        free(ip);
+			free(address);
+			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			LedControl(LED_OFF);
+			return "";
+		}
+		else
+		{
+	        free(ip);
+			free(address);
+			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			LedControl(LED_OFF);
+			return "";
+		}
     }
 }

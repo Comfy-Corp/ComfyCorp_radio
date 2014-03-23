@@ -167,6 +167,7 @@ int UIScreenOK()
     if(screenStateChar == UISTATE_ALARMEVENT)
     {
         screenStateChar = UISTATE_SHOWTIME;
+        alarmEventFlag = 0;
         UIshow();        
         AlarmControlSnoozePrimary();
         return 1;
@@ -224,8 +225,10 @@ int UIScreenRight()
 
 int UIScreenEsc()
 {
-    if(screenStateChar == UISTATE_ALARMEVENT)
+    if(screenStateChar == UISTATE_ALARMEVENT){
+        alarmEventFlag = 0;
         AlarmControlRemoveDailyAlarm();
+    }
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
     screenStateChar = 0;
@@ -235,12 +238,12 @@ int UIScreenEsc()
 
 int UIHandleInput(int kb_error)
 {
-        if ((kb_error != KB_ERROR))
-        {
-            LcdBackLightBriefOn(100);
-            userInputKeyPress();
-        }
-        return 1;
+    if ((kb_error != KB_ERROR))
+    {
+        LcdBackLightBriefOn(100);
+        userInputKeyPress();
+    }
+    return 1;
 }
 
 int UIRefreshScreen(){

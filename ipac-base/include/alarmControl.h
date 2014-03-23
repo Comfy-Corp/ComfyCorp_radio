@@ -1,9 +1,11 @@
 typedef struct _alarm{
+	struct tm *alarmTime;
 	char *alarmText;
 	char *alarmStreamName;
 	unsigned char alarmType; //0 : primary  1 : secondary
-	struct tm *alarmTime;
 }_alarm;
+
+u_char alarmEventFlag;
 
 extern void AlarmControlSleep(void);
 extern void AlarmControlCreateDailyAlarm(struct _alarm*);

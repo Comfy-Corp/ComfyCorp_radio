@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 FILE* stream;
 int* metaInterval;
 int* ignoredData;
