@@ -496,8 +496,8 @@ char* GetSettingsHTTP(char* netaddress)
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
-		settingsType = malloc (sizeof(char)*16);
-		streamAddrStripped = malloc(sizeof(char)*100);
+		settingsType = calloc (sizeof(char), 16);
+		streamAddrStripped = calloc(sizeof(char), 100);
 		while( fgets(data, 512, streampie) )
 		{
 			LedControl(LED_TOGGLE);
