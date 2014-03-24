@@ -380,7 +380,6 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 char* GetSettingsHTTP(char* netaddress)
 { 
 	LedControl(LED_TOGGLE);
-	FILE *stream;
 	int* ignoredData = 0;
 	int* metaInterval = 0;
 	char* stringDataType;
@@ -392,7 +391,10 @@ char* GetSettingsHTTP(char* netaddress)
 	int result = OK;
 	char *data;
 	
-	sockie = NULL;
+	if (sockie != NULL)
+	{
+		NutTcpCloseSocket(sockie);
+	}
     sockie = NutTcpCreateSocket();
     uint32_t socketTimeout = 1000;
     int errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
@@ -547,6 +549,7 @@ char* GetSettingsHTTP(char* netaddress)
 	        initPlayer();
 	        int playResult = play(webstream);
 	        streamURLCurrent = streamAddrStripped;
+	        // free(stringDataType);
 	        free(settingsType);
 	        free(ip);
 			free(address);
@@ -556,6 +559,7 @@ char* GetSettingsHTTP(char* netaddress)
 		}
 		else
 		{
+			// free(stringDataType);
 	        free(settingsType);
 	        free(ip);
 			free(address);
