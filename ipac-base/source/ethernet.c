@@ -385,7 +385,6 @@ char* GetSettingsHTTP(char* netaddress)
 	if(alarmEventFlag)
 		return;
 	LedControl(LED_TOGGLE);
-	FILE *stream;
 	int* ignoredData = 0;
 	int* metaInterval = 0;
 	char* stringDataType;
@@ -397,7 +396,10 @@ char* GetSettingsHTTP(char* netaddress)
 	int result = OK;
 	char *data;
 	
-	sockie = NULL;
+	if (sockie != NULL)
+	{
+		NutTcpCloseSocket(sockie);
+	}
     sockie = NutTcpCreateSocket();
     uint32_t socketTimeout = 1000;
     int errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
@@ -499,8 +501,8 @@ char* GetSettingsHTTP(char* netaddress)
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
-		settingsType = malloc (sizeof(char)*16);
-		streamAddrStripped = malloc(sizeof(char)*100);
+		settingsType = calloc (sizeof(char), 16);
+		streamAddrStripped = calloc(sizeof(char), 100);
 		while( fgets(data, 512, streampie) )
 		{
 			LedControl(LED_TOGGLE);
@@ -552,6 +554,7 @@ char* GetSettingsHTTP(char* netaddress)
 	        initPlayer();
 	        int playResult = play(webstream);
 	        streamURLCurrent = streamAddrStripped;
+	        // free(stringDataType);
 	        free(settingsType);
 	        free(ip);
 			free(address);
@@ -561,6 +564,7 @@ char* GetSettingsHTTP(char* netaddress)
 		}
 		else
 		{
+			// free(stringDataType);
 	        free(settingsType);
 	        free(ip);
 			free(address);
