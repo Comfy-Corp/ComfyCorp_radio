@@ -6,6 +6,7 @@ typedef struct _alarm{
 }_alarm;
 
 u_char alarmEventFlag;
+u_char alarmPlayingFlag; //I don't like doing this, but I guess it's neccesary
 
 extern void AlarmControlSleep(void);
 extern void AlarmControlCreateDailyAlarm(struct _alarm*);

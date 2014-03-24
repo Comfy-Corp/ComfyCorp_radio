@@ -126,7 +126,6 @@ FILE* GetHTTPRawStream(char* ip)
 	fprintf(stream, "Icy-MetaData: 1\r\n");
 	fprintf(stream, "Connection: close\r\n\r\n");
 	fflush(stream);
-
 	
 	// Server stuurt nu HTTP header terug, catch in buffer
 	data = (char *) malloc(512 * sizeof(char));
@@ -317,14 +316,17 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 					}
 				}
 				streamNameLocLCD = ( 8-(streamNameSize/2));
-				LcdClear();
-				if (streamNameSize < 16)
-				{
-					LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
-				}
-				else
-				{
-					LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
+				if(!alarmEventFlag){
+					streamNameLocLCD = ( 8-(streamNameSize/2));
+					LcdClear();
+					if (streamNameSize < 16)
+					{
+						LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
+					}
+					else
+					{
+						LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
+					}
 				}
 			}
 
@@ -360,15 +362,17 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 					break;
 				}
 			}
-			streamNameLocLCD = ( 8-(streamNameSize/2));
-			LcdClear();
-			if (streamNameSize < 16)
-			{
-				LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
-			}
-			else
-			{
-				LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
+			if(!alarmEventFlag){
+				streamNameLocLCD = ( 8-(streamNameSize/2));
+				LcdClear();
+				if (streamNameSize < 16)
+				{
+					LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
+				}
+				else
+				{
+					LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
+				}
 			}
 		}
 		free(data);

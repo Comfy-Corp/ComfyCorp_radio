@@ -43,7 +43,7 @@ void AlarmControlSleep(void){
 	}	
 	struct _alarm *sleepAlarm = malloc(sizeof(_alarm));
 	sleepAlarm->alarmText = "Wake up!";
-	sleepAlarm->alarmStreamName = "19";
+	sleepAlarm->alarmStreamName = "119";
 	sleepAlarm->alarmType = 0; //Primary
 	sleepAlarm->alarmTime = sleepTime;
 	AlarmControlCreateDailyAlarm(sleepAlarm); //Set alarm to 5 seconds.
@@ -56,10 +56,12 @@ void AlarmControlSnoozePrimary(){
 	if(now->tm_min>59){
 		now->tm_min %= 60;
 		now->tm_hour++;
+		if(now->tm_hour>23)
+			now->tm_hour = 0;
 	}
 	struct _alarm *snoozeAlarm = malloc(sizeof(_alarm));
 	snoozeAlarm->alarmText = "Snooze";
-	snoozeAlarm->alarmStreamName;
+	snoozeAlarm->alarmStreamName = AlarmControlActivePrimaryAlarm->alarmStreamName;
 	snoozeAlarm->alarmType = 0; //Primary
 	snoozeAlarm->alarmTime = now;
 	AlarmControlCreateDailyAlarm(snoozeAlarm); //Set alarm to 5 seconds.
@@ -113,11 +115,7 @@ u_long AlarmControlCheck(){
 //params: no idea what to do here either
 //ideas 
 void AlarmControlAlarmEvent(){
-	if (isPlaying())
-    {
-        setPlaying(0);
-        NutSleep(1500);
-    }
+	alarmPlayingFlag = 0;
 	alarmEventFlag = 1; //Raise ethernet's alarm flag
 	UIchangeState(UISTATE_ALARMEVENT);
     printf("Alarm!\n");

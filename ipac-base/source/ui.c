@@ -167,7 +167,7 @@ int UIScreenOK()
     if(screenStateChar == UISTATE_ALARMEVENT)
     {
         screenStateChar = UISTATE_SHOWTIME;
-        alarmEventFlag = 0;
+        alarmPlayingFlag = 0;       
         UIshow();        
         AlarmControlSnoozePrimary();
         return 1;
@@ -226,7 +226,7 @@ int UIScreenRight()
 int UIScreenEsc()
 {
     if(screenStateChar == UISTATE_ALARMEVENT){
-        alarmEventFlag = 0;
+        alarmPlayingFlag = 0;
         AlarmControlRemoveDailyAlarm();
     }
     if(screenStateChar == UISTATE_SHOWRESET)
