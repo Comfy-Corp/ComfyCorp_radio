@@ -1,16 +1,19 @@
 typedef struct _alarm{
+	struct tm *alarmTime;
 	char *alarmText;
 	char *alarmStreamName;
-	u_char alarmType; //0 : primary  1 : secondary
-	struct tm *alarmTime;
+	unsigned char alarmType; //0 : primary  1 : secondary
 }_alarm;
 
+u_char alarmEventFlag;
+u_char alarmPlayingFlag; //I don't like doing this, but I guess it's neccesary
+
 extern void AlarmControlSleep(void);
-extern void AlarmControlCreateDaylyAlarm(struct _alarm);
+extern void AlarmControlCreateDailyAlarm(struct _alarm*);
 extern void AlarmControlCreateYearlyAlarm(struct _alarm);
-extern u_long AlarmControlCheck();
+extern unsigned long AlarmControlCheck(void);
 extern void AlarmControlInit(void);
-extern void AlarmControlRemoveDaylyAlarm(void);
+extern void AlarmControlRemoveDailyAlarm(void);
 
 struct _alarm *AlarmControlActivePrimaryAlarm;
 struct _alarm *AlarmControlActiveSecondaryAlarm; //Not used yet
