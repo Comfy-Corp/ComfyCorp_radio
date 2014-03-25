@@ -303,7 +303,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		{
 			stringData = strstr(data, "icy-metaint:");
 			stringStreamNameLoc = strstr(data, "icy-name:");
-			if (stringStreamNameLoc != NULL)
+			if (strncmp(stringStreamNameLoc,"icy-name:",strlen("icy-name:")) == 0)
 			{
 				streamName = "";
 				strcpy(streamName,strstr(stringStreamNameLoc, ":")+1);
@@ -372,6 +372,8 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 				LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
 			}
 		}
+		free(address);
+		free(ip);
 		free(data);
         return stream;
     }
