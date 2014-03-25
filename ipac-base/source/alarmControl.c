@@ -69,8 +69,10 @@ void AlarmControlSnoozePrimary(){
 
 //Compares Sec, Min & Hour default alarm slot 0
 void AlarmControlCreateDailyAlarm(struct _alarm *alarm){
-	if(AlarmControlActivePrimaryAlarm != NULL)
+	if(AlarmControlActivePrimaryAlarm != NULL){
 		free(AlarmControlActivePrimaryAlarm);
+		AlarmControlActivePrimaryAlarm = NULL;		
+	}
 	AlarmControlActivePrimaryAlarm = calloc(1,sizeof(_alarm));
 	AlarmControlActivePrimaryAlarm->alarmText = alarm->alarmText;	
 	AlarmControlActivePrimaryAlarm->alarmStreamName = alarm -> alarmStreamName;
@@ -99,7 +101,7 @@ void AlarmControlCreateYearlyAlarm(struct _alarm alarm){
 
 void AlarmControlPrintActiveAlarm(){
 	 tm *AlarmTime = AlarmControlActivePrimaryAlarm -> alarmTime;
-	 printf("AlarmA: \"%s\" %02d:%02d:%02d \n",AlarmControlActivePrimaryAlarm->alarmText, AlarmTime -> tm_hour, AlarmTime -> tm_min, AlarmTime -> tm_sec);
+	 printf("AlarmA T:\"%s\"S:\"%s\" %02d:%02d:%02d \n",AlarmControlActivePrimaryAlarm->alarmText, AlarmControlActivePrimaryAlarm->alarmStreamName, AlarmTime -> tm_hour, AlarmTime -> tm_min, AlarmTime -> tm_sec);
 }
 
 u_long AlarmControlCheck(){

@@ -163,6 +163,7 @@ THREAD(StreamPlayer, arg)
 	}
 	printf("Lekker killen\n");
 	fclose(stream);
+	stream = NULL;
 	NutThreadExit();
 }
 

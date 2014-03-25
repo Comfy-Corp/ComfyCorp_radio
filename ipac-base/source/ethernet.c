@@ -29,10 +29,7 @@
 #define NOK 1
 #define OK 0
 
-FILE *streampie;
-TCPSOCKET *sock;
-TCPSOCKET *sockie;
-char stopped;
+char* streamURLCurrent;
 	
 int ethInitInet(void)
 {
@@ -102,6 +99,7 @@ int ethGetNTPTime()
 
 FILE* GetHTTPRawStream(char* ip)
 {
+	TCPSOCKET *sock;
 	int result = OK;
 	char *data;
 	
@@ -136,7 +134,7 @@ FILE* GetHTTPRawStream(char* ip)
 			break;
 	}
 	puts(data);
-	
+
 	free(data);
 
 	return stream;
@@ -144,6 +142,8 @@ FILE* GetHTTPRawStream(char* ip)
 
 int connectToStream(void)
 {
+	TCPSOCKET *sock;
+
 	int result = OK;
 	char *data;
 	
@@ -193,6 +193,8 @@ int playStream(void)
 
 FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 { 
+	TCPSOCKET *sock;
+	
 	LcdBackLightBriefOn(100);
 	int result = OK;
 	char *data;
@@ -376,6 +378,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			}
 		}
 		free(data);
+
         return stream;
     }
 }
@@ -678,10 +681,10 @@ void GetAlarmsHTTP(char* netaddress){
 		char *alarmTypeTag; //0 : primary  1 : secondary
 		char *alarmTimeTextTag;
 
-		alarmText = malloc (sizeof(char)*100);
-		alarmStreamName = malloc(sizeof(char)*16);
-		alarmType = malloc(sizeof(char) * 4);
-		alarmTimeText = malloc(sizeof(char)*32);
+		alarmText = calloc (1, 100);
+		alarmStreamName = calloc(1, 16);
+		alarmType = calloc(1, 4);
+		alarmTimeText = calloc(1, 32);
 		
 		int i;
 		while( fgets(data, 512, streampie) )
@@ -735,10 +738,8 @@ void GetAlarmsHTTP(char* netaddress){
 		printf("alarmStreamName %s\n",alarmStreamName);
 		printf("alarmTimeText %s\n",alarmTimeText);
 		_alarm *constructedAlarm = malloc(sizeof(_alarm));
-		alarmText[strlen(alarmText)-1]=0;
 		constructedAlarm->alarmText = alarmText;
 		constructedAlarm->alarmStreamName = alarmStreamName;
-		//constructedAlarm->alarmType = alarmType;
 		constructedAlarm->alarmType = 0;
 		tm *alarmTime = calloc(1,sizeof(tm));
 		alarmTime -> tm_min  = atoi(strstr(alarmTimeText,":")+1);		
@@ -759,10 +760,10 @@ void GetAlarmsHTTP(char* netaddress){
     }
 }
 
-char* GetStreamURL(){
-	char* baseUrl = "37.46.136.205/cgi-bin/api.php?q=getstreamurl&id=";
+void GetStreamURL(){
+	char* baseUrl = "/cgi-bin/api.php?q=getstreamurl&id=";
 	char* constExtens = "&time=";
-	size_t urlLength = strlen(baseUrl) + 32;
+	size_t urlLength = strlen(baseUrl) + 64;
 	char* streamID = AlarmControlActivePrimaryAlarm->alarmStreamName;
     char* netaddress = malloc(urlLength);
     memset (netaddress, 0, urlLength); 
@@ -777,12 +778,27 @@ char* GetStreamURL(){
     netaddress = strcat(netaddress, constExtens);
     //netaddress = strcat(netaddress, constExtens);
     netaddress = strcat(netaddress, timeStr);
+    free(timeStr);
 
-	FILE* stream;
+	FILE * streampie;
+	char* data;
 
-	streampie = NULL;
-	int result = OK;
-	char *data;
+	sockie = NULL;
+    sockie = NutTcpCreateSocket();
+
+    int errorCodeNutTcpSetSockOpt = 0;
+    errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
+    printf("NutTcpSetSockOpt: %d\n", errorCodeNutTcpSetSockOpt);
+    if (errorCodeNutTcpSetSockOpt)
+    {
+    	streampie = NULL;
+		data = NULL;
+    	printf("%d\n", NutTcpError(sockie));
+    	NutTcpCloseSocket(sockie);
+		sockie = NULL;
+		netaddress = NULL;
+    	return;
+    }
 	
 	sockie = NULL;
     sockie = NutTcpCreateSocket();
@@ -842,6 +858,11 @@ char* GetStreamURL(){
 						inet_addr(ip), 
 						port) )
 	{
+		streampie = NULL;
+		data = NULL;
+		NutTcpCloseSocket(sockie);
+		sockie = NULL;
+		netaddress = NULL;
 		printf("Error: >> NutTcpConnect()");
 	}
     else
@@ -866,19 +887,18 @@ char* GetStreamURL(){
 		fprintf(streampie, "Accept: */*\r\n");
 		fprintf(streampie, "Connection: close\r\n\r\n");
 		fflush(streampie);
-		
+		free(netaddress);
+		netaddress = NULL;
 		// Server stuurt nu HTTP header terug, catch in buffer
 		data = (char *) malloc(512 * sizeof(char));
 		
-		char *streamURL;
+		char *streamURL = calloc(1, sizeof(char)*64);
 
 		char *streamURLtag;
-
-		streamURL = calloc(1, sizeof(char)*64);		
+		
 		int i;
 		while( fgets(data, 512, streampie) )
 		{
-			printf("data[%s]\n", data);
 			//Alarm parts
 			streamURLtag = strstr(data, "StreamURL:");
 
@@ -894,33 +914,16 @@ char* GetStreamURL(){
 					}
 				}
 				break;
+				memset(data,0,512);
 			}
 		}
-		if (strcmp(streamURLCurrent,streamURL)!=0 && strncmp(streamURL, "STOP", strlen("STOP")) != 0 && strcmp(streamURL,"") != 0)
-		{
-			stopped = 0;
-			if (isPlaying())
-            {
-                setPlaying(0);
-                NutSleep(1500);
-            }
-	        FILE* webstream = GetHTTPRawStreamWithAddress(streamURL);
-	        initPlayer();
-	        int playResult = play(webstream);
-	        streamURLCurrent = streamURL;
-	        free(ip);
-			free(address);
-			printf("streamURLCurrent: %s\n", streamURLCurrent);
-			LedControl(LED_OFF);
-			return "";
-		}
-		else
-		{
-	        free(ip);
-			free(address);
-			printf("streamURLCurrent: %s\n", streamURLCurrent);
-			LedControl(LED_OFF);
-			return "";
-		}
+		free(data);
+		fclose(streampie); //CLOSED FILE STREAM
+		streampie = NULL; //POINTER CLEAR WITHOUT ALLOCATION, I AM SO SMART
+		printf("socket close exit code %d", NutTcpCloseSocket(sockie)); //CLOSE SOCKET!
+		sockie = NULL;
+		printf("Stream: %s\n", streamURL);
+		LedControl(LED_OFF); //BYE_BYE EYE-CANDY
+		return;
     }
 }
