@@ -16,10 +16,10 @@ char *previousTime;
 
 int UIshow()
 {
-	LcdClear();
+    LcdClear();
     char *timeBuffer = malloc(sizeof(char) * 8);
     char *timeBuffer2 = malloc(sizeof(char) * 8);
-	switch (screenStateChar)
+    switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:
                 X12FillStringWithTime(timeBuffer);
@@ -72,13 +72,13 @@ int UIshow()
             default:
                 break;
         }
-	return screenStateChar;
+    return screenStateChar;
 }
 
 void UIchangeState(char newState)
 {
-	screenStateChar = newState;
-	UIshow();
+    screenStateChar = newState;
+    UIshow();
 }
 
 int UIGetState()
@@ -88,7 +88,7 @@ int UIGetState()
 
 int UIScreenUp()
 {
-    if ((screenStateChar == UISTATE_SHOWALARM)||(screenStateChar == UISTATE_ALARMEVENT))
+    if (screenStateChar == UISTATE_ALARMEVENT)
     {
         return 0;
     }
@@ -103,7 +103,7 @@ int UIScreenUp()
 
 int UIScreenDown()
 {
-    if ((screenStateChar == UISTATE_SHOWALARM)||(screenStateChar == UISTATE_ALARMEVENT))
+    if (screenStateChar == UISTATE_ALARMEVENT)
     {
         return 0;
     }
@@ -121,8 +121,9 @@ int UIScreenOK()
     if (screenStateChar == UISTATE_SHOWSYNCING)
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
-        printf("%s\n","I would like to sync, but I can not do that yet :(" );
-        LcdHelloAnimation();
+        //printf("%s\n","I would like to sync, but I can not do that yet :(" );
+        //char* url2= GetAlarmsHTTP("37.46.136.205/alarms");  
+        AlarmControlAlarmEvent();
         return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
@@ -140,7 +141,15 @@ int UIScreenOK()
         if(AlarmControlActivePrimaryAlarm == NULL)
             AlarmControlSleep();
         else
-            AlarmControlRemoveDaylyAlarm();
+            AlarmControlRemoveDailyAlarm();
+        /*
+        char* streamID = "118";
+        char* netaddress = malloc(strlen(baseUrl)+6); 
+        memset (netaddress, 0, urlLength);
+        memcpy (netaddress, baseUrl, strlen(baseUrl));
+        netaddress = strcat(netaddress, streamID);
+        GetStreamURL(netaddress);
+        free(netaddress);  */
         screenStateChar = UISTATE_SHOWTIME;
         UIshow();
         return 1;
@@ -158,6 +167,7 @@ int UIScreenOK()
     if(screenStateChar == UISTATE_ALARMEVENT)
     {
         screenStateChar = UISTATE_SHOWTIME;
+        alarmPlayingFlag = 0;       
         UIshow();        
         AlarmControlSnoozePrimary();
         return 1;
@@ -215,8 +225,10 @@ int UIScreenRight()
 
 int UIScreenEsc()
 {
-    if(screenStateChar == UISTATE_ALARMEVENT)
-        AlarmControlRemoveDaylyAlarm();
+    if(screenStateChar == UISTATE_ALARMEVENT){
+        alarmPlayingFlag = 0;
+        AlarmControlRemoveDailyAlarm();
+    }
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
     screenStateChar = 0;
@@ -226,12 +238,12 @@ int UIScreenEsc()
 
 int UIHandleInput(int kb_error)
 {
-        if ((kb_error != KB_ERROR))
-        {
-            LcdBackLightBriefOn(100);
-            userInputKeyPress();
-        }
-        return 1;
+    if ((kb_error != KB_ERROR))
+    {
+        LcdBackLightBriefOn(100);
+        userInputKeyPress();
+    }
+    return 1;
 }
 
 int UIRefreshScreen(){
@@ -245,7 +257,7 @@ int UIRefreshScreen(){
             LcdSetCursor(0x40);
             LcdAlarmIcon(0x4F);
         }
-    }    
+    }
     return 1;
 }
 

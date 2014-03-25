@@ -24,7 +24,7 @@
 #include <errno.h>
 #include "player.h"
 #include "led.h"
-
+#include "alarmControl.h"
 
 #define NOK 1
 #define OK 0
@@ -534,4 +534,267 @@ void GetSettingsHTTP(void) 				   //NEW
 			// return ""; //BYE_BYE getSettingsHTTP()
 		}
     }
-}// kut leven
+}
+
+void GetAlarmsHTTP(){
+	FILE* streampie;
+
+	char *data;
+	
+	TCPSOCKET *sockie; //NEW - MOVED FROM GLOBAL TO INSTRUCTION VARIABLE
+	sockie = NutTcpCreateSocket();
+    uint32_t socketTimeout = 1000;
+
+    int errorCodeNutTcpSetSockOpt = 0;
+    errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
+    printf("NutTcpSetSockOpt: %d\n", errorCodeNutTcpSetSockOpt);
+    if (errorCodeNutTcpSetSockOpt)
+    {
+    	streampie = NULL;
+		data = NULL;
+    	printf("%d\n", NutTcpError(sockie));
+    	NutTcpCloseSocket(sockie);
+		sockie = NULL;
+    	return;
+    }
+	
+
+    ///NEW
+    if( NutTcpConnect(	sockie,
+						inet_addr("37.46.136.205"), 
+						80) )
+	{
+		streampie = NULL;
+		data = NULL;
+		NutTcpCloseSocket(sockie);
+		sockie = NULL;
+		printf("Error: >> NutTcpConnect()");
+		return;
+	}
+    ///END NEW
+    else
+    {
+        streampie = _fdopen((int) sockie, "r+b");
+        printf("Address is: %s\n", "/alarms");
+        fprintf(streampie, "GET %s HTTP/1.0\r\n", "/alarms");
+		fprintf(streampie, "Host: %s\r\n", "62.212.132.54");
+		fprintf(streampie, "User-Agent: Ethernut\r\n");
+		fprintf(streampie, "Accept: */*\r\n");
+		fprintf(streampie, "Connection: close\r\n\r\n");
+		fflush(streampie);
+		
+		// Server stuurt nu HTTP header terug, catch in buffer
+		data = (char *) malloc(512 * sizeof(char));
+		
+		char *alarmText;
+		char *alarmStreamName;
+		char *alarmType; //0 : primary  1 : secondary
+		char *alarmTimeText;
+
+		char *alarmTextTag;
+		char *alarmStreamNameTag;
+		char *alarmTypeTag; //0 : primary  1 : secondary
+		char *alarmTimeTextTag;
+
+		alarmText = malloc (sizeof(char)*100);
+		alarmStreamName = malloc(sizeof(char)*16);
+		alarmType = malloc(sizeof(char) * 4);
+		alarmTimeText = malloc(sizeof(char)*32);
+		
+		int i;
+		while( fgets(data, 512, streampie) )
+		{
+			//Alarm parts
+			alarmTextTag = strstr(data, "AlarmTextA:");
+			alarmStreamNameTag = strstr(data, "AlarmStreamIDA:");
+			alarmTypeTag = strstr(data, "AlarmTypeA:"); //0 : primary  1 : secondary
+			alarmTimeTextTag = strstr(data, "AlarmTimeA:");
+
+			if (strncmp(data, "AlarmTextA:", strlen("AlarmTextA:")) == 0)
+			{
+				strncpy(alarmText,strstr(alarmTextTag, ":")+1, 100);
+				for (i = 0; i < 100; ++i)
+				{
+					if (alarmText[i]==10) //lf
+					{
+						alarmText[i] = 0;
+						break;
+					}
+				}
+			}
+			if (strncmp(data, "AlarmStreamIDA:", strlen("AlarmStreamIDA:")) == 0)
+			{
+				strncpy(alarmStreamName,strstr(alarmStreamNameTag, ":")+1, 16);
+				for (i = 0; i < 16; ++i)
+				{
+					if (alarmStreamName[i]==10) //lf
+					{
+						alarmStreamName[i] = 0;
+						break;
+					}
+				}
+			}
+			if (strncmp(data, "AlarmTimeA:", strlen("AlarmTimeA:")) == 0)
+			{
+				strncpy(alarmTimeText,strstr(alarmTimeTextTag, ":")+1, 32);	
+				for (i = 0; i < 32; ++i)
+				{
+					if (alarmTimeText[i]==10) //lf
+					{
+						alarmTimeText[i] = 0;
+						break;
+					}
+				}		
+			}
+			if (data == "end")
+				break;
+		}
+		printf("alarmText: %s\n", alarmText);
+		printf("alarmStreamName %s\n",alarmStreamName);
+		printf("alarmTimeText %s\n",alarmTimeText);
+		_alarm *constructedAlarm = malloc(sizeof(_alarm));
+		alarmText[strlen(alarmText)-1]=0;
+		constructedAlarm->alarmText = alarmText;
+		constructedAlarm->alarmStreamName = alarmStreamName;
+		//constructedAlarm->alarmType = alarmType;
+		constructedAlarm->alarmType = 0;
+		tm *alarmTime = calloc(1,sizeof(tm));
+		alarmTime -> tm_min  = atoi(strstr(alarmTimeText,":")+1);		
+		alarmTimeText[2] = 0;
+		alarmTime -> tm_hour = atoi(alarmTimeText);
+		constructedAlarm->alarmTime = alarmTime;	
+		tm *newTime = constructedAlarm->alarmTime;
+		printf("Text:%s Stream:%s Type:%d Time:%d:%d\n",constructedAlarm->alarmText,
+														constructedAlarm->alarmStreamName,
+														constructedAlarm->alarmType,
+														newTime->tm_hour,
+														newTime->tm_min);
+		AlarmControlCreateDailyAlarm(constructedAlarm);
+		free(data);
+		fclose(streampie);
+		printf("socket close exit code %d\n", NutTcpCloseSocket(sockie));
+		alarmTextTag = NULL;
+		alarmStreamNameTag = NULL;
+		alarmTypeTag = NULL;
+		alarmTimeTextTag = NULL;
+		free(alarmTimeText);
+		streampie = NULL;
+
+    }
+}
+
+void GetStreamURL(){
+	FILE * streampie;
+	char* data;
+	char* baseUrl = "/cgi-bin/api.php?q=getstreamurl&id=";
+	char* constExtens = "&time=";
+	size_t urlLength = strlen(baseUrl) + 32;
+	char* streamID = AlarmControlActivePrimaryAlarm->alarmStreamName;
+    char* netaddress = malloc(urlLength);
+    memset (netaddress, 0, urlLength); 
+    strcpy (netaddress, baseUrl);
+    netaddress = strcat(netaddress, streamID);
+    tm *timeNow = malloc(sizeof(tm));
+   	X12RtcGetClock(timeNow);
+    char* timeStr = malloc(6);
+    sprintf(timeStr, "%d:%d\0", timeNow->tm_hour, timeNow->tm_min);
+    free(timeNow);
+    printf("time:%s\n", timeStr);
+    netaddress = strcat(netaddress, constExtens);
+    //netaddress = strcat(netaddress, constExtens);
+    netaddress = strcat(netaddress, timeStr);
+
+	TCPSOCKET *sockie; //NEW - MOVED FROM GLOBAL TO INSTRUCTION VARIABLE
+	sockie = NutTcpCreateSocket();
+    uint32_t socketTimeout = 1000;
+
+    int errorCodeNutTcpSetSockOpt = 0;
+    errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
+    printf("NutTcpSetSockOpt: %d\n", errorCodeNutTcpSetSockOpt);
+    if (errorCodeNutTcpSetSockOpt)
+    {
+    	streampie = NULL;
+		data = NULL;
+    	printf("%d\n", NutTcpError(sockie));
+    	NutTcpCloseSocket(sockie);
+		sockie = NULL;
+    	return;
+    }
+	
+
+    ///NEW
+    if( NutTcpConnect(	sockie,
+						inet_addr("37.46.136.205"), 
+						80) )
+	{
+		streampie = NULL;
+		data = NULL;
+		NutTcpCloseSocket(sockie);
+		sockie = NULL;
+		printf("Error: >> NutTcpConnect()");
+		return;
+	}
+    else
+    {
+        streampie = _fdopen((int) sockie, "r+b");
+        printf("Address is: %s\n", netaddress);
+        fprintf(streampie, "GET %s HTTP/1.0\r\n", netaddress);
+		fprintf(streampie, "Host: %s\r\n", "62.212.132.54");
+		fprintf(streampie, "User-Agent: Ethernut\r\n");
+		fprintf(streampie, "Accept: */*\r\n");
+		fprintf(streampie, "Connection: close\r\n\r\n");
+		fflush(streampie);
+		
+		// Server stuurt nu HTTP header terug, catch in buffer
+		data = (char *) malloc(512 * sizeof(char));
+		
+		char *streamURL;
+
+		char *streamURLtag;
+
+		streamURL = calloc(1, sizeof(char)*64);		
+		int i;
+		while( fgets(data, 512, streampie) )
+		{
+			printf("data[%s]\n", data);
+			//Alarm parts
+			streamURLtag = strstr(data, "StreamURL:");
+
+			if (strncmp(data, "StreamURL:", strlen("StreamURL:")) == 0)
+			{
+				strncpy(streamURL,strstr(streamURLtag, ":")+1, 100);
+				for (i = 0; i < 100; ++i)
+				{
+					if (streamURL[i]==10) //lf
+					{
+						streamURL[i] = 0;
+						break;
+					}
+				}
+				break;
+			}
+		}
+		if (strcmp(streamURLCurrent,streamURL)!=0 
+				&& strncmp(streamURL, "NONE", strlen("NONE")) != 0 
+				&& strcmp(streamURL,"") != 0) // WORKS AND THIS IF IS A BEAUTY :)
+		{
+			if (isPlaying())
+            {
+                setPlaying(0);
+                NutSleep(1500);
+            }
+	        FILE* webstream = GetHTTPRawStreamWithAddress(streamURLCurrent); //WORKS, WE THINK ;)
+	        initPlayer(); 
+	        play(webstream);
+			printf("streamURL: %s\n", streamURL);
+			LedControl(LED_OFF); //BYE_BYE EYE-CANDY
+			return;
+		}
+		else
+		{
+			printf("streamURLCurrent: %s\n", streamURLCurrent);
+			LedControl(LED_OFF); //BYE_BYE EYE-CANDY
+			return;
+		}
+    }
+}
