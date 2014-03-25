@@ -29,9 +29,7 @@
 #define NOK 1
 #define OK 0
 
-FILE *streampie;
 TCPSOCKET *sock;
-TCPSOCKET *sockie;
 char* streamURLCurrent;
 	
 int ethInitInet(void)
@@ -67,7 +65,7 @@ int ethInitInet(void)
 			inet_ntoa(confnet.cdn_gateway));
 	}
 	//NutSleep(1000);
-	
+	streamURLCurrent = calloc(1,100);
 	return result;
 }
 
@@ -379,121 +377,78 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
     }
 }
 
-char* GetSettingsHTTP(char* netaddress)
+void GetSettingsHTTP(void) 				   //NEW
 { 
-	LedControl(LED_TOGGLE);
-	FILE *stream;
-	int* ignoredData = 0;
-	int* metaInterval = 0;
-	char* stringDataType;
-	char* stringStreamAddr;
-	char* settingsType;
-	char* streamAddrStripped;
+	FILE *streampie; //NEW - MOVED FROM GLOBAL TO INSTRUCTION VARIABLE
+	LedControl(LED_TOGGLE); //EYE-CANDY
+	char* stringDataType; //CHECKED - NO MALLOC/CALLOC
+	char* stringStreamAddr; //CHECKED - NO MALLOC/CALLOC
+	char* settingsType; //FREEED
+	char* streamAddrStripped; //NOT FREEED BUT MALLOCED!!! WARNING WARNING WARNING COULD BE THE CAUSE!!!
 
-	streampie = NULL;
-	int result = OK;
-	char *data;
+	char *data; //FREEED!! COULD STILL BE CAUSE OF CRASHES!!!!!
 	
-	sockie = NULL;
-    sockie = NutTcpCreateSocket();
+	TCPSOCKET *sockie; //NEW - MOVED FROM GLOBAL TO INSTRUCTION VARIABLE
+	sockie = NutTcpCreateSocket();
     uint32_t socketTimeout = 1000;
-    int errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
+
+    int errorCodeNutTcpSetSockOpt = 0;
+    errorCodeNutTcpSetSockOpt = NutTcpSetSockOpt(sockie, SO_RCVTIMEO, &socketTimeout,sizeof(socketTimeout));
     printf("NutTcpSetSockOpt: %d\n", errorCodeNutTcpSetSockOpt);
     if (errorCodeNutTcpSetSockOpt)
     {
+    	streampie = NULL;
+		stringDataType = NULL;
+		stringStreamAddr = NULL;
+		settingsType = NULL;
+		streamAddrStripped = NULL;
+		data = NULL;
     	printf("%d\n", NutTcpError(sockie));
+    	NutTcpCloseSocket(sockie);
+		sockie = NULL;
+    	return;
     }
-	char* ip = malloc(23*sizeof(char));
-	strncpy(ip, netaddress, 22);
-	char nullTerm=0;
-	int slashLoc=0;
-	int colonLoc=0;
-	int i;
-	int port = 80;
+	
 
-	/*-- Finding the forward slash and port colon --*/
-	for(i = 0;i<=23;++i)
-	{
-		if(ip[i]=='/')
-		{
-			ip[i]=0;
-			nullTerm = 1;
-			slashLoc = i;
-			// printf("slashLoc set to %d\n", slashLoc);
-			break;
-		}
-
-		if(ip[i]==':')
-		{
-			colonLoc = i;
-			// printf("colonLoc set to %d\n", colonLoc);
-		}
-
-		else if (ip[i] ==0)
-		{
-			nullTerm=-1;
-			break;
-		}
-	} 
-	LedControl(LED_TOGGLE);
-	if (colonLoc)
-	{
-		ip[colonLoc] = 0;
-		char* Sport = malloc(((slashLoc - colonLoc)+2)*sizeof(char));
-		for (i=colonLoc+1;i<slashLoc;++i)
-		{
-			Sport[i-colonLoc-1] = netaddress[i];
-		}
-		Sport[slashLoc - colonLoc-1] = 0;
-		
-		port = atoi(Sport);
-		free(Sport);
-	}
-	LedControl(LED_TOGGLE);
-	if (!nullTerm)
-	{
-		ip[17] = 0;
-	}   
-    //str[strlen(str) - 1] = 0;
-    char* address = malloc(80*sizeof(char));
-    memset(address, 0, sizeof(80*sizeof(char)));
-    // printf("connecting to ip %s\n", ip);
+    ///NEW
     if( NutTcpConnect(	sockie,
-						inet_addr(ip), 
-						port) )
+						inet_addr("37.46.136.205"), 
+						80) )
 	{
+		streampie = NULL;
+		stringDataType = NULL;
+		stringStreamAddr = NULL;
+		settingsType = NULL;
+		streamAddrStripped = NULL;
+		data = NULL;
+		NutTcpCloseSocket(sockie);
+		sockie = NULL;
 		printf("Error: >> NutTcpConnect()");
+		return;
 	}
+    ///END NEW
+
     else
     {
-        if (nullTerm>0)
-        {
-	 		for (i=slashLoc;i < 79; ++i)
-	        {
-	            address[i-slashLoc] = netaddress[i];
-	        }
-    	}
-    	else
-    	{
-    		address[0] = 0;
-    	}	
-    	//printf("opening %s%s\n", ip, address);
-    	LedControl(LED_TOGGLE);
-        streampie = _fdopen((int) sockie, "r+b");
-        printf("Address is: %s\n", address);
-        fprintf(streampie, "GET %s HTTP/1.0\r\n", address);
+
+    	LedControl(LED_TOGGLE); //EYE-CANDY
+        streampie = _fdopen((int) sockie, "r+b"); //CHECKED - CLOSES VERY TIME!
+        printf("Address is: %s\n", "/settings");
+        fprintf(streampie, "GET %s HTTP/1.0\r\n", "/settings");
 		fprintf(streampie, "Host: %s\r\n", "62.212.132.54");
 		fprintf(streampie, "User-Agent: Ethernut\r\n");
 		fprintf(streampie, "Accept: */*\r\n");
 		fprintf(streampie, "Connection: close\r\n\r\n");
 		fflush(streampie);
-		LedControl(LED_TOGGLE);
+		LedControl(LED_TOGGLE); //EYE-CANDY
 
 		// Server stuurt nu HTTP header terug, catch in buffer
-		data = (char *) malloc(512 * sizeof(char));
+		data = (char *) malloc(512 * sizeof(char)); //(as told before) FREEED!! COULD STILL BE CAUSE OF CRASHES!!!!!
 		
-		settingsType = malloc (sizeof(char)*16);
-		streamAddrStripped = malloc(sizeof(char)*100);
+		settingsType = calloc(sizeof(char),16); //FREEED
+		streamAddrStripped = calloc(sizeof(char),100); //NOT FREEED BUT MALLOCED!!! WARNING WARNING WARNING COULD BE THE CAUSE!!!
+
+		//Nothing special going on in here: except for the strncopies!
 		while( fgets(data, 512, streampie) )
 		{
 			LedControl(LED_TOGGLE);
@@ -502,24 +457,29 @@ char* GetSettingsHTTP(char* netaddress)
 			
 			if (strncmp(data, "Type:", strlen("Type:")) == 0)
 			{
-				strncpy(settingsType,strstr(stringDataType, ":")+1, 16);
+				strncpy(settingsType,strstr(stringDataType, ":")+1, 16); //FREED, BOTH OF THE POINTY POINTERS
 			}
 			if (strncmp(data, "StreamAddr:", strlen("StreamAddr:")) == 0)
 			{
-				strncpy(streamAddrStripped,strstr(stringStreamAddr, ":")+1, 100);
+				strncpy(streamAddrStripped,strstr(stringStreamAddr, ":")+1, 100); //NOT FREEED BUT MALLOCED!!! WARNING WARNING WARNING COULD BE THE CAUSE!!! (talking about the dreaded streamAddrStripped)
 				if (strncmp(streamAddrStripped, "STOP", strlen("STOP")) == 0)
 				{
 					setPlaying(0);
-					streamURLCurrent = "";
+					// streamURLCurrent = ""; //STRANGE, AND NOT ACCEPTABLE
+					char* pointerTemp = "";
+					strcpy(streamURLCurrent,pointerTemp); 
+					pointerTemp = NULL;
 					LcdClear();
 					// streamName = "_";
 				}
 				break;
 			}
-
+			memset(data,0,512); //Not sure if works
 		}
+		stringDataType = NULL;
+		stringStreamAddr = NULL;
 		printf("settingsType: %s\n", settingsType);
-		free(data);
+		free(data); //FREE, AT LAST! :D
 		
 		int i;
 		for (i = 0; i < 100; ++i)
@@ -527,41 +487,49 @@ char* GetSettingsHTTP(char* netaddress)
 			if (streamAddrStripped[i]==10) //lf
 			{
 				streamAddrStripped[i] = 0;
-				fclose(streampie);
-				printf("socket close exit code %d", NutTcpCloseSocket(sockie));
-				break;
+				break; //I WANT TO BREAK FREE!
 			}
 		}
+		
+		fclose(streampie); //CLOSED FILE STREAM
+		streampie = NULL; //POINTER CLEAR WITHOUT ALLOCATION, I AM SO SMART
+		printf("socket close exit code %d", NutTcpCloseSocket(sockie)); //CLOSE SOCKET!
+		sockie = NULL;
 
-		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 && strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0 && strncmp(settingsType, "STREAMREQ", 7) == 0 && strcmp(streamAddrStripped,"") != 0)
+		if (strcmp(streamURLCurrent,streamAddrStripped)!=0 
+				&& strncmp(streamAddrStripped, "STOP", strlen("STOP")) != 0 
+				&& strncmp(settingsType, "STREAMREQ", 7) == 0 
+				&& strcmp(streamAddrStripped,"") != 0) // WORKS AND THIS IF IS A BEAUTY :)
 		{
+			printf("Hallo\n");
 			if (isPlaying())
             {
                 setPlaying(0);
                 NutSleep(1500);
             }
-	        FILE* webstream = GetHTTPRawStreamWithAddress(streamAddrStripped);
-	        initPlayer();
-	        int playResult = play(webstream);
-	        streamURLCurrent = streamAddrStripped;
-	        free(settingsType);
-	        free(ip);
-			free(address);
+	        strcpy(streamURLCurrent,streamAddrStripped);
+            printf("streamURLCurrent: %s\n",streamURLCurrent );
+            printf("streamAddrStripped: %s\n", streamAddrStripped);
+	        FILE* webstream = GetHTTPRawStreamWithAddress(streamURLCurrent); //WORKS, WE THINK ;)
+	        initPlayer(); //WORKS, WE KNOW
+	        // int playResult = play(webstream); //WORKS, WE KNOW! :D
+	        play(webstream);
+	        // streamURLCurrent = streamAddrStripped; //WHAT THE FUCK IS GOING ON HERE? *BARF*
+	        free(streamAddrStripped);
+	        free(settingsType); //FREEEEE
 			printf("streamURLCurrent: %s\n", streamURLCurrent);
-			LedControl(LED_OFF);
-			return "";
+			LedControl(LED_OFF); //BYE_BYE EYE-CANDY
+			return;
+			// return ""; //BYE_BYE getSettingsHTTP()
 		}
 		else
 		{
-	        free(settingsType);
-	        free(ip);
-			free(address);
+			free(streamAddrStripped);
+	        free(settingsType); // FRIET!
 			printf("streamURLCurrent: %s\n", streamURLCurrent);
-			LedControl(LED_OFF);
-			return "";
+			LedControl(LED_OFF); //BYE_BYE EYE-CANDY
+			return;
+			// return ""; //BYE_BYE getSettingsHTTP()
 		}
-
     }
-}
-
-
+}// kut leven

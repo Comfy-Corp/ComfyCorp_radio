@@ -47,6 +47,7 @@ THREAD(StreamPlayer, arg)
 	int nrBytesRead = 0;
 	unsigned char iflag;
 	int bytesReadTemp = ignoredData;
+	char jimJorisJelleJulianenGuus;
 	//
 	// Init MP3 buffer. NutSegBuf is een globale, systeem buffer
 	//
@@ -87,7 +88,16 @@ THREAD(StreamPlayer, arg)
 			if( rbytes < 1024 )
 			{
 				VsPlayerKick();
+				++jimJorisJelleJulianenGuus;
+				if (jimJorisJelleJulianenGuus >=25)
+				{
+					setPlaying(0);
+				}
 			}
+			else	
+			{
+				jimJorisJelleJulianenGuus = 0;
+			}	
 		}
 		if (!runningStream)
 		{
@@ -145,17 +155,13 @@ THREAD(StreamPlayer, arg)
 			rbytes -= nrBytesRead;
 			if( nrBytesRead <= 0 )
 			{
+
 				break;
-			}				
+			}
+			
 		}
 	}
 	printf("Lekker killen\n");
 	fclose(stream);
 	NutThreadExit();
 }
-
-
-
-
-
-
