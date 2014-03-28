@@ -6,6 +6,9 @@
 #include "keyboard.h"
 #include "storage.h"
 #include "rtc.h"
+#include "watchdog.h"
+#include "ethernet.h"
+#include "alarmControl.h"
 
 char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
@@ -13,23 +16,37 @@ char *previousTime;
 
 int UIshow()
 {
-	LcdClear();
+    LcdClear();
     char *timeBuffer = malloc(sizeof(char) * 8);
     char *timeBuffer2 = malloc(sizeof(char) * 8);
-	switch (screenStateChar)
+    switch (screenStateChar)
         {
-            case UISTATE_SHOWTIME:                
+            case UISTATE_SHOWTIME:
                 X12FillStringWithTime(timeBuffer);
                 previousTime = timeBuffer;
-                LcdSetCursor(0x00);
+                LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
+                if(streamName != NULL)
+                {
+                    if (streamNameSize < 16)
+                    {
+                        LcdWriteStringAtLoc(streamName, streamNameSize, streamNameLocLCD);
+                    }
+                    else
+                    {
+                        LcdWriteStringAtLoc(streamName, streamNameSize+1, streamNameLocLCD);
+                    }
+                }
                 free(timeBuffer);
                 break;
             case UISTATE_SHOWSYNCING:
             LcdWriteString("SYNCING",8);
                 break;
             case UISTATE_SHOWALARM:
-            LcdWriteString("ALARMZZ",8);
+            if(AlarmControlActivePrimaryAlarm == NULL)
+                LcdWriteString("Sleep 2 min",strlen("Sleep 2 min")+1);
+            else
+                LcdWriteString("Remove alarm",strlen("Remove alarm")+1);
                 break;
             case UISTATE_SHOWRESET:
             LcdWriteString("FACTORY RESET?",15);
@@ -37,19 +54,31 @@ int UIshow()
             case UISTATE_SHOWSETUP:
             printf("UISTATE_SHOWSETUP\n");
                 X12GetTimeZoneString(timeBuffer2, 0);
+                LcdSetCursor(0x00);
+                LcdWriteString("Hoe laat is het?", strlen("Hoe laat is het?")+1);
+                LcdSetCursor(0x44);
                 LcdWriteString(timeBuffer2, strlen(timeBuffer2)+1);
                 free(timeBuffer2);
+                break;
+            case UISTATE_ALARMEVENT:
+                LcdClear();
+                LcdSetCursor(0x00);
+                LcdWriteString( AlarmControlActivePrimaryAlarm -> alarmText,
+                                strlen(AlarmControlActivePrimaryAlarm -> alarmText)+1);
+                LcdSetCursor(0x40);
+                LcdWriteString("OK:Snooze", strlen("OK:Snooze")+1);
+                LcdBackLightBriefOn(200);
                 break;
             default:
                 break;
         }
-	return screenStateChar;
+    return screenStateChar;
 }
 
 void UIchangeState(char newState)
 {
-	screenStateChar = newState;
-	UIshow();
+    screenStateChar = newState;
+    UIshow();
 }
 
 int UIGetState()
@@ -59,6 +88,10 @@ int UIGetState()
 
 int UIScreenUp()
 {
+    if (screenStateChar == UISTATE_ALARMEVENT)
+    {
+        return 0;
+    }
     ++screenStateChar;
     if (screenStateChar > 2)
     {
@@ -70,6 +103,10 @@ int UIScreenUp()
 
 int UIScreenDown()
 {
+    if (screenStateChar == UISTATE_ALARMEVENT)
+    {
+        return 0;
+    }
     --screenStateChar;
     if (screenStateChar < 0)
     {
@@ -84,7 +121,9 @@ int UIScreenOK()
     if (screenStateChar == UISTATE_SHOWSYNCING)
     {
         //TODO ADD ONLINE SETTINGS SYNCING METHODE
-        printf("%s\n","I would like to sync, but I can not do that yet :(" );
+        //printf("%s\n","I would like to sync, but I can not do that yet :(" );
+        //char* url2= GetAlarmsHTTP("37.46.136.205/alarms");  
+        AlarmControlAlarmEvent();
         return 1;
         //TODO PROBLEM HOW CAN I CONTINUE FROM THE TIMEZONE WITHOUT THE ENTER KEY TO SAVE IT?
     }
@@ -96,12 +135,41 @@ int UIScreenOK()
         UIshow();
         return 1;
     }
+
+    if (screenStateChar == UISTATE_SHOWALARM)
+    {
+        if(AlarmControlActivePrimaryAlarm == NULL)
+            AlarmControlSleep();
+        else
+            AlarmControlRemoveDailyAlarm();
+        /*
+        char* streamID = "118";
+        char* netaddress = malloc(strlen(baseUrl)+6); 
+        memset (netaddress, 0, urlLength);
+        memcpy (netaddress, baseUrl, strlen(baseUrl));
+        netaddress = strcat(netaddress, streamID);
+        GetStreamURL(netaddress);
+        free(netaddress);  */
+        screenStateChar = UISTATE_SHOWTIME;
+        UIshow();
+        return 1;
+    }
+
     if(screenStateChar == UISTATE_SHOWSETUP)
     {
         _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
         StorageSaveConfig(&timeZoneHour);
         printf("saved: %d", timeZoneHour);
         screenStateChar = UISTATE_SHOWTIME;
+        LcdClear();
+        return 1;
+    }
+    if(screenStateChar == UISTATE_ALARMEVENT)
+    {
+        screenStateChar = UISTATE_SHOWTIME;
+        alarmPlayingFlag = 0;       
+        UIshow();        
+        AlarmControlSnoozePrimary();
         return 1;
     }
     return 1;
@@ -122,8 +190,10 @@ int UIScreenLeft()
         {
             tempTimezoneHours = 11;
         }
+        LcdSetCursor(0x00);
+        LcdWriteString("Hoe laat is het?", strlen("Hoe laat is het?")+1);
+        LcdSetCursor(0x44);
         X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
-        LcdClear();
         LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
@@ -144,8 +214,10 @@ int UIScreenRight()
         {
             tempTimezoneHours = -12;
         }
+        LcdSetCursor(0x00);
+        LcdWriteString("Hoe laat is het?", strlen("Hoe laat is het?")+1);
+        LcdSetCursor(0x44);
         X12GetTimeZoneString(timeBuffer, tempTimezoneHours);
-        LcdClear();
         LcdWriteString(timeBuffer, sizeof(timeBuffer));
     }
     return 1;
@@ -153,6 +225,10 @@ int UIScreenRight()
 
 int UIScreenEsc()
 {
+    if(screenStateChar == UISTATE_ALARMEVENT){
+        alarmPlayingFlag = 0;
+        AlarmControlRemoveDailyAlarm();
+    }
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
     screenStateChar = 0;
@@ -162,23 +238,33 @@ int UIScreenEsc()
 
 int UIHandleInput(int kb_error)
 {
-        if ((kb_error != KB_ERROR))
-        {
-            LcdBackLightBriefOn(100);
-            userInputKeyPress();
-        }
-        return 1;
+    if ((kb_error != KB_ERROR))
+    {
+        LcdBackLightBriefOn(100);
+        userInputKeyPress();
+    }
+    return 1;
 }
 
 int UIRefreshScreen(){
     if(screenStateChar == UISTATE_SHOWTIME){
         char *timeBuffer = malloc(sizeof(char) * 8);
         X12FillStringWithTime(timeBuffer);
-        LcdSetCursor(0x00);
+        LcdSetCursor(0x44);
         LcdWriteString(timeBuffer, strlen(timeBuffer)+1);
         free(timeBuffer);
-    }    
+        if(AlarmControlActivePrimaryAlarm != NULL){
+            LcdSetCursor(0x40);
+            LcdAlarmIcon(0x4F);
+        }
+    }
     return 1;
+}
+
+int UIHandleReset(){
+    WatchDogEnable();
+    WatchDogStart(30);
+    for (;;) {};
 }
 
 int UIGetUserSetTimezone(void)
