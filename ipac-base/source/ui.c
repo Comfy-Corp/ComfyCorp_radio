@@ -10,9 +10,10 @@
 #include "ethernet.h"
 #include "alarmControl.h"
 
-char screenStateChar = UISTATE_SHOWTIME;
 int tempTimezoneHours=0;
 char *previousTime;
+
+char screenStateChar = 0;
 
 int UIshow()
 {
@@ -231,7 +232,7 @@ int UIScreenEsc()
     }
     if(screenStateChar == UISTATE_SHOWRESET)
         return 1;
-    screenStateChar = 0;
+    screenStateChar = UISTATE_SHOWTIME;
     UIshow();
     return 1;
 }
@@ -272,3 +273,7 @@ int UIGetUserSetTimezone(void)
     return tempTimezoneHours;
 }
 
+int getStateChar(void)
+{
+    return screenStateChar;
+}

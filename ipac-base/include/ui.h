@@ -28,3 +28,5 @@ int UIScreenEsc(void);
 int UIHandleReset(void);
 int UIHandleInput(int);
 int UIGetUserSetTimezone(void);
+int getStateChar(void);
+
