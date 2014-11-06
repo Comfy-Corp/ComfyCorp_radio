@@ -62,7 +62,10 @@ int sayTheTimeIs( void ){
 }
 
 int sayClockNumber( int number ){
-    LcdWriteString("sayClockNumber %d", number, strlen("sayClockNumber ")+3);
+	char *displayString = malloc(strlen("sayClockNumber "+3));
+	sprintf(displayString, sprintf("sayClockNumber %d", number));
+    LcdWriteString(displayString, strlen("sayClockNumber ")+3);
+    free(displayString);
 	//TODO: add speak method "number"
 	return 0;
 }

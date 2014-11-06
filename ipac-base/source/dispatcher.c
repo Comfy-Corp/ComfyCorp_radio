@@ -3,6 +3,8 @@
 #include "system.h"
 #include "portio.h"
 #include "dispatcher.h"
+#include "keyboard.h"
+#include "ui.h"
 
 /*-------------------------------------------------------------------------*/
 /* local routines (prototyping)                                            */
@@ -33,7 +35,7 @@ void SysMainBeatInterrupt(void *p)
      *  scan for valid keys AND check if a MMCard is inserted or removed
      */
     KbScan();
-    CardCheckCard();
+    //CardCheckCard(); We don't use the card
 }
 
 /* ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ */

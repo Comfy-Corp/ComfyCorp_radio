@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <time.h>
 #include "lcd.h"
@@ -160,7 +161,7 @@ int UIScreenOK()
     {
         _StorableSetting timeZoneHour = {tempTimezoneHours, sizeof(timeZoneHour)};
         StorageSaveConfig(&timeZoneHour);
-        printf("saved: %d", timeZoneHour);
+        printf("saved: %d", tempTimezoneHours);
         screenStateChar = UISTATE_SHOWTIME;
         LcdClear();
         return 1;
@@ -266,6 +267,7 @@ int UIHandleReset(){
     WatchDogEnable();
     WatchDogStart(30);
     for (;;) {};
+        return 1;
 }
 
 int UIGetUserSetTimezone(void)

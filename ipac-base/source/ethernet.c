@@ -100,8 +100,7 @@ int ethGetNTPTime()
 
 FILE* GetHTTPRawStream(char* ip)
 {
-
-	int result = OK;
+	//int result = OK;
 	char *data;
 	
 	if (sock != NULL)
@@ -191,10 +190,10 @@ int playStream(void)
 	return OK;
 }
 
-FILE* GetHTTPRawStreamWithAddress(char* netaddress)
+void GetHTTPRawStreamWithAddress(char* netaddress, FILE* streamOut)
 { 
 	LcdBackLightBriefOn(100);
-	int result = OK;
+	//int result = OK;
 	char *data;
 	if (sock != NULL)
 	{
@@ -331,13 +330,13 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 			if (stringData != NULL)
 			{
 				printf("Hoera, gevonden! %s\n", stringData );
-				metaInterval = atoi(strstr(stringData,":")+1);
-				printf("MetaInt = %d\n", metaInterval);
+				*metaInterval = atoi(strstr(stringData,":")+1);
+				printf("MetaInt = %d\n", *metaInterval);
 			}
 			char* EOT = strstr(data, "\r\n\r\n");
 			if (EOT != NULL)
 			{
-				ignoredData = sizeof(EOT); // fout.
+				*ignoredData = sizeof(EOT); // fout.
 				printf("%s\n", EOT);
 				break;
 			}
@@ -375,7 +374,7 @@ FILE* GetHTTPRawStreamWithAddress(char* netaddress)
 		free(address);
 		free(ip);
 		free(data);
-        return stream;
+        streamOut = stream;
     }
 }
 
@@ -512,7 +511,8 @@ void GetSettingsHTTP(void) 				   //NEW
 	        strcpy(streamURLCurrent,streamAddrStripped);
             printf("streamURLCurrent: %s\n",streamURLCurrent );
             printf("streamAddrStripped: %s\n", streamAddrStripped);
-	        FILE* webstream = GetHTTPRawStreamWithAddress(streamURLCurrent); //WORKS, WE THINK ;)
+	        FILE* webstream = NULL;
+	        GetHTTPRawStreamWithAddress(streamURLCurrent,webstream); //WORKS, WE THINK ;)
 	        initPlayer(); //WORKS, WE KNOW
 	        // int playResult = play(webstream); //WORKS, WE KNOW! :D
 	        play(webstream);
@@ -658,17 +658,17 @@ void GetAlarmsHTTP(){
 		constructedAlarm->alarmStreamName = alarmStreamName;
 		//constructedAlarm->alarmType = alarmType;
 		constructedAlarm->alarmType = 0;
-		tm *alarmTime = calloc(1,sizeof(tm));
-		alarmTime -> tm_min  = atoi(strstr(alarmTimeText,":")+1);		
+		tm alarmTime;
+		alarmTime.tm_min  = atoi(strstr(alarmTimeText,":")+1);		
 		alarmTimeText[2] = 0;
-		alarmTime -> tm_hour = atoi(alarmTimeText);
+		alarmTime.tm_hour = atoi(alarmTimeText);
 		constructedAlarm->alarmTime = alarmTime;	
-		tm *newTime = constructedAlarm->alarmTime;
+		tm newTime = constructedAlarm->alarmTime;
 		printf("Text:%s Stream:%s Type:%d Time:%d:%d\n",constructedAlarm->alarmText,
 														constructedAlarm->alarmStreamName,
 														constructedAlarm->alarmType,
-														newTime->tm_hour,
-														newTime->tm_min);
+														newTime.tm_hour,
+														newTime.tm_min);
 		AlarmControlCreateDailyAlarm(constructedAlarm);
 		free(data);
 		fclose(streampie);
@@ -697,7 +697,8 @@ void GetStreamURL(){
     tm *timeNow = malloc(sizeof(tm));
    	X12RtcGetClock(timeNow);
     char* timeStr = malloc(6);
-    sprintf(timeStr, "%d:%d\0", timeNow->tm_hour, timeNow->tm_min);
+    sprintf(timeStr, "%d:%d", timeNow->tm_hour, timeNow->tm_min);
+    //sprintf(timeStr, "%d:%d\0", timeNow->tm_hour, timeNow->tm_min);
     free(timeNow);
     printf("time:%s\n", timeStr);
     netaddress = strcat(netaddress, constExtens);
@@ -783,7 +784,8 @@ void GetStreamURL(){
                 setPlaying(0);
                 NutSleep(1500);
             }
-	        FILE* webstream = GetHTTPRawStreamWithAddress(streamURLCurrent); //WORKS, WE THINK ;)
+	        FILE* webstream  = NULL;
+	        GetHTTPRawStreamWithAddress(streamURLCurrent,webstream); //WORKS, WE THINK ;)
 	        initPlayer(); 
 	        play(webstream);
 			printf("streamURL: %s\n", streamURL);

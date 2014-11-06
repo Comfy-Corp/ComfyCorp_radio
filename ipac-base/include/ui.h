@@ -1,3 +1,6 @@
+#ifndef _UI_H
+#define _UI_H
+
 #define UISTATE_SHOWTIME 0
 #define UISTATE_SHOWALARM 1
 #define UISTATE_SHOWSYNCING 2
@@ -29,4 +32,6 @@ int UIHandleReset(void);
 int UIHandleInput(int);
 int UIGetUserSetTimezone(void);
 int getStateChar(void);
+int UIRefreshScreen(void);
 
+#endif

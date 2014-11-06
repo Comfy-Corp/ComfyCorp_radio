@@ -4,8 +4,9 @@
  *                                                                    
  ************************************************************************/
 #include "storage.h"
-#include <time.h>
 #include <dev/board.h>
+#include <dev/nvmem.h>
+#include <time.h>
 #include <stdio.h>
 
 
