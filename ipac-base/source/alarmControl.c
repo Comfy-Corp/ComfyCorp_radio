@@ -26,7 +26,6 @@ void AlarmControlInit(void){
 	//Warning, you didn't free :(
 	free(testAlarm);
 	_alarm *nonVolAlarm = malloc(sizeof(_alarm));
-	StorageLoadPrimaryAlarm(&nonVolAlarm);
 	AlarmControlCreateDailyAlarm(nonVolAlarm);
 	free(nonVolAlarm);
 }

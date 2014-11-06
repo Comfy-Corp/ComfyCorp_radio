@@ -16,10 +16,10 @@ char *previousTime;
 
 int UIshow()
 {
-	LcdClear();
+    LcdClear();
     char *timeBuffer = malloc(sizeof(char) * 8);
     char *timeBuffer2 = malloc(sizeof(char) * 8);
-	switch (screenStateChar)
+    switch (screenStateChar)
         {
             case UISTATE_SHOWTIME:
                 X12FillStringWithTime(timeBuffer);
@@ -72,13 +72,13 @@ int UIshow()
             default:
                 break;
         }
-	return screenStateChar;
+    return screenStateChar;
 }
 
 void UIchangeState(char newState)
 {
-	screenStateChar = newState;
-	UIshow();
+    screenStateChar = newState;
+    UIshow();
 }
 
 int UIGetState()

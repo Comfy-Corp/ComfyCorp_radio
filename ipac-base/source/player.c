@@ -166,9 +166,3 @@ THREAD(StreamPlayer, arg)
 	stream = NULL;
 	NutThreadExit();
 }
-
-
-
-
-
-
