@@ -5,12 +5,12 @@ SRC_DIR	= ./source
 INC_DIR = ./include
 
 # NutOS location (includes and libs)
-NUT_INC = c:/ethernut-4.3.3/nut/include
-NUT_BUILD_INC = c:/ethernut-4.3.3/build/gcc/atmega2561/lib/include
-NUT_LIB_DIR = c:/ethernut-4.3.3/build/gcc/atmega2561/lib
+NUT_INC = /Users/guube/ethernut/nut/include
+NUT_BUILD_INC = /Users/guube/ethernut/build/gcc/atmega2561/lib/include
+NUT_LIB_DIR = /Users/guube/ethernut/build/gcc/atmega2561/lib
 
 # WinAvr includes
-AVR_INC = c:/winavr/avr/include
+AVR_INC = /Users/avr/include
 
 
 # Compiler, assembler & linker (flags)
@@ -53,25 +53,45 @@ CFILES =        main.c			\
 				weatherReport.c	
 				
 # Header files.
-HFILES =        lcd.h        keyboard.h              \
-				ui.h         userInput.h          \
-				player.h 	\
-				ethernet.h 	\
-                led.h                            \
-                portio.h         remcon.h         log.h          \
-                system.h                 settings.h     \
-                                  inet.h         \
-                platform.h       version.h        update.h       \
-                           uart0driver.h    typedefs.h     \
-                       vs10xx.h         audio.h        \
-                watchdog.h       mmc.h             \
-                flash.h          spidrv.h         command.h      \
-                parse.h          mmcdrv.h         fat.h          \
-                fatdrv.h	  	rtc.h 		\
-				dispatcher.h 	 storage.h 			bankmem.h 	\
-				heap.h 	os.h 	thread.h 	alarmControl.h		\
-				customChars.h 	weatherReport.h\
-				speakingClock.h
+HFILES =        keyboard.h      \
+				ui.h 			\
+				userInput.h     \
+				player.h 		\
+				ethernet.h 		\
+                led.h           \
+                portio.h 		\
+                remcon.h 		\
+                log.h 			\
+                system.h 		\
+                settings.h     	\
+                inet.h         	\
+                platform.h 		\
+                version.h 		\
+                update.h       	\
+                uart0driver.h 	\
+                typedefs.h     	\
+                vs10xx.h 		\
+                audio.h        	\
+                watchdog.h 		\
+                mmc.h           \
+                flash.h     	\
+                spidrv.h    	\
+                command.h      	\
+                parse.h        	\
+                mmcdrv.h      	\
+                fat.h          	\
+                fatdrv.h		\
+                rtc.h 			\
+				dispatcher.h 	\
+				storage.h 		\
+				bankmem.h 		\
+				heap.h 			\
+				os.h 			\
+				thread.h 		\
+				alarmControl.h	\
+				customChars.h 	\
+				weatherReport.h \
+				speakingClock.h 
 				
 
 # Alle source files in de ./source dir

@@ -1,3 +1,4 @@
 {
-	"cmd": ["make"]
+	"directory": "~/Projects/ti23-comfy-corp/ipac-base",
+	"shell_cmd": "make"
 }

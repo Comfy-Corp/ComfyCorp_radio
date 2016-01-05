@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "ui.h"
-#include "userinput.h"
+#include "userInput.h"
 #include "keyboard.h"
 
 void userInputKeyPress()
@@ -29,6 +29,18 @@ void userInputKeyPress()
 		case KEY_POWER:
 			UIHandleReset();
 			break;
+		case KEY_01:
+			VsSetVolume(1,1);
+		case KEY_02:
+			VsSetVolume(2,2);
+		case KEY_03:
+			VsSetVolume(3,3);
+		case KEY_04:
+			VsSetVolume(4,4);
+		case KEY_05:
+			VsSetVolume(5,5);
+		case KEY_ALT:
+			printf("Current volume is: %d\n", VsGetVolume());
 	}
 }
 

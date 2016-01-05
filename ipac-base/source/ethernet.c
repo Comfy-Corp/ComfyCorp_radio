@@ -414,7 +414,7 @@ void GetSettingsHTTP(void) 				   //NEW
 
     ///NEW
     if( NutTcpConnect(	sockie,
-						inet_addr("37.46.136.205"), 
+						inet_addr("188.166.22.194"), 
 						80) )
 	{
 		streampie = NULL;
@@ -561,7 +561,7 @@ void GetAlarmsHTTP(){
 
     ///NEW
     if( NutTcpConnect(	sockie,
-						inet_addr("37.46.136.205"), 
+						inet_addr("188.166.22.194"), 
 						80) )
 	{
 		streampie = NULL;
@@ -724,7 +724,7 @@ void GetStreamURL(){
 
     ///NEW
     if( NutTcpConnect(	sockie,
-						inet_addr("37.46.136.205"), 
+						inet_addr("188.166.22.194"), 
 						80) )
 	{
 		streampie = NULL;

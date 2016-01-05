@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "player.h"
 
-char* baseUrl = "37.46.136.205/cgi-bin/api.php?q=getstreamurl&id=";
+char* baseUrl = "188.166.22.194/cgi-bin/api.php?q=getstreamurl&id=";
 char* constExtens = "&time=";
 
 void AlarmControlInit(void){
